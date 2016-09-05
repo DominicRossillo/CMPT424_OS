@@ -18,6 +18,7 @@ module TSOS {
             - "\s+$" is the same thing, but at the end of the string.
             - "g" makes is global, so we get all the whitespace.
             - "" is nothing, which is what we replace the whitespace with.
+			
             */
         }
 
