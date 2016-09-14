@@ -36,6 +36,7 @@ module TSOS {
         }
 
         public handleInput(): void {
+            
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();

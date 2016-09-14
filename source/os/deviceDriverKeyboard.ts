@@ -53,18 +53,171 @@ module TSOS {
                         (keyCode == 32)                     ||   // space
                         (keyCode == 13)) {                       // enter
                 chr = String.fromCharCode(keyCode);
-
+                //!
+                 if (isShifted) {
+                 
+                     if (keyCode == 49){
+                 
+                        chr = String.fromCharCode(33);
+                    }
+                    //@
+                     else if (keyCode == 50) {
+                        chr = String.fromCharCode(64);
+                    }
+                    //#
+                     else if (keyCode == 51) {
+                        chr = String.fromCharCode(35);
+                    }
+                    //$
+                     else if (keyCode == 52) {
+                        chr = String.fromCharCode(36);
+                    }
+                    //%
+                     else if (keyCode == 53) {
+                        chr = String.fromCharCode(37);
+                    }
+                     //^
+                     else if (keyCode == 54) {
+                        chr = String.fromCharCode(94);
+                    } //&
+                     else if (keyCode == 55) {
+                        chr = String.fromCharCode(38);
+                    }
+                    //*
+                     else if (keyCode == 56) {
+                        chr = String.fromCharCode(42);
+                    }
+                    //(
+                     else if (keyCode == 57) {
+                        chr = String.fromCharCode(40);
+                    }
+                    //) 
+                     else if (keyCode == 48) {
+                        chr = String.fromCharCode(41);
+                    }
+          
+               }
+              
                 _KernelInputQueue.enqueue(chr);
             }
-              else if (keyCode == 8)   //puncuations 
-                        { 
-
+           
+             else {                      
+                chr = String.fromCharCode(keyCode);
                 
-                var ctx = _Canvas.getContext("2d");
-                ctx.clearRect(0,0,keyCode.width,500);
-             
+                 if (isShifted) {
+                 //~
+                     if (keyCode == 192){
+                 
+                        chr = String.fromCharCode(126);
+                    }
+                    //_
+                     else if (keyCode == 189) {
+                        chr = String.fromCharCode(95);
+                    }
+                    //+
+                     else if (keyCode == 187) {
+                        chr = String.fromCharCode(43);
+                    }
+                    //{
+                     else if (keyCode == 219) {
+                        chr = String.fromCharCode(123);
+                    }
+                    //}
+                     else if (keyCode == 221) {
+                        chr = String.fromCharCode(125);
+                    }
+                     // |
+                     else if (keyCode == 220) {
+                        chr = String.fromCharCode(124);
+                    } //:
+                     else if (keyCode == 186) {
+                        chr = String.fromCharCode(58);
+                    }
+                    //"
+                     else if (keyCode == 222) {
+                        chr = String.fromCharCode(34);
+                    }
+                    //<
+                     else if (keyCode == 188) {
+                        chr = String.fromCharCode(60);
+                    }
+                    //>
+                     else if (keyCode == 190) {
+                        chr = String.fromCharCode(62);
+                    }
+                    //?
+                     else if (keyCode == 191) {
+                        chr = String.fromCharCode(63);
+                    }
+                }
 
+
+                    //non shitfted chars
+                        else {
+                        //`
+                        if (keyCode == 192){
+                     
+                            chr = String.fromCharCode(96);
+                        }
+                        //-
+                         else if (keyCode == 189) {
+                            chr = String.fromCharCode(45);
+                        }
+                        //=
+                         else if (keyCode == 187) {
+                            chr = String.fromCharCode(61);
+                        }
+                        //[
+                         else if (keyCode == 219) {
+                            chr = String.fromCharCode(91);
+                        }
+                        //]
+                         else if (keyCode == 221) {
+                            chr = String.fromCharCode(93);
+                        }
+                         // \
+                         else if (keyCode == 220) {
+                            chr = String.fromCharCode(92);
+                        } //;
+                         else if (keyCode == 186) {
+                            chr = String.fromCharCode(59);
+                        }
+                        //'
+                         else if (keyCode == 222) {
+                            chr = String.fromCharCode(39);
+                        }
+                        //,
+                         else if (keyCode == 188) {
+                            chr = String.fromCharCode(44);
+                        }
+                        //.
+                         else if (keyCode == 190) {
+                            chr = String.fromCharCode(46);
+                        }
+                        // /
+                         else if (keyCode == 191) {
+                            chr = String.fromCharCode(47);
+                        }
+                    }
+          
+               }
+              
+                _KernelInputQueue.enqueue(chr);
             }
+            // else if (keyCode ==8) {                       // delete
+            //      _StdOut.clearScreen();
+            //      _StdOut.s
+            //     chr = _KernelInputQueue.dequeue();
+            //     chr.getsize;
+            //     var ctx = _Canvas.getContext("2d");
+            //     ctx.beginPath();
+            //     ctx.fillStyle = "blue";
+            //     ctx.fillRect(0,0,500,500);
+            //     ctx.fill();
+            //     alert("delte");
+                
+            // }
+            
         }
     }
 }
