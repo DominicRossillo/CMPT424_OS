@@ -16,11 +16,8 @@ gulp.task('compile-typescript', function() {
 			'source/*.ts',
 			'source/host/*.ts',
 			'source/os/*.ts'
-			  
 		],
-		dest: 'distrib'
-		
-		
+		dest: 'distrib/'
 	};
 
 	return gulp.src(typescriptPaths.src)
@@ -30,7 +27,7 @@ gulp.task('compile-typescript', function() {
         .pipe(gulp.dest(typescriptPaths.dest));
 });
 
-// This is the task for copying over our CSS to the dist diwqrectory.
+// This is the task for copying over our CSS to the dist directory.
 // It really doesn't do much, but if we were to use a CSS preprocesser (like LESS/SASS),
 // then we would build our LESS/SASS files and copy the resulting CSS to the distrib folder.
 // This is just to show some good front-end web development techniques.

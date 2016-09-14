@@ -18,6 +18,7 @@ var TSOS;
             - "\s+$" is the same thing, but at the end of the string.
             - "g" makes is global, so we get all the whitespace.
             - "" is nothing, which is what we replace the whitespace with.
+            
             */
         };
         Utils.rot13 = function (str) {
@@ -31,11 +32,11 @@ var TSOS;
                 var ch = str[i];
                 var code = 0;
                 if ("abcedfghijklmABCDEFGHIJKLM".indexOf(ch) >= 0) {
-                    code = str.charCodeAt(i) + 13; // It's okay to use 13.  It's not a magic number, it's called rot13.
+                    code = str.charCodeAt(Number(i)) + 13; // It's okay to use 13.  It's not a magic number, it's called rot13.
                     retVal = retVal + String.fromCharCode(code);
                 }
                 else if ("nopqrstuvwxyzNOPQRSTUVWXYZ".indexOf(ch) >= 0) {
-                    code = str.charCodeAt(i) - 13; // It's okay to use 13.  See above.
+                    code = str.charCodeAt(Number(i)) - 13; // It's okay to use 13.  See above.
                     retVal = retVal + String.fromCharCode(code);
                 }
                 else {
@@ -45,6 +46,6 @@ var TSOS;
             return retVal;
         };
         return Utils;
-    })();
+    }());
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));

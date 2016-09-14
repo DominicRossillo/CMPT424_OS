@@ -27,6 +27,7 @@ var TSOS;
             this.resetXY();
         };
         Console.prototype.clearScreen = function () {
+            //Dom;
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
         };
         Console.prototype.resetXY = function () {
@@ -84,6 +85,6 @@ var TSOS;
             // TODO: Handle scrolling. (iProject 1)
         };
         return Console;
-    })();
+    }());
     TSOS.Console = Console;
 })(TSOS || (TSOS = {}));

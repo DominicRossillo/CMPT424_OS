@@ -30,7 +30,11 @@ module TSOS {
             var sc;
             //
             // Load the command list.
-
+			//bsod
+			sc = new ShellCommand(this.shellBSOD,
+                                  "bsod",
+                                  "- crashes the os.");
+            this.commandList[this.commandList.length] = sc;
             // ver
             sc = new ShellCommand(this.shellVer,
                                   "ver",
@@ -119,6 +123,8 @@ module TSOS {
             // ... and assign the command and args to local variables.
             var cmd = userCommand.command;
             var args = userCommand.args;
+				
+			
             //
             // Determine the command and execute it.
             //
@@ -253,6 +259,18 @@ module TSOS {
             }
             
             
+        }
+		
+		public shellBSOD(args) {
+            _StdOut.clearScreen();
+            _StdOut.resetXY();
+			var ctx = _Canvas.getContext("2d");
+			ctx.beginPath();
+			ctx.fillStyle = "blue";
+			ctx.fillRect(0,0,500,500);
+			ctx.fill();
+            _StdOut.putText("An error has occured, you broke something.");
+	        
         }
 		
 		public shellDate(args) {

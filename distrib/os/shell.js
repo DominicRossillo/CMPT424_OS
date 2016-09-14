@@ -25,11 +25,23 @@ var TSOS;
             var sc;
             //
             // Load the command list.
+            //bsod
+            sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "- crashes the os.");
+            this.commandList[this.commandList.length] = sc;
             // ver
             sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
             // help
             sc = new TSOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
+            this.commandList[this.commandList.length] = sc;
+            //whereami
+            sc = new TSOS.ShellCommand(this.shellWhereami, "whereami", "- Tells you what your current location is.");
+            this.commandList[this.commandList.length] = sc;
+            //whatislove
+            sc = new TSOS.ShellCommand(this.shellWhatislove, "whatislove", "- Tells you what love really is.");
+            this.commandList[this.commandList.length] = sc;
+            //date and time
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Tells you the current date and time.");
             this.commandList[this.commandList.length] = sc;
             // shutdown
             sc = new TSOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
@@ -178,6 +190,32 @@ var TSOS;
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         };
+        Shell.prototype.shellWhereami = function (args) {
+            _StdOut.putText("You are infront of a computer, life is great.");
+        };
+        Shell.prototype.shellWhatislove = function (args) {
+            if (_SarcasticMode) {
+                _StdOut.putText("Alan of course, he is the master of all minions.");
+            }
+            else {
+                _StdOut.putText("Dom is love, and life.");
+            }
+        };
+        Shell.prototype.shellBSOD = function (args) {
+            _StdOut.clearScreen();
+            _StdOut.resetXY();
+            var ctx = _Canvas.getContext("2d");
+            ctx.beginPath();
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, 500, 500);
+            ctx.fill();
+            _StdOut.putText("An error has occured, you broke something.");
+        };
+        Shell.prototype.shellDate = function (args) {
+            _StdOut.putText("The current date and time is: ");
+            _StdOut.advanceLine();
+            _StdOut.putText(Date().toString());
+        };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");
             // Call Kernel shutdown routine.
@@ -194,6 +232,18 @@ var TSOS;
                 switch (topic) {
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
+                        break;
+                    case "ver":
+                        _StdOut.putText("Ver Displays the current version of the OS.");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("Where am i, helps you figure out where you are in real life.");
+                        break;
+                    case "date":
+                        _StdOut.putText("Date can be used to find out the current Date and Time.");
+                        break;
+                    case "whatislove":
+                        _StdOut.putText("What is love is used to find what you really love.");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
@@ -247,6 +297,6 @@ var TSOS;
             }
         };
         return Shell;
-    })();
+    }());
     TSOS.Shell = Shell;
 })(TSOS || (TSOS = {}));

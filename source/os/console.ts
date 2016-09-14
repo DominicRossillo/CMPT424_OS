@@ -26,6 +26,7 @@ module TSOS {
         }
 
         private clearScreen(): void {
+			//Dom;
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
         }
 
