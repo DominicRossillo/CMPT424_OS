@@ -146,6 +146,7 @@ module TSOS {
         }
 
         public static draw(ctx, font, size, x, y, str) {
+
             var total = 0;
             var len = str.length;
             var mag = size / 25.0;
@@ -184,8 +185,50 @@ module TSOS {
             return total;
         }
 
+
+          public static del(ctx, font, size, x, y, str) {
+            var total = 0;
+            var len = str.length;
+            var mag = size / 25.0;
+
+            ctx.save();
+            ctx.lineCap = "round";
+            ctx.lineWidth = 2.0 * mag;
+            ctx.strokeStyle = "black";
+            
+
+            for (var i = 0; i < len; i++) {
+                 alert("inside for");
+                var c = CanvasTextFunctions.letter(str.charAt(i));
+                if (!c) {
+                    continue;
+                }
+                ctx.beginPath();
+                var penUp = true;
+                var needStroke = 0;
+                for (var j = 0; j < c.points.length; j++) {
+                    var a = c.points[j];
+                    if (a[0] === -1 && a[1] === -1) {
+                        penUp = true;
+                        continue;
+                    }
+                    if (penUp) {
+                        ctx.moveTo( x + a[0]*mag, y - a[1]*mag);
+                        penUp = false;
+                    } else {
+                        ctx.lineTo( x + a[0]*mag, y - a[1]*mag);
+                    }
+                }
+                ctx.stroke();
+                x += c.width*mag;
+            }
+            ctx.restore();
+            return total;
+        }
+
         public static enable(ctx) {
             ctx.drawText = function(font,size,x,y,text) { return CanvasTextFunctions.draw( ctx, font,size,x,y,text); };
+            ctx.delText = function(font,size,x,y,text) { return CanvasTextFunctions.del( ctx, font,size,x,y,text); };
             ctx.measureText = function(font,size,text) { return CanvasTextFunctions.measure( font,size,text); };
             ctx.fontAscent = function(font,size) { return CanvasTextFunctions.ascent(font,size); };
             ctx.fontDescent = function(font,size) { return CanvasTextFunctions.descent(font,size); };

@@ -49,9 +49,11 @@ module TSOS {
                 }
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
-                        (keyCode == 32)                     ||   // space
-                        (keyCode == 13)) {                       // enter
+            } 
+
+            else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
+                        (keyCode == 32)                   ||   // space
+                        (keyCode == 13)) {                     // enter
                 chr = String.fromCharCode(keyCode);
                 //!
                  if (isShifted) {
@@ -95,17 +97,24 @@ module TSOS {
                      else if (keyCode == 48) {
                         chr = String.fromCharCode(41);
                     }
-          
+                      
                }
-              
-                _KernelInputQueue.enqueue(chr);
-            }
+               _KernelInputQueue.enqueue(chr);
+             
+            }    
+                //delete/backspace
+                else if (keyCode==8){
+                 
+                 chr = String.fromCharCode(keyCode);
+                 _KernelInputQueue.enqueue(chr);
+
+                }
            
              else {                      
                 chr = String.fromCharCode(keyCode);
                 
                  if (isShifted) {
-                 //~
+                   //~
                      if (keyCode == 192){
                  
                         chr = String.fromCharCode(126);
@@ -149,6 +158,7 @@ module TSOS {
                      else if (keyCode == 191) {
                         chr = String.fromCharCode(63);
                     }
+                    _KernelInputQueue.enqueue(chr);
                 }
 
 
@@ -198,26 +208,14 @@ module TSOS {
                          else if (keyCode == 191) {
                             chr = String.fromCharCode(47);
                         }
+                       
                     }
-          
+              _KernelInputQueue.enqueue(chr);
                }
               
-                _KernelInputQueue.enqueue(chr);
-            }
-            // else if (keyCode ==8) {                       // delete
-            //      _StdOut.clearScreen();
-            //      _StdOut.s
-            //     chr = _KernelInputQueue.dequeue();
-            //     chr.getsize;
-            //     var ctx = _Canvas.getContext("2d");
-            //     ctx.beginPath();
-            //     ctx.fillStyle = "blue";
-            //     ctx.fillRect(0,0,500,500);
-            //     ctx.fill();
-            //     alert("delte");
                 
-            // }
-            
+            }
+         
         }
     }
-}
+

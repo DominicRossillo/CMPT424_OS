@@ -46,6 +46,11 @@ var TSOS;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                else if (chr === String.fromCharCode(8)) {
+                    this.remText((this.buffer).charAt((this.buffer).length - 1));
+                    this.buffer = (this.buffer).slice(0, this.buffer.length - 1);
+                    alert(this.buffer);
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -71,6 +76,14 @@ var TSOS;
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
             }
+        };
+        Console.prototype.remText = function (text) {
+            //deltext
+            // Move the current X position.
+            var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+            this.currentXPosition = (this.currentXPosition - offset);
+            // Draw the text at the current X and Y coordinates.
+            _DrawingContext.delText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
         };
         Console.prototype.advanceLine = function () {
             this.currentXPosition = 0;

@@ -109,7 +109,7 @@ module TSOS {
             // Display the initial prompt.
             this.putPrompt();
         }
-
+        
         public putPrompt() {
             _StdOut.putText(this.promptStr);
         }
