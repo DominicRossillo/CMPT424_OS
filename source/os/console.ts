@@ -48,10 +48,29 @@ module TSOS {
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                else if (chr === String.fromCharCode(9)) { //    Tab key
+                    // Tab key will look if what is entered is a sub string of any known commands and complete it
+                    alert(this.buffer);
+                    alert(this.buffer.length);
+                    alert(_OsShell.commandList.length);
+                    for (var i=0; i<(_OsShell.commandList.length); i++){
+                        alert((_OsShell.commandList[i]).substring(0,(this.buffer.length)-1)));
+                        if(this.buffer==(_OsShell.commandList[i]).substring(0,(this.buffer.length)-1)){
+                            alert("yep")
+                        }
+
+ 
+                    };
+                 
+
+
+
+
+                }
                 else if(chr === String.fromCharCode(8)) {
                     this.remText((this.buffer).charAt((this.buffer).length-1));
                     this.buffer = (this.buffer).slice(0,this.buffer.length-1);
-                    alert(this.buffer);
+                    
 
                 } 
                 else {
