@@ -99,7 +99,7 @@ module TSOS {
                     }
                       
                }
-               _KernelInputQueue.enqueue(chr);
+               _KernelInputQueue.enqueue(chr); 
              
             }    
                 //delete/backspace
@@ -109,8 +109,8 @@ module TSOS {
                  _KernelInputQueue.enqueue(chr);
 
                 }
-                //tabcomplete
-                  else if (keyCode==8){
+                //tabcomplete    
+                  else if (keyCode==9){
                  
                  chr = String.fromCharCode(keyCode);
                  _KernelInputQueue.enqueue(chr);

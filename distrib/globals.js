@@ -51,3 +51,5 @@ var _GLaDOS = null; // If the above is linked in, this is the instantiated insta
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };
+//array used to recall past commands used by using the up arrow 
+var bufferRecall = [];

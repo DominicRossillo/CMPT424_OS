@@ -93,7 +93,7 @@ var TSOS;
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
-            else if (keyCode == 8) {
+            else if (keyCode == 9) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

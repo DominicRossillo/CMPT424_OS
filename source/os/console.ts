@@ -46,25 +46,35 @@ module TSOS {
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
+                    var bufferRecall = []
                     this.buffer = "";
                 }
                 else if (chr === String.fromCharCode(9)) { //    Tab key
                     // Tab key will look if what is entered is a sub string of any known commands and complete it
-                    alert(this.buffer);
-                    alert(this.buffer.length);
-                    alert(_OsShell.commandList.length);
+                    if (this.buffer.length>0){
                     for (var i=0; i<(_OsShell.commandList.length); i++){
-                        alert((_OsShell.commandList[i]).substring(0,(this.buffer.length)-1)));
-                        if(this.buffer==(_OsShell.commandList[i]).substring(0,(this.buffer.length)-1)){
-                            alert("yep")
-                        }
+                         
+                            if((this.buffer)==(_OsShell.commandList[i].command).substr(0,(this.buffer.length))){    
+                               var commandbuild= "" 
+                              
+                              
+                                for(var j=0; j<(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).length;j++){
+                                    
+                                    var comchar=(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).charAt(j); //chars added to complete the command
+                                    this.putText(comchar);
+                                    commandbuild += comchar;
+                                }
+                                     this.buffer += commandbuild
+                            }
 
- 
                     };
                  
 
 
-
+                  }
+                  else{
+                      this.buffer= ""
+                  }
 
                 }
                 else if(chr === String.fromCharCode(8)) {
