@@ -27,12 +27,14 @@ var TSOS;
             this.resetXY();
         };
         Console.prototype.clearScreen = function () {
-            //Dom;
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
         };
         Console.prototype.resetXY = function () {
             this.currentXPosition = 0;
             this.currentYPosition = this.currentFontSize;
+        };
+        Console.prototype.resetX = function () {
+            this.currentXPosition = 0;
         };
         Console.prototype.handleInput = function () {
             while (_KernelInputQueue.getSize() > 0) {
@@ -44,7 +46,8 @@ var TSOS;
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
-                    var bufferRecall = [];
+                    bufferRecall.push(this.buffer);
+                    recallCount = bufferRecall.length;
                     this.buffer = "";
                 }
                 else if (chr === String.fromCharCode(9)) {
@@ -71,6 +74,26 @@ var TSOS;
                     this.remText((this.buffer).charAt((this.buffer).length - 1));
                     this.buffer = (this.buffer).slice(0, this.buffer.length - 1);
                 }
+                else if (chr === String.fromCharCode(38)) {
+                    // alert("please")
+                    if (recallCount > 0) {
+                        recallCount--;
+                        _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
+                        this.buffer = bufferRecall[recallCount];
+                        this.resetX();
+                        this.putText(">" + this.buffer);
+                    }
+                }
+                else if (chr === String.fromCharCode(40)) {
+                    // alert("please")
+                    if (recallCount < bufferRecall.length) {
+                        recallCount++;
+                        _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
+                        this.buffer = bufferRecall[recallCount];
+                        this.resetX();
+                        this.putText(">" + this.buffer);
+                    }
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -80,7 +103,8 @@ var TSOS;
                 }
             }
         };
-        Console.prototype.putText = function (text) {
+        Console.prototype.putText = function (text, record) {
+            if (record === void 0) { record = false; }
             // My first inclination here was to write two functions: putChar() and putString().
             // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
             // between the two.  So rather than be like PHP and write two (or more) functions that

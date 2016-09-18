@@ -116,6 +116,14 @@ module TSOS {
                  _KernelInputQueue.enqueue(chr);
 
                 }
+                  //tabcomplete    
+                  else if (keyCode==38 ||keyCode ==40){
+                 
+                 chr = String.fromCharCode(keyCode);
+                 _KernelInputQueue.enqueue(chr);
+
+                }
+
            
              else {                      
                 chr = String.fromCharCode(keyCode);

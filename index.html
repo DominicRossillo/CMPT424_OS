@@ -37,6 +37,12 @@
 <body onload="onDocumentLoad()">
 
 <div id="divMain" style="width:100%;">
+ <h2>
+      Date and Time: <span id=time_title></span>
+      </h2>
+      <h2>
+      Status: <span id=status_title></span>
+      </h2>
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
@@ -64,8 +70,10 @@
              value="Reset"
              tabindex="2"
              onclick="TSOS.Control.hostBtnReset_click(this);">
-   </div>
 
+
+   </div>
+    
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
       <canvas id="display"
               width="500px"
@@ -76,7 +84,7 @@
       </canvas>
 	
    </div>
-
+   
    <div id="divLog" style="margin-left:520px;">
       <label>
          Host Log

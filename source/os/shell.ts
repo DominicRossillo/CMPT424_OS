@@ -64,6 +64,11 @@ module TSOS {
 								  "date",
                                   "- Tells you the current date and time.");
             this.commandList[this.commandList.length] = sc;
+            //status
+            sc = new ShellCommand(this.shellStatus,
+                                  "status",
+                                  "- updates the current status, takes a string");
+            this.commandList[this.commandList.length] = sc;
 			
 			
             // shutdown
@@ -274,9 +279,21 @@ module TSOS {
         }
 		
 		public shellDate(args) {
-            _StdOut.putText("The current date and time is: ");
-            _StdOut.advanceLine()
+            
 			_StdOut.putText( Date().toString());
+        }
+        public shellStatus(args) {
+            if(args.length>0){
+                var status = ""
+                for(var i=0; i<args.length;i++){
+                    status+=args[i]+" "
+                }
+            
+                document.getElementById("status_title").innerText=status;
+            }
+            else {
+                _StdOut.putText("Usage: status <word(s)>  Please supply a status.");
+            }
         }
 
         public shellShutdown(args) {

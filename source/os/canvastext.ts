@@ -207,7 +207,7 @@ module TSOS {
                 var penUp = true;
                 var needStroke = 0;
                 for (var j = 0; j < c.points.length; j++) {
-                    var a = c.points[j];
+                    var a = c.points[j];    
                     if (a[0] === -1 && a[1] === -1) {
                         penUp = true;
                         continue;
@@ -226,8 +226,17 @@ module TSOS {
             return total;
         }
 
+        public static recallClear(ctx, font, size, x, y, str) {
+
+                _DrawingContext.clearRect(0, y-(_DefaultFontSize),500,500);
+                
+           //need to get put prompt working here?
+           
+        }
+
         public static enable(ctx) {
             ctx.drawText = function(font,size,x,y,text) { return CanvasTextFunctions.draw( ctx, font,size,x,y,text); };
+            ctx.recallClear = function(font,size,x,y,text) { return CanvasTextFunctions.recallClear( ctx, font,size,x,y,text); };
             ctx.delText = function(font,size,x,y,text) { return CanvasTextFunctions.del( ctx, font,size,x,y,text); };
             ctx.measureText = function(font,size,text) { return CanvasTextFunctions.measure( font,size,text); };
             ctx.fontAscent = function(font,size) { return CanvasTextFunctions.ascent(font,size); };

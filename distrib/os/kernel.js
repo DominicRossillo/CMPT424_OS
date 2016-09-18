@@ -68,6 +68,8 @@ var TSOS;
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
                that it has to look for interrupts and process them if it finds any.                           */
+            var curentTime = Date().toString();
+            document.getElementById("time_title").innerText = Date();
             // Check for an interrupt, are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
@@ -155,6 +157,12 @@ var TSOS;
         Kernel.prototype.krnTrapError = function (msg) {
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
+            var ctx = _Canvas.getContext("2d");
+            ctx.beginPath();
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, 500, 500);
+            ctx.fill();
+            _StdOut.putText("An error has occured, you broke something.");
             this.krnShutdown();
         };
         return Kernel;

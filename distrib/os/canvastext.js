@@ -113,8 +113,13 @@ var TSOS;
             ctx.restore();
             return total;
         };
+        CanvasTextFunctions.recallClear = function (ctx, font, size, x, y, str) {
+            _DrawingContext.clearRect(0, y - (_DefaultFontSize), 500, 500);
+            //need to get put prompt working here?
+        };
         CanvasTextFunctions.enable = function (ctx) {
             ctx.drawText = function (font, size, x, y, text) { return CanvasTextFunctions.draw(ctx, font, size, x, y, text); };
+            ctx.recallClear = function (font, size, x, y, text) { return CanvasTextFunctions.recallClear(ctx, font, size, x, y, text); };
             ctx.delText = function (font, size, x, y, text) { return CanvasTextFunctions.del(ctx, font, size, x, y, text); };
             ctx.measureText = function (font, size, text) { return CanvasTextFunctions.measure(font, size, text); };
             ctx.fontAscent = function (font, size) { return CanvasTextFunctions.ascent(font, size); };

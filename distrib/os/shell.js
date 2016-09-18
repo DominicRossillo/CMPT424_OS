@@ -43,6 +43,9 @@ var TSOS;
             //date and time
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Tells you the current date and time.");
             this.commandList[this.commandList.length] = sc;
+            //status
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "- updates the current status, takes a string");
+            this.commandList[this.commandList.length] = sc;
             // shutdown
             sc = new TSOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
@@ -212,9 +215,19 @@ var TSOS;
             _StdOut.putText("An error has occured, you broke something.");
         };
         Shell.prototype.shellDate = function (args) {
-            _StdOut.putText("The current date and time is: ");
-            _StdOut.advanceLine();
             _StdOut.putText(Date().toString());
+        };
+        Shell.prototype.shellStatus = function (args) {
+            if (args.length > 0) {
+                var status = "";
+                for (var i = 0; i < args.length; i++) {
+                    status += args[i] + " ";
+                }
+                document.getElementById("status_title").innerText = status;
+            }
+            else {
+                _StdOut.putText("Usage: status <word(s)>  Please supply a status.");
+            }
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

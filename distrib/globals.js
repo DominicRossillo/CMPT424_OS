@@ -53,3 +53,4 @@ var onDocumentLoad = function () {
 };
 //array used to recall past commands used by using the up arrow 
 var bufferRecall = [];
+var recallCount = 0;

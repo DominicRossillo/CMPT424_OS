@@ -26,13 +26,20 @@ module TSOS {
         }
 
         private clearScreen(): void {
-			//Dom;
+			
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
         }
+
+
 
         private resetXY(): void {
             this.currentXPosition = 0;
             this.currentYPosition = this.currentFontSize;
+        }
+
+        private resetX(): void {
+            this.currentXPosition = 0;
+            
         }
 
         public handleInput(): void {
@@ -46,8 +53,10 @@ module TSOS {
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
-                    var bufferRecall = []
+                    bufferRecall.push(this.buffer);
+                    recallCount=bufferRecall.length;
                     this.buffer = "";
+                    
                 }
                 else if (chr === String.fromCharCode(9)) { //    Tab key
                     // Tab key will look if what is entered is a sub string of any known commands and complete it
@@ -83,6 +92,31 @@ module TSOS {
                     
 
                 } 
+                //buffer recall to rewrite old commands submitted by user
+                 else if(chr === String.fromCharCode(38)) {
+                    // alert("please")
+                                if (recallCount>0){
+                                recallCount--;
+                                _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
+                             
+                                this.buffer=bufferRecall[recallCount];
+                                this.resetX();  
+                                this.putText(">"+this.buffer);
+                                                  
+                            }
+                        }
+                 else if(chr === String.fromCharCode(40)) {
+                    // alert("please")
+                                if (recallCount<bufferRecall.length){
+                                recallCount++;
+                                _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
+                             
+                                this.buffer=bufferRecall[recallCount];
+                                this.resetX();    
+                                this.putText(">"+this.buffer);
+                                                
+                            }
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -94,7 +128,7 @@ module TSOS {
             }
         }
 
-        public putText(text): void {
+        public putText(text,record=false): void {
             // My first inclination here was to write two functions: putChar() and putString().
             // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
             // between the two.  So rather than be like PHP and write two (or more) functions that

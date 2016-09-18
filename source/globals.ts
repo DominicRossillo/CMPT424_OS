@@ -69,4 +69,5 @@ var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
 };
 //array used to recall past commands used by using the up arrow 
- var bufferRecall = []
+ var bufferRecall = [];
+ var recallCount = 0;
