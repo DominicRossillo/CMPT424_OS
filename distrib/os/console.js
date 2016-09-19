@@ -44,6 +44,7 @@ var TSOS;
                 if (chr === String.fromCharCode(13)) {
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
+                    scrollingText.push(">" + this.buffer);
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
@@ -75,7 +76,6 @@ var TSOS;
                     this.buffer = (this.buffer).slice(0, this.buffer.length - 1);
                 }
                 else if (chr === String.fromCharCode(38)) {
-                    // alert("please")
                     if (recallCount > 0) {
                         recallCount--;
                         _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
@@ -85,7 +85,6 @@ var TSOS;
                     }
                 }
                 else if (chr === String.fromCharCode(40)) {
-                    // alert("please")
                     if (recallCount < bufferRecall.length) {
                         recallCount++;
                         _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
@@ -119,6 +118,9 @@ var TSOS;
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
+                if (record) {
+                    scrollingText.push(text);
+                }
             }
         };
         Console.prototype.remText = function (text) {
@@ -130,16 +132,25 @@ var TSOS;
             _DrawingContext.delText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
         };
         Console.prototype.advanceLine = function () {
-            this.currentXPosition = 0;
-            /*
-             * Font size measures from the baseline to the highest point in the font.
-             * Font descent measures from the baseline to the lowest point in the font.
-             * Font height margin is extra spacing between the lines.
-             */
-            this.currentYPosition += _DefaultFontSize +
-                _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                _FontHeightMargin;
-            // TODO: Handle scrolling. (iProject 1)
+            if (this.currentYPosition < 500 - this.currentFontSize) {
+                this.currentXPosition = 0;
+                /*
+                 * Font size measures from the baseline to the highest point in the font.
+                 * Font descent measures from the baseline to the lowest point in the font.
+                 * Font height margin is extra spacing between the lines.
+                 */
+                this.currentYPosition += _DefaultFontSize +
+                    _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                    _FontHeightMargin;
+            }
+            else {
+                scrollOffSet++;
+                this.init();
+                for (var i = scrollOffSet; i < scrollingText.length; i++) {
+                    this.putText(scrollingText[i]);
+                    this.advanceLine();
+                }
+            }
         };
         return Console;
     }());

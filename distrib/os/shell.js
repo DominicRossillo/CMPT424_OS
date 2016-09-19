@@ -42,6 +42,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             //date and time
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Tells you the current date and time.");
+            //load hex file
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- checks to see if code in the taProgramInput is valid hex");
             this.commandList[this.commandList.length] = sc;
             //status
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "- updates the current status, takes a string");
@@ -156,58 +158,60 @@ var TSOS;
         // called from here, so kept here to avoid violating the law of least astonishment.
         //
         Shell.prototype.shellInvalidCommand = function () {
-            _StdOut.putText("Invalid Command. ");
+            _StdOut.putText("Invalid Command. ", true);
             if (_SarcasticMode) {
-                _StdOut.putText("Unbelievable. You, [subject name here],");
+                _StdOut.putText("Unbelievable. You, [subject name here],", true);
                 _StdOut.advanceLine();
-                _StdOut.putText("must be the pride of [subject hometown here].");
+                _StdOut.putText("must be the pride of [subject hometown here].", true);
             }
             else {
-                _StdOut.putText("Type 'help' for, well... help.");
+                _StdOut.putText("Type 'help' for, well... help.", true);
             }
         };
         Shell.prototype.shellCurse = function () {
-            _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
+            _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.", true);
             _StdOut.advanceLine();
-            _StdOut.putText("Bitch.");
+            _StdOut.putText("Bitch.", true);
             _SarcasticMode = true;
         };
         Shell.prototype.shellApology = function () {
             if (_SarcasticMode) {
-                _StdOut.putText("I think we can put our differences behind us.");
+                _StdOut.putText("I think we can put our differences behind us.", true);
                 _StdOut.advanceLine();
-                _StdOut.putText("For science . . . You monster.");
+                _StdOut.putText("For science . . . You monster.", true);
                 _SarcasticMode = false;
             }
             else {
-                _StdOut.putText("For what?");
+                _StdOut.putText("For what?", true);
             }
         };
         Shell.prototype.shellVer = function (args) {
-            _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            _StdOut.putText(APP_NAME + " version " + APP_VERSION, true);
         };
         Shell.prototype.shellHelp = function (args) {
-            _StdOut.putText("Commands:");
+            _StdOut.putText("Commands:", true);
             for (var i in _OsShell.commandList) {
                 _StdOut.advanceLine();
-                _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
+                _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description, true);
             }
         };
         Shell.prototype.shellWhereami = function (args) {
-            _StdOut.putText("You are infront of a computer, life is great.");
+            _StdOut.putText("You are infront of a computer, life is great.", true);
         };
         Shell.prototype.shellWhatislove = function (args) {
             if (_SarcasticMode) {
-                _StdOut.putText("Alan of course, he is the master of all minions.");
+                _StdOut.putText("Alan of course, he is the master of all minions.", true);
             }
             else {
-                _StdOut.putText("Dom is love, and life.");
+                _StdOut.putText("Dom is love, and life.", true);
             }
         };
+        //bsod command
         Shell.prototype.shellBSOD = function (args) {
             _StdOut.clearScreen();
             _StdOut.resetXY();
             var ctx = _Canvas.getContext("2d");
+            //drawing blue square over cli
             ctx.beginPath();
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, 500, 500);
@@ -215,18 +219,47 @@ var TSOS;
             _StdOut.putText("An error has occured, you broke something.");
         };
         Shell.prototype.shellDate = function (args) {
-            _StdOut.putText(Date().toString());
+            //prints the current date, time and time zone
+            _StdOut.putText(Date().toString(), true);
+        };
+        //load function to test if code in the taprograminput is valid hex code
+        Shell.prototype.shellLoad = function (args) {
+            var re = /([^a-f^A-F^0-9^\s])+/g;
+            var m;
+            var testcode = document.getElementById("taProgramInput").value;
+            var testpass = true;
+            if (testcode.length > 0) {
+                while ((m = re.exec(testcode)) !== null) {
+                    if (m.index === re.lastIndex) {
+                        re.lastIndex++;
+                    }
+                    else {
+                        testpass = false;
+                    }
+                }
+            }
+            else {
+                testpass = false;
+            }
+            if (testpass) {
+                _StdOut.putText("This is valid hexcode");
+            }
+            else {
+                _StdOut.putText("This is not valid hexcode");
+            }
         };
         Shell.prototype.shellStatus = function (args) {
+            //command to update status title outside of the cli
             if (args.length > 0) {
                 var status = "";
+                //loop that makes gets multiple word statuses 
                 for (var i = 0; i < args.length; i++) {
                     status += args[i] + " ";
                 }
                 document.getElementById("status_title").innerText = status;
             }
             else {
-                _StdOut.putText("Usage: status <word(s)>  Please supply a status.");
+                _StdOut.putText("Usage: status <word(s)>  Please supply a status.", true);
             }
         };
         Shell.prototype.shellShutdown = function (args) {
@@ -244,27 +277,27 @@ var TSOS;
                 var topic = args[0];
                 switch (topic) {
                     case "help":
-                        _StdOut.putText("Help displays a list of (hopefully) valid commands.");
+                        _StdOut.putText("Help displays a list of (hopefully) valid commands.", true);
                         break;
                     case "ver":
-                        _StdOut.putText("Ver Displays the current version of the OS.");
+                        _StdOut.putText("Ver Displays the current version of the OS.", true);
                         break;
                     case "whereami":
-                        _StdOut.putText("Where am i, helps you figure out where you are in real life.");
+                        _StdOut.putText("Where am i, helps you figure out where you are in real life.", true);
                         break;
                     case "date":
-                        _StdOut.putText("Date can be used to find out the current Date and Time.");
+                        _StdOut.putText("Date can be used to find out the current Date and Time.", true);
                         break;
                     case "whatislove":
-                        _StdOut.putText("What is love is used to find what you really love.");
+                        _StdOut.putText("What is love is used to find what you really love.", true);
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
-                        _StdOut.putText("No manual entry for " + args[0] + ".");
+                        _StdOut.putText("No manual entry for " + args[0] + ".", true);
                 }
             }
             else {
-                _StdOut.putText("Usage: man <topic>  Please supply a topic.");
+                _StdOut.putText("Usage: man <topic>  Please supply a topic.", true);
             }
         };
         Shell.prototype.shellTrace = function (args) {
@@ -273,32 +306,32 @@ var TSOS;
                 switch (setting) {
                     case "on":
                         if (_Trace && _SarcasticMode) {
-                            _StdOut.putText("Trace is already on, doofus.");
+                            _StdOut.putText("Trace is already on, doofus.", true);
                         }
                         else {
                             _Trace = true;
-                            _StdOut.putText("Trace ON");
+                            _StdOut.putText("Trace ON", true);
                         }
                         break;
                     case "off":
                         _Trace = false;
-                        _StdOut.putText("Trace OFF");
+                        _StdOut.putText("Trace OFF", true);
                         break;
                     default:
-                        _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.");
+                        _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.", true);
                 }
             }
             else {
-                _StdOut.putText("Usage: trace <on | off>");
+                _StdOut.putText("Usage: trace <on | off>", true);
             }
         };
         Shell.prototype.shellRot13 = function (args) {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.
-                _StdOut.putText(args.join(' ') + " = '" + TSOS.Utils.rot13(args.join(' ')) + "'");
+                _StdOut.putText(args.join(' ') + " = '" + TSOS.Utils.rot13(args.join(' ')) + "'", true);
             }
             else {
-                _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
+                _StdOut.putText("Usage: rot13 <string>  Please supply a string.", true);
             }
         };
         Shell.prototype.shellPrompt = function (args) {
@@ -306,7 +339,7 @@ var TSOS;
                 _OsShell.promptStr = args[0];
             }
             else {
-                _StdOut.putText("Usage: prompt <string>  Please supply a string.");
+                _StdOut.putText("Usage: prompt <string>  Please supply a string.", true);
             }
         };
         return Shell;

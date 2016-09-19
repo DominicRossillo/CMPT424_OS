@@ -71,3 +71,7 @@ var onDocumentLoad = function() {
 //array used to recall past commands used by using the up arrow 
  var bufferRecall = [];
  var recallCount = 0;
+
+//array used to keep track of text that will display while scrolling down
+var scrollingText= [];
+var scrollOffSet=0;

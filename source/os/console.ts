@@ -51,10 +51,11 @@ module TSOS {
                 if (chr === String.fromCharCode(13)) { //     Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
+                    scrollingText.push(">"+this.buffer);
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
-                    recallCount=bufferRecall.length;
+                    recallCount=bufferRecall.length;    
                     this.buffer = "";
                     
                 }
@@ -94,7 +95,7 @@ module TSOS {
                 } 
                 //buffer recall to rewrite old commands submitted by user
                  else if(chr === String.fromCharCode(38)) {
-                    // alert("please")
+                    
                                 if (recallCount>0){
                                 recallCount--;
                                 _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
@@ -106,7 +107,7 @@ module TSOS {
                             }
                         }
                  else if(chr === String.fromCharCode(40)) {
-                    // alert("please")
+              
                                 if (recallCount<bufferRecall.length){
                                 recallCount++;
                                 _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
@@ -138,12 +139,18 @@ module TSOS {
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
-            }
+                   
+                    // Draw the text at the current X and Y coordinates.
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                    // Move the current X position.
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                    this.currentXPosition = this.currentXPosition + offset;
+
+                    if(record){
+                        scrollingText.push(text);
+                                            }
+                }
+           
          }
 
          public remText(text): void {
@@ -161,17 +168,31 @@ module TSOS {
 
 
         public advanceLine(): void {
-            this.currentXPosition = 0;
-            /*
-             * Font size measures from the baseline to the highest point in the font.
-             * Font descent measures from the baseline to the lowest point in the font.
-             * Font height margin is extra spacing between the lines.
-             */
-            this.currentYPosition += _DefaultFontSize + 
-                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                     _FontHeightMargin;
+            if(this.currentYPosition<500-this.currentFontSize){
+                    this.currentXPosition = 0;
+                    /*
+                     * Font size measures from the baseline to the highest point in the font.
+                     * Font descent measures from the baseline to the lowest point in the font.
+                     * Font height margin is extra spacing between the lines.
+                     */
+                    this.currentYPosition += _DefaultFontSize + 
+                                             _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                             _FontHeightMargin;
 
-            // TODO: Handle scrolling. (iProject 1)
-        }
+                    // TODO: Handle scrolling. (iProject 1)
+            }
+
+             else {
+
+                    scrollOffSet++
+                    
+                    this.init();
+                    for(var i=scrollOffSet; i<scrollingText.length;i++){
+                       
+                       this.putText(scrollingText[i]);
+                       this.advanceLine();
+                    }
+                }
+            }
     }
  }
