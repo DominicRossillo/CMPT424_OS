@@ -37,6 +37,10 @@ var TSOS;
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
+            //checks for caps lock if so invert current isShifted
+            if (capsLock) {
+                isShifted = !isShifted;
+            }
             // Check to see if we even want to deal with the key that was pressed.
             if (((keyCode >= 65) && (keyCode <= 90)) ||
                 ((keyCode >= 97) && (keyCode <= 123))) {
@@ -98,7 +102,7 @@ var TSOS;
                 _KernelInputQueue.enqueue(chr);
             }
             else if (keyCode == 20) {
-                isShifted = !isShifted;
+                capsLock = !capsLock;
             }
             else if (keyCode == 38 || keyCode == 40) {
                 chr = String.fromCharCode(keyCode);

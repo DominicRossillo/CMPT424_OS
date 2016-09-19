@@ -38,6 +38,10 @@ module TSOS {
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             
             var chr = "";
+            //checks for caps lock if so invert current isShifted
+            if(capsLock){
+                isShifted=!isShifted
+            }
             // Check to see if we even want to deal with the key that was pressed.
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
                 ((keyCode >= 97) && (keyCode <= 123) )) {  // a..z {
@@ -121,7 +125,7 @@ module TSOS {
                 //capslock
                    else if (keyCode==20){
                  
-                 isShifted=!isShifted;
+                 capsLock=!capsLock;
 
                 }
                   //up arrow and down arrow  

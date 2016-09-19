@@ -296,7 +296,7 @@ module TSOS {
             var testcode = (<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
             var testpass=true;
             if(testcode.length>0){
-                alert("got in if")
+                alert("got in if");
                 while ((m = re.exec(testcode)) !== null) {
                       if (m.index === re.lastIndex) {
                             re.lastIndex++;
@@ -305,7 +305,7 @@ module TSOS {
                       }
                       else{
                             testpass=false;
-                            
+                            break;
                           }                      
                     }
                 }
@@ -314,21 +314,22 @@ module TSOS {
                 } 
                 if (testpass){
                     alert("WTF");
-                     _StdOut.putText("This is valid hexcode")
+                     _StdOut.putText("This is valid hexcode",true);
                 }
                 else{
-                     _StdOut.putText("This is not valid hexcode")
+                     _StdOut.putText("This is not valid hexcode",true);
+                       alert("got in else");
                 }        
         }
 
         public shellStatus(args) {
             //command to update status title outside of the cli
             if(args.length>0){
-                var status = ""
+                var status = "";
                
                 //loop that makes gets multiple word statuses 
                 for(var i=0; i<args.length;i++){
-                    status+=args[i]+" "
+                    status+=args[i]+" ";
                 }
             
                 document.getElementById("status_title").innerText=status;
@@ -366,8 +367,23 @@ module TSOS {
 					case "date":
                         _StdOut.putText("Date can be used to find out the current Date and Time.",true);
                         break;
-					case "whatislove":
+					case "load":
+                        _StdOut.putText("Checks the text in the text area is valid hex code.",true);
+                        break;
+                    case "status":
+                        _StdOut.putText("Change the status title on the page.",true);
+                        break;
+                    case "whatislove":
                         _StdOut.putText("What is love is used to find what you really love.",true);
+                        break;
+                    case "bsod":
+                        _StdOut.putText("Crashes the OS.",true);
+                        break;
+                    case "trace":
+                        _StdOut.putText("Turns the OS trace on or off.",true);
+                        break;
+                    case "prompt":
+                        _StdOut.putText("Set the prompt.",true);
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:

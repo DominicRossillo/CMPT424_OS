@@ -56,7 +56,7 @@ module TSOS {
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
                     recallCount=bufferRecall.length;    
-                   
+                    alert(this.buffer);
                     this.buffer = "";
                     
                 }
