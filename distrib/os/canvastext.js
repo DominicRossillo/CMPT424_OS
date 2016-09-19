@@ -77,6 +77,7 @@ var TSOS;
             ctx.restore();
             return total;
         };
+        //function made to write over the same letter that was at the end of str
         CanvasTextFunctions.del = function (ctx, font, size, x, y, str) {
             var total = 0;
             var len = str.length;
@@ -113,6 +114,7 @@ var TSOS;
             ctx.restore();
             return total;
         };
+        //clears everything below the curent y, used when using up arrow and down arrow
         CanvasTextFunctions.recallClear = function (ctx, font, size, x, y, str) {
             _DrawingContext.clearRect(0, y - (_DefaultFontSize), 500, 500);
             //need to get put prompt working here?

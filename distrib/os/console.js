@@ -53,15 +53,20 @@ var TSOS;
                 }
                 else if (chr === String.fromCharCode(9)) {
                     // Tab key will look if what is entered is a sub string of any known commands and complete it
+                    // if nothing is writen this if will just return ""
                     if (this.buffer.length > 0) {
+                        //loop to look at all commands in the command list
                         for (var i = 0; i < (_OsShell.commandList.length); i++) {
+                            //if command at current index trimed to the same length as the user input then return that command
                             if ((this.buffer) == (_OsShell.commandList[i].command).substr(0, (this.buffer.length))) {
                                 var commandbuild = "";
+                                //for loop to generate the commmand we are finishing 
                                 for (var j = 0; j < (_OsShell.commandList[i].command).substr(this.buffer.length, (_OsShell.commandList[i].command).length - 1).length; j++) {
                                     var comchar = (_OsShell.commandList[i].command).substr(this.buffer.length, (_OsShell.commandList[i].command).length - 1).charAt(j); //chars added to complete the command
                                     this.putText(comchar);
                                     commandbuild += comchar;
                                 }
+                                //add the end of the command to the buffer
                                 this.buffer += commandbuild;
                             }
                         }
@@ -72,22 +77,28 @@ var TSOS;
                     }
                 }
                 else if (chr === String.fromCharCode(8)) {
+                    //finds and draws the text over the previous char
                     this.remText((this.buffer).charAt((this.buffer).length - 1));
+                    //changes the buffer to what it would be - the char we just overwrote 
                     this.buffer = (this.buffer).slice(0, this.buffer.length - 1);
                 }
                 else if (chr === String.fromCharCode(38)) {
+                    //iff to make sure you dont index underflow 
                     if (recallCount > 0) {
                         recallCount--;
                         _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
+                        //adds the line that we want to recall to the buffer and resets the x
                         this.buffer = bufferRecall[recallCount];
                         this.resetX();
                         this.putText(">" + this.buffer);
                     }
                 }
                 else if (chr === String.fromCharCode(40)) {
-                    if (recallCount < bufferRecall.length) {
+                    // if to make sure you dont index overflow
+                    if (recallCount < bufferRecall.length - 1) {
                         recallCount++;
                         _DrawingContext.recallClear(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition);
+                        //adds the line that we want to recall to the buffer and resets the x
                         this.buffer = bufferRecall[recallCount];
                         this.resetX();
                         this.putText(">" + this.buffer);
@@ -132,6 +143,7 @@ var TSOS;
             _DrawingContext.delText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
         };
         Console.prototype.advanceLine = function () {
+            //if to make sure we arent leaving the bounds of the canvas
             if (this.currentYPosition < 500 - this.currentFontSize) {
                 this.currentXPosition = 0;
                 /*
@@ -144,6 +156,7 @@ var TSOS;
                     _FontHeightMargin;
             }
             else {
+                //else we are going to inc scrollOffset and print everything from scrollingText, Starting from the off set
                 scrollOffSet++;
                 this.init();
                 for (var i = scrollOffSet; i < scrollingText.length; i++) {

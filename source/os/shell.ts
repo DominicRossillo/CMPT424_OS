@@ -63,6 +63,7 @@ module TSOS {
 			sc = new ShellCommand(this.shellDate,
 								  "date",
                                   "- Tells you the current date and time.");
+            this.commandList[this.commandList.length] = sc;
             //load hex file
             sc = new ShellCommand(this.shellLoad,
                                   "load",
@@ -280,12 +281,13 @@ module TSOS {
 			ctx.fillRect(0,0,500,500);
 			ctx.fill();
             _StdOut.putText("An error has occured, you broke something.");
+            _Kernel.krnShutdown();
 	        
         }
 		
 		public shellDate(args) {
             //prints the current date, time and time zone
-			_StdOut.putText( Date().toString(),true);
+			_StdOut.putText((Date().toString()),true);
         }
         //load function to test if code in the taprograminput is valid hex code
         public shellLoad(args) {
@@ -294,6 +296,7 @@ module TSOS {
             var testcode = (<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
             var testpass=true;
             if(testcode.length>0){
+                alert("got in if")
                 while ((m = re.exec(testcode)) !== null) {
                       if (m.index === re.lastIndex) {
                             re.lastIndex++;
@@ -310,6 +313,7 @@ module TSOS {
                     testpass=false;
                 } 
                 if (testpass){
+                    alert("WTF");
                      _StdOut.putText("This is valid hexcode")
                 }
                 else{
@@ -321,6 +325,7 @@ module TSOS {
             //command to update status title outside of the cli
             if(args.length>0){
                 var status = ""
+               
                 //loop that makes gets multiple word statuses 
                 for(var i=0; i<args.length;i++){
                     status+=args[i]+" "

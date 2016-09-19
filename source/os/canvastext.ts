@@ -185,7 +185,7 @@ module TSOS {
             return total;
         }
 
-
+            //function made to write over the same letter that was at the end of str
           public static del(ctx, font, size, x, y, str) {
             var total = 0;
             var len = str.length;
@@ -225,7 +225,7 @@ module TSOS {
             ctx.restore();
             return total;
         }
-
+        //clears everything below the curent y, used when using up arrow and down arrow
         public static recallClear(ctx, font, size, x, y, str) {
 
                 _DrawingContext.clearRect(0, y-(_DefaultFontSize),500,500);

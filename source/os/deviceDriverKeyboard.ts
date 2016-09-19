@@ -36,6 +36,7 @@ module TSOS {
             var keyCode = params[0];
             var isShifted = params[1];
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
+            
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
@@ -55,6 +56,7 @@ module TSOS {
                         (keyCode == 32)                   ||   // space
                         (keyCode == 13)) {                     // enter
                 chr = String.fromCharCode(keyCode);
+
                 //!
                  if (isShifted) {
                  
@@ -116,7 +118,13 @@ module TSOS {
                  _KernelInputQueue.enqueue(chr);
 
                 }
-                  //tabcomplete    
+                //capslock
+                   else if (keyCode==20){
+                 
+                 isShifted=!isShifted;
+
+                }
+                  //up arrow and down arrow  
                   else if (keyCode==38 ||keyCode ==40){
                  
                  chr = String.fromCharCode(keyCode);
@@ -173,7 +181,7 @@ module TSOS {
                      else if (keyCode == 191) {
                         chr = String.fromCharCode(63);
                     }
-                    _KernelInputQueue.enqueue(chr);
+                   
                 }
 
 

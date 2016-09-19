@@ -42,6 +42,7 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             //date and time
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Tells you the current date and time.");
+            this.commandList[this.commandList.length] = sc;
             //load hex file
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- checks to see if code in the taProgramInput is valid hex");
             this.commandList[this.commandList.length] = sc;
@@ -217,10 +218,11 @@ var TSOS;
             ctx.fillRect(0, 0, 500, 500);
             ctx.fill();
             _StdOut.putText("An error has occured, you broke something.");
+            _Kernel.krnShutdown();
         };
         Shell.prototype.shellDate = function (args) {
             //prints the current date, time and time zone
-            _StdOut.putText(Date().toString(), true);
+            _StdOut.putText((Date().toString()), true);
         };
         //load function to test if code in the taprograminput is valid hex code
         Shell.prototype.shellLoad = function (args) {
@@ -229,6 +231,7 @@ var TSOS;
             var testcode = document.getElementById("taProgramInput").value;
             var testpass = true;
             if (testcode.length > 0) {
+                alert("got in if");
                 while ((m = re.exec(testcode)) !== null) {
                     if (m.index === re.lastIndex) {
                         re.lastIndex++;
@@ -242,6 +245,7 @@ var TSOS;
                 testpass = false;
             }
             if (testpass) {
+                alert("WTF");
                 _StdOut.putText("This is valid hexcode");
             }
             else {
