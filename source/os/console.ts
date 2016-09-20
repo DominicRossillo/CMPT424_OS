@@ -56,7 +56,7 @@ module TSOS {
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
                     recallCount=bufferRecall.length;    
-                    alert(this.buffer);
+                   
                     this.buffer = "";
                     
                 }
@@ -115,7 +115,7 @@ module TSOS {
                             }
                         }
                  //down arrow
-                 else if(chr === String.fromCharCode(40)) {
+                 else if(chr === String.fromCharCode(40)&& usearrow) {
                                 // if to make sure you dont index overflow
                                 if (recallCount<bufferRecall.length-1){
                                 recallCount++;
@@ -124,6 +124,7 @@ module TSOS {
                                 this.buffer=bufferRecall[recallCount];
                                 this.resetX();    
                                 this.putText(">"+this.buffer);
+                                usearrow=false;
                                                 
                             }
                 }
@@ -147,9 +148,39 @@ module TSOS {
             //
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
+          
             if (text !== "") {
-                   
-                    // Draw the text at the current X and Y coordinates.
+                //if the key being typed is past 475 on x then advances the line
+                   if(this.currentXPosition>475){  
+                        _StdOut.advanceLine();
+
+                       
+                   }
+                   //if a string is read in that has a length that will go off the page, this will cut it in half
+                   else if(_DrawingContext.measureText(this.currentFont, this.currentFontSize, text)>500){
+                       
+                         var headtext= text.substr(0,Math.floor(text.length/2));
+                         var tailtext= text.substr(Math.floor(text.length/2),text.length);
+                         // alert("putText() text : "+text)
+                         // alert("putText() tailtext : "+tailtext)                  
+                           
+
+                         _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, headtext);
+                        _StdOut.advanceLine();
+
+                       
+                        
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, tailtext);
+                        //adds the split string into the srolling text array 
+                        if(record){
+                        scrollingText.push(headtext);
+                        scrollingText.push(tailtext);
+                                            }
+                       
+
+                   }
+                   else{
+                   // Draw the text at the current X and Y coordinates.
                     _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                     // Move the current X position.
                     var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
@@ -158,6 +189,7 @@ module TSOS {
                     if(record){
                         scrollingText.push(text);
                                             }
+                    }
                 }
            
          }

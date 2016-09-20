@@ -98,6 +98,7 @@ module TSOS {
                     //(
                      else if (keyCode == 57) {
                         chr = String.fromCharCode(40);
+
                     }
                     //) 
                      else if (keyCode == 48) {
@@ -130,7 +131,7 @@ module TSOS {
                 }
                   //up arrow and down arrow  
                   else if (keyCode==38 ||keyCode ==40){
-                 
+                 usearrow=true;
                  chr = String.fromCharCode(keyCode);
                  _KernelInputQueue.enqueue(chr);
 

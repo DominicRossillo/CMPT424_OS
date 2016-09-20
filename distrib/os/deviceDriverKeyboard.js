@@ -105,6 +105,7 @@ var TSOS;
                 capsLock = !capsLock;
             }
             else if (keyCode == 38 || keyCode == 40) {
+                usearrow = true;
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

@@ -49,7 +49,6 @@ var TSOS;
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
                     recallCount = bufferRecall.length;
-                    alert(this.buffer);
                     this.buffer = "";
                 }
                 else if (chr === String.fromCharCode(9)) {
@@ -94,7 +93,7 @@ var TSOS;
                         this.putText(">" + this.buffer);
                     }
                 }
-                else if (chr === String.fromCharCode(40)) {
+                else if (chr === String.fromCharCode(40) && usearrow) {
                     // if to make sure you dont index overflow
                     if (recallCount < bufferRecall.length - 1) {
                         recallCount++;
@@ -103,6 +102,7 @@ var TSOS;
                         this.buffer = bufferRecall[recallCount];
                         this.resetX();
                         this.putText(">" + this.buffer);
+                        usearrow = false;
                     }
                 }
                 else {
@@ -115,7 +115,6 @@ var TSOS;
             }
         };
         Console.prototype.putText = function (text, record) {
-            if (record === void 0) { record = false; }
             // My first inclination here was to write two functions: putChar() and putString().
             // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
             // between the two.  So rather than be like PHP and write two (or more) functions that
@@ -124,14 +123,35 @@ var TSOS;
             //
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
+            if (record === void 0) { record = false; }
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
-                if (record) {
-                    scrollingText.push(text);
+                //if the key being typed is past 475 on x then advances the line
+                if (this.currentXPosition > 475) {
+                    _StdOut.advanceLine();
+                }
+                else if (_DrawingContext.measureText(this.currentFont, this.currentFontSize, text) > 500) {
+                    var headtext = text.substr(0, Math.floor(text.length / 2));
+                    var tailtext = text.substr(Math.floor(text.length / 2), text.length);
+                    // alert("putText() text : "+text)
+                    // alert("putText() tailtext : "+tailtext)                  
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, headtext);
+                    _StdOut.advanceLine();
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, tailtext);
+                    //adds the split string into the srolling text array 
+                    if (record) {
+                        scrollingText.push(headtext);
+                        scrollingText.push(tailtext);
+                    }
+                }
+                else {
+                    // Draw the text at the current X and Y coordinates.
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                    // Move the current X position.
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                    this.currentXPosition = this.currentXPosition + offset;
+                    if (record) {
+                        scrollingText.push(text);
+                    }
                 }
             }
         };

@@ -231,7 +231,6 @@ var TSOS;
             var testcode = document.getElementById("taProgramInput").value;
             var testpass = true;
             if (testcode.length > 0) {
-                alert("got in if");
                 while ((m = re.exec(testcode)) !== null) {
                     if (m.index === re.lastIndex) {
                         re.lastIndex++;
@@ -246,12 +245,10 @@ var TSOS;
                 testpass = false;
             }
             if (testpass) {
-                alert("WTF");
                 _StdOut.putText("This is valid hexcode", true);
             }
             else {
                 _StdOut.putText("This is not valid hexcode", true);
-                alert("got in else");
             }
         };
         Shell.prototype.shellStatus = function (args) {

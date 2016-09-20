@@ -59,3 +59,5 @@ var scrollingText = [];
 var scrollOffSet = 0;
 //array used to keep track of text that will display while scrolling down
 var capsLock = false;
+//fix arrow with shift and numbers
+var usearrow = false;
