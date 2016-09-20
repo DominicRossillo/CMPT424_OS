@@ -102,7 +102,7 @@ module TSOS {
                 } 
                 //buffer recall to rewrite old commands submitted by user
                 //up arrow
-                 else if(chr === String.fromCharCode(38)) {
+                 else if(chr === String.fromCharCode(38)&& usearrow) {
                                 //iff to make sure you dont index underflow 
                                 if (recallCount>0){
                                 recallCount--;

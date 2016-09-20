@@ -82,7 +82,7 @@ var TSOS;
                     //changes the buffer to what it would be - the char we just overwrote 
                     this.buffer = (this.buffer).slice(0, this.buffer.length - 1);
                 }
-                else if (chr === String.fromCharCode(38)) {
+                else if (chr === String.fromCharCode(38) && usearrow) {
                     //iff to make sure you dont index underflow 
                     if (recallCount > 0) {
                         recallCount--;
