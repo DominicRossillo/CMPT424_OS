@@ -52,7 +52,7 @@ module TSOS {
                 if (isShifted) {
                     chr = String.fromCharCode(keyCode);
                 }
-                // TODO: Check for caps-lock and handle as shifted if so.
+               
                 _KernelInputQueue.enqueue(chr);
             } 
 
@@ -88,7 +88,7 @@ module TSOS {
                      else if (keyCode == 54) {
                         chr = String.fromCharCode(94);
                     } //&
-                     else if (keyCode == 55) {
+                     else if (keyCode == 55 && !usearrow) {
                         chr = String.fromCharCode(38);
                     }
                     //*
@@ -96,7 +96,7 @@ module TSOS {
                         chr = String.fromCharCode(42);
                     }
                     //(
-                     else if (keyCode == 57) {
+                     else if (keyCode == 57 && !usearrow) {
                         chr = String.fromCharCode(40);
 
                     }
@@ -130,7 +130,7 @@ module TSOS {
 
                 }
                   //up arrow and down arrow  
-                  else if (keyCode==38 ||keyCode ==40){
+                  else if ((keyCode==38 ||keyCode ==40)&& !usearrow){
                  usearrow=true;
                  chr = String.fromCharCode(keyCode);
                  _KernelInputQueue.enqueue(chr);

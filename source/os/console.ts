@@ -111,7 +111,7 @@ module TSOS {
                                 this.buffer=bufferRecall[recallCount];
                                 this.resetX();  
                                 this.putText(">"+this.buffer);
-                                                  
+                                usearrow=false;
                             }
                         }
                  //down arrow

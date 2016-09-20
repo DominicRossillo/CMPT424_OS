@@ -91,6 +91,7 @@ var TSOS;
                         this.buffer = bufferRecall[recallCount];
                         this.resetX();
                         this.putText(">" + this.buffer);
+                        usearrow = false;
                     }
                 }
                 else if (chr === String.fromCharCode(40) && usearrow) {
