@@ -46,6 +46,7 @@ module TSOS {
             
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
+                var comcompletefound=0;  
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
                 if (chr === String.fromCharCode(13)) { //     Enter key
@@ -64,22 +65,38 @@ module TSOS {
                     // Tab key will look if what is entered is a sub string of any known commands and complete it
                     // if nothing is writen this if will just return ""
                     if (this.buffer.length>0){
+               
                         //loop to look at all commands in the command list
+                    
                     for (var i=0; i<(_OsShell.commandList.length); i++){
+                            
                              //if command at current index trimed to the same length as the user input then return that command
                             if((this.buffer)==(_OsShell.commandList[i].command).substr(0,(this.buffer.length))){    
                                var commandbuild= "" 
-                              
-                                //for loop to generate the commmand we are finishing 
-                                for(var j=0; j<(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).length;j++){
+                             
+                                // loop to count if any commands after this one are = to the buffer 
+                               for (j=i+1; j<(_OsShell.commandList.length); j++) {
+
+                                   if((this.buffer)==(_OsShell.commandList[j].command).substr(0,(this.buffer.length))){
+                                     comcompletefound++;   
+                                   }
                                     
-                                    var comchar=(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).charAt(j); //chars added to complete the command
-                                    this.putText(comchar);
-                                    commandbuild += comchar;
-                                }
-                                    //add the end of the command to the buffer
-                                     this.buffer += commandbuild
-                            }
+                               }
+                             //if multiple function arent found finish the word
+                              if(comcompletefound==0){
+                                     
+                                    //for loop to generate the commmand we are finishing 
+                                    for(var j=0; j<(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).length;j++){
+                                        
+                                        var comchar=(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).charAt(j); //chars added to complete the command
+                                        this.putText(comchar);
+                                        commandbuild += comchar;
+                                    }
+                                        //add the end of the command to the buffer
+                                         this.buffer += commandbuild
+                                      
+                                     }
+                              }
 
                     };
                  
@@ -152,6 +169,7 @@ module TSOS {
             if (text !== "") {
                 //if the key being typed is past 475 on x then advances the line
                    if(this.currentXPosition>475){  
+                         scrollingText.push(this.buffer);
                         _StdOut.advanceLine();
 
                        

@@ -14,6 +14,7 @@
    <!-- Host (Virtual Machine / Hardware Simulation) Routines -->
    <script type="text/javascript" src="distrib/host/control.js"></script>
    <script type="text/javascript" src="distrib/host/devices.js"></script>
+    <script type="text/javascript" src="distrib/host/memory.js"></script>
    <script type="text/javascript" src="distrib/host/cpu.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
@@ -97,7 +98,18 @@
          ></textarea>
       </label>
    </div>
-
+    <div id="divUserProgramInput" style="margin-left:520px;">
+           <label>
+             Process Memory
+           </label>
+                        <div class="panel panel-default" >
+                            <div class="panel-body" style="height:170px;overflow-y:auto;">
+                            <table id="memoryTable" class="table">
+                            </table>
+                               
+                            </div>
+                        </div>
+   </div>
    <div id="divUserProgramInput" style="margin-left:520px;">
       <label>
          User Program Input
