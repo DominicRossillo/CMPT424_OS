@@ -87,6 +87,11 @@ module TSOS {
                                   "cls",
                                   "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
+             // run <PID>
+            sc = new ShellCommand(this.shellRun,
+                                  "run",
+                                  "- Runs a loaded program of a given <PID>.");
+            this.commandList[this.commandList.length] = sc;
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -287,7 +292,9 @@ module TSOS {
 		
 		public shellDate(args) {
             //prints the current date, time and time zone
+
 			_StdOut.putText((Date().toString()),true);
+             _StdOut.advanceLine();
         }
         //load function to test if code in the taprograminput is valid hex code
         public shellLoad(args) {
@@ -295,6 +302,8 @@ module TSOS {
             var m;
             var testcode = (<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
             var testpass=true;
+            var memtable=document.getElementById('memoryTable');
+
             if(testcode.length>0){
            
                 while ((m = re.exec(testcode)) !== null) {
@@ -313,8 +322,36 @@ module TSOS {
                     testpass=false;
                 } 
                 if (testpass){
+                        var curcode=0;
+                        var hexin=testcode.split(" ");
+                        var _Pcb = new Pcb(); 
+                        _Pcb.Pid= allPcb.length+1;
+                        
+
+                        for(var i=0; i<Math.ceil((hexin.length/8)); i++){
+                       
+                             for(var j=1; j<=hexin.length && j<9 && curcode<hexin.length; j++){
+                                    //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
+                                   // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
+                                    //var newPcb = new Pcb(1,2,3,4,5,true);
+                                   // alert(newPcb);
+                                   
+                                   _Memory.memoryUpdate(hexin[curcode]);
+                                  //  memtable.innerHTML=hexin[curcode];
+                                    //alert(hexin[curcode]);
+
+                                    curcode++;
+                                   
+                             }
+
+                        }
+                         _StdOut.putText("This is valid hexcode",true);
+                        _StdOut.advanceLine();
+                        _StdOut.putText("The Program has been loaded with PID: "+ _Pcb.Pid,true);
+                        _StdOut.advanceLine();
+                        allPcb.push(_Pcb);
+                       alert(_Memory.memory);
                      
-                     _StdOut.putText("This is valid hexcode",true);
                 }
                 else{
                      _StdOut.putText("This is not valid hexcode",true);
@@ -357,6 +394,9 @@ module TSOS {
                 switch (topic) {
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.",true);
+                        break;
+                    case "run":
+                        _StdOut.putText("Runs a program loaded into memory referenced by a <PID>.",true);
                         break;
 					case "ver":
                         _StdOut.putText("Ver Displays the current version of the OS.",true);
@@ -432,6 +472,30 @@ module TSOS {
                 _OsShell.promptStr = args[0];
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.",true);
+            }
+        }
+        //comand to run programs
+        public shellRun(args) {
+            if (args.length>0){
+                var foundPID=false;
+                for (var i=0; i<allPcb.length;i++){
+                     if(allPcb[i].Pid==args){
+                         foundPID=true;
+                         var tarPcb= allPcb[i];
+                         break; 
+                     }
+
+                }
+                if(foundPID==true){
+                    _CPU.runOpCode(_Memory.memory);
+
+                }
+                else
+                   _StdOut.putText("The PID you entered is not valid.")
+                
+            }
+            else {
+                _StdOut.putText("Usage: status <run>  Please supply a pid.",true);
             }
         }
 

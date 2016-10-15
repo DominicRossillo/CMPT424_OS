@@ -45,71 +45,41 @@ var TSOS;
         };
         Cpu.prototype.runOpCode = function (args) {
             if (args.length > 0) {
-                for (var i = this.PC; i < args.length; i++) {
+                for (var i = 0; i < args.length; i++) {
                     var curOpCode = args[i];
-                    // alert(curOpCode);
+                    alert(curOpCode);
                     switch (curOpCode) {
                         //load the accumulator with a constant
                         case "A9":
-                            this.Acc = parseInt(args[i + 1], 16);
-                            i++;
-                            alert("the cur Acc = " + this.Acc);
+                            this.Acc = args[i + 1];
+                            i = i + 2;
                             break;
                         case "AD":
-                            //test string A9 01 A9 02 A9 1A A9 08 AD 05 00
-                            var memloc = "" + args[i + 2] + "" + args[i + 1];
-                            var decOfLoc = _Memory.getFromMemory(memloc);
-                            this.Acc = decOfLoc;
-                            i = i + 2;
-                            alert("the cur Acc = " + this.Acc);
+                            _StdOut.putText("Ver Displays the current version of the OS.", true);
                             break;
                         case "8D":
-                            var memloc = "" + args[i + 2] + "" + args[i + 1];
-                            var memIndex = parseInt(memloc, 16);
-                            var decOfLoc = _Memory.getFromMemory(memloc);
-                            _Memory.memory[memIndex] = this.Acc.toString(16);
-                            i = i + 2;
-                            alert("the Acc store location = " + _Memory.memory[memIndex]);
-                            alert(_Memory.memory);
+                            _StdOut.putText("Where am i, helps you figure out where you are in real life.", true);
                             break;
                         case "6D":
-                            var memloc = "" + args[i + 2] + "" + args[i + 1];
-                            alert("the cur Acc = " + this.Acc);
-                            var decOfLoc = _Memory.getFromMemory(memloc);
-                            var awcResult = decOfLoc + this.Acc;
-                            this.Acc = awcResult;
-                            i = i + 2;
-                            alert("the cur Acc = " + this.Acc);
+                            _StdOut.putText("Date can be used to find out the current Date and Time.", true);
                             break;
                         case "A2":
-                            this.Xreg = parseInt(args[i + 1], 16);
-                            i++;
-                            alert("the cur x Reg= " + this.Xreg);
+                            _StdOut.putText("Checks the text in the text area is valid hex code.", true);
                             break;
                         case "AE":
-                            var memloc = "" + args[i + 2] + "" + args[i + 1];
-                            var decOfLoc = _Memory.getFromMemory(memloc);
-                            this.Xreg = decOfLoc;
-                            i = i + 2;
-                            alert("the cur X reg = " + this.Xreg);
+                            _StdOut.putText("Change the status title on the page.", true);
                             break;
                         case "A0":
-                            this.Xreg = parseInt(args[i + 1], 16);
-                            i++;
-                            alert("the cur x Reg= " + this.Xreg);
+                            _StdOut.putText("What is love is used to find what you really love.", true);
                             break;
                         case "AC":
-                            var memloc = "" + args[i + 2] + "" + args[i + 1];
-                            var decOfLoc = _Memory.getFromMemory(memloc);
-                            this.Xreg = decOfLoc;
-                            i = i + 2;
-                            alert("the cur X reg = " + this.Xreg);
+                            _StdOut.putText("Crashes the OS.", true);
                             break;
                         case "EA":
                             _StdOut.putText("Turns the OS trace on or off.", true);
                             break;
                         case "00":
-                            _StdOut.putText("Finished running program.", true);
+                            _StdOut.putText("Set the prompt.", true);
                             break;
                         case "EC":
                             _StdOut.putText("Set the prompt.", true);
@@ -126,7 +96,6 @@ var TSOS;
                         // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                         default:
                             _StdOut.putText("This is not a valid Op Code " + curOpCode, true);
-                            break;
                     }
                 }
             }

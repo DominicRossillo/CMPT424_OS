@@ -262,7 +262,7 @@ var TSOS;
                         // alert(newPcb);
                         _Memory.memoryUpdate(hexin[curcode]);
                         //  memtable.innerHTML=hexin[curcode];
-                        //alert(hexin[curcode]);
+                        alert(hexin[curcode]);
                         curcode++;
                     }
                 }
@@ -401,7 +401,7 @@ var TSOS;
                     }
                 }
                 if (foundPID == true) {
-                    _CPU.runOpCode(_Memory.memory);
+                    _CPU.runOpCode(foundPID);
                 }
                 else
                     _StdOut.putText("The PID you entered is not valid.");

@@ -63,5 +63,3 @@ var capsLock = false;
 var usearrow = false;
 //init our memory array 
 var _Memory;
-//init our array of pcbs
-var allPcb = [];

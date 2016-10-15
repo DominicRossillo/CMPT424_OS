@@ -28,32 +28,12 @@ module TSOS {
     export class Control {
 
 
-        public static memInit(): void {
+        public static memTableInit(): void {
             var display = document.getElementById('memoryTable');
             var htmlstring=""
             var memory=[];
-           //initializing the multi dimmensioal array for memory 
-           // for(var x = 0; x < 95; x++){
-           //      memory[x] = [];    
-           //      for(var y = 0; y < 8; y++){ 
-           //          if(y=0){
-
-           //                   memory[x][y] = "0x"+x*8; 
-           //                   htmlstring += '<tr>' + '<th>'+memory[x][y].tostring+'</th>';
-           //          }
-           //          else{
-           //                  memory[x][y] = "00";    
-           //                  htmlstring += '<th>'+memory[x][y].tostring+'</th>';
-           //              }
-           //              htmlstring += '</tr>'
-           //          }    
-
-           //      }    
-
-
-
           //initializing the multi dimmensioal array for memory 
-           for(var  i = 0; i < 178; i+8){
+           for(var  i = 0; i < 768; i+=8){
                var memrow ='';
                if (i<10){
                    memrow+='0'
@@ -62,22 +42,13 @@ module TSOS {
                    memrow+='0'
                }
                //handles head of the table for mem rows
-           htmlstring+= '<tr><th>0x+'+ memrow+i.toString +'</th>';
-           //sets up the default 00 for all the collumns 
-           htmlstring+= '<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'<th>00</th>'+'</tr>';
+               htmlstring+= '<tr>'+'<td>0x'+ memrow+i +'</td>';
+               //sets up the default 00 for all the collumns 
+               htmlstring+= '<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'</tr>';
 
                 
 
             }    
-
-
-
-
-
-
-
-
-
 
                  display.innerHTML = htmlstring;
 
@@ -105,7 +76,7 @@ module TSOS {
             // Use the TypeScript cast to HTMLInputElement
             (<HTMLInputElement> document.getElementById("btnStartOS")).focus();
             //creating memory table
-            this.memInit();
+            this.memTableInit();
 
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().

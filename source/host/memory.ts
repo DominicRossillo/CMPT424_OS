@@ -1,36 +1,37 @@
 
 module TSOS {
     export class Memory {
+        memory: string[];
+        memPoint: number;
 
+        
+         constructor(){
+                 this.memPoint= 0;
+                 this.memory=[];
+            for(var i =0; i<767; i++){
+                
+                  this.memory.push("00");
 
-//        var memory=[];
-//        //initializing the multi dimmensioal array for memory 
-//        for(var x = 0; x < 95; x++){
-//         memory[x] = [];    
-//         for(var y = 0; y < 8; y++){ 
-//             if(y=0){
-//                  memory[x][y] = "0x"+x*8;   
-//             }
-//             else{
-//                 memory[x][y] = "00";     
-//                 }
-           
-//             }    
-//         }    
+            }
 
-//     function createTable(myArray):void {
-//         var memtable = "<table border=1>";
-//         for(var i=0; i<myArray.length; i++) {
-//             memtable += "<tr>";
-//             for(var j=0; j<myArray[i].length; j++){
-//                 memtable += "<td>"+myArray[i][j]+"</td>";
-//             }
-//             memtable += "</tr>";
-//         }
-//         memtable += "</table>";
+         }
+
+         memoryUpdate(newValue:string){
+             this.memory[this.memPoint]=newValue;
+             this.memPoint++;
+         }
+         //function to get values from memory and convert them to dec
+         getFromMemory(index){
+             var tarReg= parseInt(index,16);
+             // alert("get from mem tarReg ="+tarReg)
+             // alert("value at index = "+this.memory[tarReg])
+             return parseInt(this.memory[tarReg],16);
+         }
 
     
 
+    
     }
+
 
 }
