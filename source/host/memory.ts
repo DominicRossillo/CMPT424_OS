@@ -18,7 +18,9 @@ module TSOS {
 
          memoryUpdate(newValue:string){
              this.memory[this.memPoint]=newValue;
+             document.getElementById("cell"+this.memPoint).innerText=newValue;
              this.memPoint++;
+
          }
          //function to get values from memory and convert them to dec
          getFromMemory(index){
@@ -26,6 +28,14 @@ module TSOS {
              // alert("get from mem tarReg ="+tarReg)
              // alert("value at index = "+this.memory[tarReg])
              return parseInt(this.memory[tarReg],16);
+         }
+         clearAllMemory(){
+             for (var i=0 ; i<this.memory.length;i++){
+                 this.memory[i]="00";
+                 this.memPoint=0
+             }
+
+
          }
 
     

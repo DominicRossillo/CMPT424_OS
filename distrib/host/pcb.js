@@ -3,7 +3,7 @@ var TSOS;
     var Pcb = (function () {
         function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting) {
             if (Pid === void 0) { Pid = 0; }
-            if (PC === void 0) { PC = _Memory.memory.length; }
+            if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
             if (Xreg === void 0) { Xreg = 0; }
             if (Yreg === void 0) { Yreg = 0; }
@@ -17,6 +17,13 @@ var TSOS;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
         }
+        Pcb.prototype.updatePcb = function (newPC, newAcc, newXreg, newYreg, newZflag) {
+            this.PC = newPC;
+            this.Acc = newAcc;
+            this.Xreg = newXreg;
+            this.Yreg = newYreg;
+            this.Zflag = newZflag;
+        };
         return Pcb;
     }());
     TSOS.Pcb = Pcb;

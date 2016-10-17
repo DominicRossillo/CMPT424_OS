@@ -19,6 +19,7 @@
     <script type="text/javascript" src="distrib/host/pcb.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
+   <script type="text/javascript" src="distrib/os/processManager.js"></script>
    <script type="text/javascript" src="distrib/os/interrupt.js"></script>
    <script type="text/javascript" src="distrib/os/canvastext.js"></script>
    <script type="text/javascript" src="distrib/os/console.js"></script>
@@ -28,6 +29,7 @@
    <script type="text/javascript" src="distrib/os/shell.js"></script>
    <script type="text/javascript" src="distrib/os/shellCommand.js"></script>
    <script type="text/javascript" src="distrib/os/userCommand.js"></script>
+
    <script type="text/javascript" src="distrib/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -99,6 +101,33 @@
          ></textarea>
       </label>
    </div>
+   <p></p>
+   <label>
+                            CPU Status
+                        </label>
+                        <div class="panel panel-default">
+                            <table id="processTable" class="table">
+                                <tr>
+                                    <th>Instr</th>
+                                    <th>PC</th>
+                                    <th>Acc</th>
+                                    <th>X</th>
+                                    <th>Y</th>
+                                    <th>Z</th>
+                                </tr>
+
+                                <tr>
+                                    <td id="instr_field">N/A</td>
+                                    <td id="pc_field">0</td>
+                                    <td id="Acc_field">0</td>
+                                    <td id="xreg_field">0</td>
+                                    <td id="yreg_field">0</td>
+                                    <td id="zflag_field">0</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <p></p>
     <div id="divUserProgramInput" style="margin-left:520px;">
            <label>
              Process Memory

@@ -270,6 +270,7 @@ var TSOS;
                 _StdOut.putText("The Program has been loaded with PID: " + newPCB.Pid);
                 _StdOut.advanceLine();
                 allPcb.push(newPCB);
+                alert(_Memory.memory);
             }
             else {
                 _StdOut.putText("This is not valid hexcode", true);

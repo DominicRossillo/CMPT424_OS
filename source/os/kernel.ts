@@ -43,6 +43,7 @@ module TSOS {
 
             //initialize memory
             _Memory= new Memory();
+            _ProcessManager= new ProcessManager();
             //
             // ... more?
             //
@@ -129,6 +130,8 @@ module TSOS {
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
+                //case CONTEXT_SWITCH:
+                    //implement CPU Scheduler to handle context swtich to end a process and deque the running queue 
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

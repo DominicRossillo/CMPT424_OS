@@ -32,8 +32,8 @@ module TSOS {
             var display = document.getElementById('memoryTable');
             var htmlstring=""
             var memory=[];
-          //initializing the multi dimmensioal array for memory 
-           for(var  i = 0; i < 768; i+=8){
+          //initializing the multi dimmensioal array for memory         
+           for(var  i = 0; i < 768;){
                var memrow ='';
                if (i<10){
                    memrow+='0'
@@ -41,10 +41,18 @@ module TSOS {
                if (i<100){
                    memrow+='0'
                }
+               var rowid="memrow"+memrow+i;
                //handles head of the table for mem rows
-               htmlstring+= '<tr>'+'<td>0x'+ memrow+i +'</td>';
+               htmlstring+= '<tr id='+rowid+'>'+'<td>0x'+ memrow+i +'</td>';
                //sets up the default 00 for all the collumns 
-               htmlstring+= '<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'<td>00</td>'+'</tr>';
+               for(var j=0; j<8;j++){
+                       var cellId=(i);
+                       htmlstring+= '<td id=cell'+cellId+'>00</td>';
+                       i++;
+
+               }
+
+               htmlstring+='</tr>';
 
                 
 

@@ -324,9 +324,7 @@ module TSOS {
                 if (testpass){
                         var curcode=0;
                         var hexin=testcode.split(" ");
-                        var _Pcb = new Pcb(); 
-                        _Pcb.Pid= allPcb.length+1;
-                        
+                        var newPCB= _ProcessManager.load();
 
                         for(var i=0; i<Math.ceil((hexin.length/8)); i++){
                        
@@ -337,6 +335,7 @@ module TSOS {
                                    // alert(newPcb);
                                    
                                    _Memory.memoryUpdate(hexin[curcode]);
+
                                   //  memtable.innerHTML=hexin[curcode];
                                     //alert(hexin[curcode]);
 
@@ -347,10 +346,10 @@ module TSOS {
                         }
                          _StdOut.putText("This is valid hexcode",true);
                         _StdOut.advanceLine();
-                        _StdOut.putText("The Program has been loaded with PID: "+ _Pcb.Pid,true);
+                        _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid);
                         _StdOut.advanceLine();
-                        allPcb.push(_Pcb);
-                       alert(_Memory.memory);
+                        allPcb.push(newPCB);
+                      // alert(_Memory.memory);
                      
                 }
                 else{
@@ -487,7 +486,8 @@ module TSOS {
 
                 }
                 if(foundPID==true){
-                    _CPU.runOpCode(_Memory.memory);
+//_CPU.runOpCode(_Memory.memory);
+                _ProcessManager.runPid(args);
 
                 }
                 else
