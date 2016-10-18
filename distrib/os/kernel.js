@@ -174,6 +174,8 @@ var TSOS;
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
             var ctx = _Canvas.getContext("2d");
+            _StdOut.clearScreen();
+            _StdOut.resetXY();
             ctx.beginPath();
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, 500, 500);

@@ -13,9 +13,9 @@
      Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
      ------------ */
 
-module TSOS {
+     module TSOS {
 
-    export class Kernel {
+         export class Kernel {
         //
         // OS Startup and Shutdown Routines
         //
@@ -138,18 +138,18 @@ module TSOS {
                 case TIMER_IRQ:
                     this.krnTimerISR();              // Kernel built-in routine for timers (not the clock).
                     break;
-                case KEYBOARD_IRQ:
+                    case KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
                 //case CONTEXT_SWITCH:
                     //implement CPU Scheduler to handle context swtich to end a process and deque the running queue 
-                default:
+                    default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
+                }
             }
-        }
 
-        public krnTimerISR() {
+            public krnTimerISR() {
             // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
             // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
         }
@@ -176,7 +176,7 @@ module TSOS {
         public krnTrace(msg: string) {
              // Check globals to see if trace is set ON.  If so, then (maybe) log the message.
              if (_Trace) {
-                if (msg === "Idle") {
+                 if (msg === "Idle") {
                     // We can't log every idle clock pulse because it would lag the browser very quickly.
                     if (_OSclock % 10 == 0) {
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
@@ -186,22 +186,24 @@ module TSOS {
                 } else {
                     Control.hostLog(msg, "OS");
                 }
-             }
+            }
         }
 
         public krnTrapError(msg) {
             Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
-			var ctx = _Canvas.getContext("2d");
+            var ctx = _Canvas.getContext("2d");
+            _StdOut.clearScreen();
+            _StdOut.resetXY();
             ctx.beginPath();
             ctx.fillStyle = "blue";
             ctx.fillRect(0,0,500,500);
             ctx.fill();
             _StdOut.putText("An error has occured, you broke something.");
-			
-			
+            
+            
             this.krnShutdown();
         }
-		
+        
     }
 }

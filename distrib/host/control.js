@@ -41,7 +41,7 @@ var TSOS;
                 }
                 var rowid = "memrow" + memrow + i;
                 //handles head of the table for mem rows
-                htmlstring += '<tr id=' + rowid + '>' + '<td>0x' + memrow + i + '</td>';
+                htmlstring += '<tr id=' + rowid + ' >' + '<td>0x' + memrow + i + '</td>';
                 //sets up the default 00 for all the collumns 
                 for (var j = 0; j < 8; j++) {
                     var cellId = (i);
@@ -126,10 +126,12 @@ var TSOS;
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         };
+        //a toggle for step by step mode
         Control.hostBtnStep_toggle = function (btn) {
             //function to enable our step button to increment through the program
             btn.disabled = !btn.disabled;
         };
+        //button to allow the cpu to make a cycle
         Control.hostBtnStep_allow = function () {
             canStep = true;
         };

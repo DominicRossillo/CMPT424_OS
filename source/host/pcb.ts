@@ -1,17 +1,18 @@
 
 module TSOS {
+//pcb object
+export class Pcb {
+  constructor(
+    public Pid: number = 0,                   
+    public PC: number=0,
+    public Acc: number=0,
+    public Xreg: number = 0,
+    public Yreg: number = 0,
+    public Zflag: number = 0,
+    public isExecuting: boolean = false) {
 
-    export class Pcb {
-         constructor(
-                    public Pid: number = 0,                   
-                    public PC: number=0,
-                    public Acc: number=0,
-                    public Xreg: number = 0,
-                    public Yreg: number = 0,
-                    public Zflag: number = 0,
-                    public isExecuting: boolean = false) {
-
-        }
+  }
+        //funciton to update your current pcb with new values taken from the cpu
         public updatePcb(newPC,newAcc,newXreg,newYreg,newZflag){
           this.PC=newPC;
           this.Acc=newAcc;
@@ -38,7 +39,7 @@ module TSOS {
      //  	}
 
 
-	
+     
 
-    }
-}
+   }
+ }

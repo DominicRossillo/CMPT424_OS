@@ -1,5 +1,6 @@
 var TSOS;
 (function (TSOS) {
+    //pcb object
     var Pcb = (function () {
         function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting) {
             if (Pid === void 0) { Pid = 0; }
@@ -17,6 +18,7 @@ var TSOS;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
         }
+        //funciton to update your current pcb with new values taken from the cpu
         Pcb.prototype.updatePcb = function (newPC, newAcc, newXreg, newYreg, newZflag) {
             this.PC = newPC;
             this.Acc = newAcc;

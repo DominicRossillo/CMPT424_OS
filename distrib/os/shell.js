@@ -267,7 +267,7 @@ var TSOS;
                 }
                 _StdOut.putText("This is valid hexcode", true);
                 _StdOut.advanceLine();
-                _StdOut.putText("The Program has been loaded with PID: " + newPCB.Pid);
+                _StdOut.putText("The Program has been loaded with PID: " + newPCB.Pid, true);
                 _StdOut.advanceLine();
                 allPcb.push(newPCB);
             }
@@ -398,8 +398,8 @@ var TSOS;
                         break;
                     }
                 }
+                //if the pid exists run it
                 if (foundPID == true) {
-                    //_CPU.runOpCode(_Memory.memory);
                     _ProcessManager.runPid(args);
                 }
                 else

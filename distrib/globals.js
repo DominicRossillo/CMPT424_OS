@@ -11,7 +11,7 @@
 // Global CONSTANTS (TypeScript 1.5 introduced const. Very cool.)
 //
 var APP_NAME = "DOMOS"; // 'cause Bob and I were at a loss for a better name.
-var APP_VERSION = "0.03"; // What did you expect?
+var APP_VERSION = "0.05"; // What did you expect?
 var CPU_CLOCK_INTERVAL = 75; // This is in ms (milliseconds) so 1000 = 1 second.
 var TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
@@ -68,7 +68,5 @@ var _Memory;
 var allPcb = [];
 //init process manger
 var _ProcessManager;
-//init memory manager 
-var _MemoryManager;
 //global to check if we can step
 var canStep = false;

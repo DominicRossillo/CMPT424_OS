@@ -33,38 +33,38 @@ module TSOS {
             var htmlstring=""
             var memory=[];
           //initializing the multi dimmensioal array for memory         
-           for(var  i = 0; i < 768;){
-               var memrow ='';
-               if (i<10){
-                   memrow+='0'
-               }
-               if (i<100){
-                   memrow+='0'
-               }
-               var rowid="memrow"+memrow+i;
+          for(var  i = 0; i < 768;){
+              var memrow ='';
+              if (i<10){
+                  memrow+='0'
+              }
+              if (i<100){
+                  memrow+='0'
+              }
+              var rowid="memrow"+memrow+i;
                //handles head of the table for mem rows
-               htmlstring+= '<tr id='+rowid+'>'+'<td>0x'+ memrow+i +'</td>';
+               htmlstring+= '<tr id='+rowid+' >'+'<td>0x'+ memrow+i +'</td>';
                //sets up the default 00 for all the collumns 
                for(var j=0; j<8;j++){
-                       var cellId=(i);
-                       htmlstring+= '<td id=cell'+cellId+'>00</td>';
-                       i++;
+                   var cellId=(i);
+                   htmlstring+= '<td id=cell'+cellId+'>00</td>';
+                   i++;
 
                }
 
                htmlstring+='</tr>';
 
-                
+               
 
-            }    
+           }    
 
-                 display.innerHTML = htmlstring;
+           display.innerHTML = htmlstring;
 
            
-        }
+       }
 
 
-        public static hostInit(): void {
+       public static hostInit(): void {
             // This is called from index.html's onLoad event via the onDocumentLoad function pointer.
 
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
@@ -156,12 +156,14 @@ module TSOS {
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+        //a toggle for step by step mode
         public static hostBtnStep_toggle(btn): void {
             //function to enable our step button to increment through the program
-             btn.disabled = !btn.disabled;
+            btn.disabled = !btn.disabled;
 
             
         }
+        //button to allow the cpu to make a cycle
         public static hostBtnStep_allow(): void {
             canStep=true;
         }

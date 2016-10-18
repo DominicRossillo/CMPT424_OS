@@ -9,42 +9,42 @@
      Note: This is not the Shell. The Shell is the "command line interface" (CLI) or interpreter for this console.
      ------------ */
 
-module TSOS {
+     module TSOS {
 
-    export class Console {
+         export class Console {
 
-        constructor(public currentFont = _DefaultFontFamily,
-                    public currentFontSize = _DefaultFontSize,
-                    public currentXPosition = 0,
-                    public currentYPosition = _DefaultFontSize,
-                    public buffer = "") {
-        }
+             constructor(public currentFont = _DefaultFontFamily,
+                 public currentFontSize = _DefaultFontSize,
+                 public currentXPosition = 0,
+                 public currentYPosition = _DefaultFontSize,
+                 public buffer = "") {
+             }
 
-        public init(): void {
-            this.clearScreen();
-            this.resetXY();
-        }
+             public init(): void {
+                 this.clearScreen();
+                 this.resetXY();
+             }
 
-        private clearScreen(): void {
-			
-            _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
-        }
+             private clearScreen(): void {
+                 
+                 _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
+             }
 
 
 
-        private resetXY(): void {
-            this.currentXPosition = 0;
-            this.currentYPosition = this.currentFontSize;
-        }
+             private resetXY(): void {
+                 this.currentXPosition = 0;
+                 this.currentYPosition = this.currentFontSize;
+             }
 
-        private resetX(): void {
-            this.currentXPosition = 0;
-            
-        }
+             private resetX(): void {
+                 this.currentXPosition = 0;
+                 
+             }
 
-        public handleInput(): void {
-            
-            while (_KernelInputQueue.getSize() > 0) {
+             public handleInput(): void {
+                 
+                 while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var comcompletefound=0;  
                 var chr = _KernelInputQueue.dequeue();
@@ -57,7 +57,7 @@ module TSOS {
                     // ... and reset our buffer.
                     bufferRecall.push(this.buffer);
                     recallCount=bufferRecall.length;    
-                   
+                    
                     this.buffer = "";
                     
                 }
@@ -65,26 +65,26 @@ module TSOS {
                     // Tab key will look if what is entered is a sub string of any known commands and complete it
                     // if nothing is writen this if will just return ""
                     if (this.buffer.length>0){
-               
+                        
                         //loop to look at all commands in the command list
-                    
-                    for (var i=0; i<(_OsShell.commandList.length); i++){
+                        
+                        for (var i=0; i<(_OsShell.commandList.length); i++){
                             
                              //if command at current index trimed to the same length as the user input then return that command
-                            if((this.buffer)==(_OsShell.commandList[i].command).substr(0,(this.buffer.length))){    
-                               var commandbuild= "" 
-                             
+                             if((this.buffer)==(_OsShell.commandList[i].command).substr(0,(this.buffer.length))){    
+                                 var commandbuild= "" 
+                                 
                                 // loop to count if any commands after this one are = to the buffer 
-                               for (j=i+1; j<(_OsShell.commandList.length); j++) {
+                                for (j=i+1; j<(_OsShell.commandList.length); j++) {
 
-                                   if((this.buffer)==(_OsShell.commandList[j].command).substr(0,(this.buffer.length))){
-                                     comcompletefound++;   
-                                   }
+                                    if((this.buffer)==(_OsShell.commandList[j].command).substr(0,(this.buffer.length))){
+                                        comcompletefound++;   
+                                    }
                                     
-                               }
+                                }
                              //if multiple function arent found finish the word
-                              if(comcompletefound==0){
-                                     
+                             if(comcompletefound==0){
+                                 
                                     //for loop to generate the commmand we are finishing 
                                     for(var j=0; j<(_OsShell.commandList[i].command).substr(this.buffer.length,(_OsShell.commandList[i].command).length-1).length;j++){
                                         
@@ -93,21 +93,21 @@ module TSOS {
                                         commandbuild += comchar;
                                     }
                                         //add the end of the command to the buffer
-                                         this.buffer += commandbuild
-                                      
-                                     }
-                              }
+                                        this.buffer += commandbuild
+                                        
+                                    }
+                                }
 
-                    };
-                 
+                            };
+                            
 
 
-                  }
-                  else{
-                      this.buffer= ""
-                  }
+                        }
+                        else{
+                            this.buffer= ""
+                        }
 
-                }
+                    }
                 //key input for deleting
                 else if(chr === String.fromCharCode(8)) {
                     //finds and draws the text over the previous char
@@ -119,11 +119,11 @@ module TSOS {
                 } 
                 //buffer recall to rewrite old commands submitted by user
                 //up arrow
-                 else if(chr === String.fromCharCode(38)&& usearrow) {
+                else if(chr === String.fromCharCode(38)&& usearrow) {
                                 //iff to make sure you dont index underflow 
                                 if (recallCount>0){
-                                recallCount--;
-                                _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
+                                    recallCount--;
+                                    _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
                                 //adds the line that we want to recall to the buffer and resets the x
                                 this.buffer=bufferRecall[recallCount];
                                 this.resetX();  
@@ -135,17 +135,17 @@ module TSOS {
                  else if(chr === String.fromCharCode(40)&& usearrow) {
                                 // if to make sure you dont index overflow
                                 if (recallCount<bufferRecall.length-1){
-                                recallCount++;
-                                _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
+                                    recallCount++;
+                                    _DrawingContext.recallClear(this.currentFont,this.currentFontSize,this.currentXPosition,this.currentYPosition);
                                  //adds the line that we want to recall to the buffer and resets the x
-                                this.buffer=bufferRecall[recallCount];
-                                this.resetX();    
-                                this.putText(">"+this.buffer);
-                                usearrow=false;
-                                                
-                            }
-                }
-                else {
+                                 this.buffer=bufferRecall[recallCount];
+                                 this.resetX();    
+                                 this.putText(">"+this.buffer);
+                                 usearrow=false;
+                                 
+                             }
+                         }
+                         else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -165,94 +165,94 @@ module TSOS {
             //
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
-          
+            
             if (text !== "") {
                 //if the key being typed is past 475 on x then advances the line
-                   if(this.currentXPosition>475){  
-                         scrollingText.push(this.buffer);
-                        _StdOut.advanceLine();
+                if(this.currentXPosition>475){  
+                    scrollingText.push(this.buffer);
+                    _StdOut.advanceLine();
 
-                       
-                   }
+                    
+                }
                    //if a string is read in that has a length that will go off the page, this will cut it in half
                    else if(_DrawingContext.measureText(this.currentFont, this.currentFontSize, text)>500){
                        
-                         var headtext= text.substr(0,Math.floor(text.length/2));
-                         var tailtext= text.substr(Math.floor(text.length/2),text.length);
+                       var headtext= text.substr(0,Math.floor(text.length/2));
+                       var tailtext= text.substr(Math.floor(text.length/2),text.length);
                          // alert("putText() text : "+text)
                          // alert("putText() tailtext : "+tailtext)                  
-                           
+                         
 
                          _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, headtext);
-                        _StdOut.advanceLine();
+                         _StdOut.advanceLine();
 
-                       
-                        
-                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, tailtext);
+                         
+                         
+                         _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, tailtext);
                         //adds the split string into the srolling text array 
                         if(record){
-                        scrollingText.push(headtext);
-                        scrollingText.push(tailtext);
-                                            }
-                       
+                            scrollingText.push(headtext);
+                            scrollingText.push(tailtext);
+                        }
+                        
 
-                   }
-                   else{
+                    }
+                    else{
                    // Draw the text at the current X and Y coordinates.
-                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                   _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                     // Move the current X position.
                     var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                     this.currentXPosition = this.currentXPosition + offset;
 
                     if(record){
                         scrollingText.push(text);
-                                            }
                     }
                 }
-           
-         }
+            }
+            
+        }
 
-         public remText(text): void {
+        public remText(text): void {
             //deltext
                 // Move the current X position.
-                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                 this.currentXPosition = (this.currentXPosition - offset);
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                this.currentXPosition = (this.currentXPosition - offset);
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.delText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 
-                                 
-         }
+                
+            }
 
 
 
 
-        public advanceLine(): void {
+            public advanceLine(): void {
             //if to make sure we arent leaving the bounds of the canvas
             if(this.currentYPosition<500-this.currentFontSize){
-                    this.currentXPosition = 0;
+                this.currentXPosition = 0;
                     /*
                      * Font size measures from the baseline to the highest point in the font.
                      * Font descent measures from the baseline to the lowest point in the font.
                      * Font height margin is extra spacing between the lines.
                      */
-                    this.currentYPosition += _DefaultFontSize + 
-                                             _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                             _FontHeightMargin;
+                     this.currentYPosition += _DefaultFontSize + 
+                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                     _FontHeightMargin;
 
                     // TODO: Handle scrolling. (iProject 1)
-            }
+                }
 
-             else {
+                else {
                     //else we are going to inc scrollOffset and print everything from scrollingText, Starting from the off set
                     scrollOffSet++
                     
                     this.init();
                     for(var i=scrollOffSet; i<scrollingText.length;i++){
-                       
-                       this.putText(scrollingText[i]);
-                       this.advanceLine();
+                        
+                        this.putText(scrollingText[i]);
+                        this.advanceLine();
                     }
                 }
             }
+        }
     }
- }

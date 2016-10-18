@@ -49,20 +49,25 @@ var TSOS;
             this.Xreg = pcb.Xreg;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
+            this.curPCB = pcb;
         };
         //updates the curpcb with values inside the cpu
         Cpu.prototype.updateCurPcb = function () {
-            if (this.curPCB != null) {
-                this.curPCB.updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
-            }
+            this.curPCB.updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
+            this.updateCurPcb();
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            //if the cpu is executing
             if (this.isExecuting) {
+                //set the current instruction to the value in memory at the PC
                 this.instruction = "" + _Memory.memory[this.PC];
                 document.getElementById("pc_field").innerText = "" + this.PC;
+                //update dispaly of pcbs so the user can see 
+                document.getElementById("pcbs_PC" + this.curPCB.Pid).innerText = "" + this.PC;
+                //update the cpu dispaly so you can see the instruction being read
                 document.getElementById("instr_field").innerText = this.instruction;
                 switch (this.instruction) {
                     //load the accumulator with a constant
@@ -73,23 +78,28 @@ var TSOS;
                         document.getElementById("Acc_field").innerText = "" + this.Acc;
                         this.PC++;
                         break;
+                    //load acc from memory
                     case "AD":
                         //test string A9 01 A9 02 A9 1A A9 08 AD 05 00
                         this.PC++;
                         var memloc = "00" + _Memory.getFromMemory(this.PC);
+                        //get the dec value of the pc in memory                                                  
                         var decOfLoc = _Memory.getFromMemory(memloc);
                         this.PC++;
+                        //assign the new acc                           
                         this.Acc = decOfLoc;
                         document.getElementById("Acc_field").innerText = "" + this.Acc;
                         // alert("the cur Acc = "+this.Acc);       
                         this.PC++;
                         break;
+                    //store the acc value some where in memory
                     case "8D":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
                         var memIndex = parseInt(memloc, 16);
                         this.PC++;
                         var newVal = this.Acc.toString(16);
+                        //if the new val is only one digit we ad a 0 to keep to the two hex format  
                         if (newVal.length <= 1) {
                             newVal = "0" + newVal;
                         }
@@ -98,6 +108,7 @@ var TSOS;
                         // alert(_Memory.memory);    
                         this.PC++;
                         break;
+                    //Add with carry
                     case "6D":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
@@ -110,6 +121,7 @@ var TSOS;
                         // alert("the cur Acc = "+this.Acc);  
                         this.PC++;
                         break;
+                    //load x reg with constant 
                     case "A2":
                         this.PC++;
                         this.Xreg = parseInt(_Memory.memory[this.PC]);
@@ -117,6 +129,7 @@ var TSOS;
                         // alert("the cur x Reg= "+this.Xreg); 
                         this.PC++;
                         break;
+                    //load x reg from value in mem
                     case "AE":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
@@ -127,6 +140,7 @@ var TSOS;
                         // alert("the cur X reg = "+this.Xreg);    
                         this.PC++;
                         break;
+                    //load y reg with value
                     case "A0":
                         this.PC++;
                         this.Yreg = parseInt(_Memory.memory[this.PC], 16);
@@ -134,6 +148,7 @@ var TSOS;
                         // alert("the cur y Reg= "+this.Yreg);                 
                         this.PC++;
                         break;
+                    //load y reg with value from memory
                     case "AC":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
@@ -144,10 +159,13 @@ var TSOS;
                         // alert("the cur y reg = "+this.Yreg);     
                         this.PC++;
                         break;
+                    //do nothing cause yea
                     case "EA":
                         this.PC++;
                         break;
+                    //break syscall to signal that we finished the program 
                     case "00":
+                        document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
                         this.updateCurPcb();
                         _ProcessManager.terminateProcess();
                         this.curPCB = null;
@@ -156,17 +174,30 @@ var TSOS;
                         this.Xreg = 0;
                         this.Yreg = 0;
                         this.Zflag = 0;
+                        //display to user that we finished and reset the CPU for the next program
+                        document.getElementById("zflag_field").innerText = "0";
+                        document.getElementById("pc_field").innerText = "0";
+                        document.getElementById("yreg_field").innerText = "0";
+                        document.getElementById("xreg_field").innerText = "0";
+                        document.getElementById("Acc_field").innerText = "0";
                         if (_ProcessManager.readyQueue.getSize() == 0) {
                             this.isExecuting = false;
                         }
                         _StdOut.putText("Finished running program.", true);
+                        _StdOut.advanceLine();
+                        _Memory.clearAllMemory();
                         break;
+                    //compare a byte in memory to x reg
                     case "EC":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
                         var decOfLoc = _Memory.getFromMemory(memloc);
                         if (this.Xreg == decOfLoc) {
                             this.Zflag = 1;
+                            document.getElementById("zflag_field").innerText = "" + this.Zflag;
+                        }
+                        else {
+                            this.Zflag = 0;
                             document.getElementById("zflag_field").innerText = "" + this.Zflag;
                         }
                         this.PC++;
@@ -184,13 +215,15 @@ var TSOS;
                             if (newPC > 255) {
                                 this.PC = newPC - 256;
                             }
-                            else
+                            else {
                                 this.PC = newPC;
+                            }
                         }
                         else {
                             this.PC++;
                         }
                         break;
+                    //increment a byte value at a address
                     case "EE":
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
@@ -206,9 +239,10 @@ var TSOS;
                         this.PC++;
                         // alert("the register value we incremented "+_Memory.memory[parseInt(memloc,16)]);       
                         break;
+                    //sys call to write to the clis
                     case "FF":
                         if (this.Xreg == 1) {
-                            _StdOut.putText("" + (this.Yreg));
+                            _StdOut.putText("" + (this.Yreg), true);
                             _StdOut.advanceLine();
                         }
                         else if (this.Xreg == 2) {
@@ -219,14 +253,18 @@ var TSOS;
                                 tempPrint += "" + newLetter;
                                 printPointer++;
                             }
-                            _StdOut.putText(tempPrint);
+                            _StdOut.putText(tempPrint, true);
                             _StdOut.advanceLine();
                         }
                         this.PC++;
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
+                        //if no cases are met me blue screan because of a bad input
                         _StdOut.putText("This is not a valid Op Code " + this.instruction, true);
+                        _Kernel.krnTrapError("bad op code");
+                        _Kernel.krnShutdown();
+                        clearInterval(_hardwareClockID);
                         break;
                 }
             }
