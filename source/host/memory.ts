@@ -15,25 +15,26 @@ module TSOS {
             }
 
          }
-
-         memoryUpdate(newValue:string){
-             this.memory[this.memPoint]=newValue;
-             document.getElementById("cell"+this.memPoint).innerText=newValue;
-             this.memPoint++;
+         public memoryUpdate(newValue,address){
+             _Memory.memory[address]=newValue;
+             document.getElementById("cell"+address).innerText=newValue;
+             _Memory.memPoint++;
 
          }
          //function to get values from memory and convert them to dec
-         getFromMemory(index){
+         public getFromMemory(index){
              var tarReg= parseInt(index,16);
              // alert("get from mem tarReg ="+tarReg)
-             // alert("value at index = "+this.memory[tarReg])
-             return parseInt(this.memory[tarReg],16);
+             // alert("value at index = "+_Memory.memory[tarReg])
+             return parseInt(_Memory.memory[tarReg],16);
          }
-         clearAllMemory(){
-             for (var i=0 ; i<this.memory.length;i++){
-                 this.memory[i]="00";
-                 this.memPoint=0
+         public clearAllMemory(){
+             for (var i=0 ; i<_Memory.memory.length;i++){
+                 _Memory.memory[i]="00";
+                 _Memory.memPoint=0;
              }
+
+         
 
 
          }
@@ -42,6 +43,5 @@ module TSOS {
 
     
     }
-
-
 }
+

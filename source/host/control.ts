@@ -156,6 +156,16 @@ module TSOS {
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+        public static hostBtnStep_toggle(btn): void {
+            //function to enable our step button to increment through the program
+             btn.disabled = !btn.disabled;
+
+            
+        }
+        public static hostBtnStep_allow(): void {
+            canStep=true;
+        }
+
 
     }
 }

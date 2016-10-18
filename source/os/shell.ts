@@ -328,13 +328,13 @@ module TSOS {
 
                         for(var i=0; i<Math.ceil((hexin.length/8)); i++){
                        
-                             for(var j=1; j<=hexin.length && j<9 && curcode<hexin.length; j++){
+                             for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
                                     //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
                                    // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
                                     //var newPcb = new Pcb(1,2,3,4,5,true);
                                    // alert(newPcb);
                                    
-                                   _Memory.memoryUpdate(hexin[curcode]);
+                                   _Memory.memoryUpdate(hexin[curcode],_Memory.memPoint);
 
                                   //  memtable.innerHTML=hexin[curcode];
                                     //alert(hexin[curcode]);

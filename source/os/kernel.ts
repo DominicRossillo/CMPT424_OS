@@ -44,6 +44,7 @@ module TSOS {
             //initialize memory
             _Memory= new Memory();
             _ProcessManager= new ProcessManager();
+          //  _MemoryManager= new MemoryManager();
             //
             // ... more?
             //
@@ -91,7 +92,18 @@ module TSOS {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                _CPU.cycle();
+                //if step mode is toggled and we are allowed to step
+                if((<HTMLInputElement>document.getElementById("steptoggle")).checked && canStep==true) {
+                    _CPU.cycle();
+                    canStep=false;
+                }
+                //else if we are in step mode and are not allowed to step 
+                else if ((<HTMLInputElement>document.getElementById("steptoggle")).checked && canStep==false ){
+                    this.krnTrace("Idle");
+                }
+                else if (!(<HTMLInputElement>document.getElementById("steptoggle")).checked ){
+                    _CPU.cycle()
+                }
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }

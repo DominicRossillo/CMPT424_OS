@@ -39,6 +39,7 @@ var TSOS;
             //initialize memory
             _Memory = new TSOS.Memory();
             _ProcessManager = new TSOS.ProcessManager();
+            //  _MemoryManager= new MemoryManager();
             //
             // ... more?
             //
@@ -81,7 +82,17 @@ var TSOS;
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
             else if (_CPU.isExecuting) {
-                _CPU.cycle();
+                //if step mode is toggled and we are allowed to step
+                if (document.getElementById("steptoggle").checked && canStep == true) {
+                    _CPU.cycle();
+                    canStep = false;
+                }
+                else if (document.getElementById("steptoggle").checked && canStep == false) {
+                    this.krnTrace("Idle");
+                }
+                else if (!document.getElementById("steptoggle").checked) {
+                    _CPU.cycle();
+                }
             }
             else {
                 this.krnTrace("Idle");

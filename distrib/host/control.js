@@ -126,6 +126,13 @@ var TSOS;
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         };
+        Control.hostBtnStep_toggle = function (btn) {
+            //function to enable our step button to increment through the program
+            btn.disabled = !btn.disabled;
+        };
+        Control.hostBtnStep_allow = function () {
+            canStep = true;
+        };
         return Control;
     }());
     TSOS.Control = Control;
