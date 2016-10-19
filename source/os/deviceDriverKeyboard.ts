@@ -9,7 +9,7 @@
    The Kernel Keyboard Device Driver.
    ---------------------------------- */
 
-module TSOS {
+   module TSOS {
 
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {
@@ -52,7 +52,7 @@ module TSOS {
                 if (isShifted) {
                     chr = String.fromCharCode(keyCode);
                 }
-               
+                
                 _KernelInputQueue.enqueue(chr);
             } 
 
@@ -62,188 +62,188 @@ module TSOS {
                 chr = String.fromCharCode(keyCode);
 
                 //!
-                 if (isShifted) {
-                 
-                     if (keyCode == 49){
-                 
+                if (isShifted) {
+                    
+                    if (keyCode == 49){
+                        
                         chr = String.fromCharCode(33);
                     }
                     //@
-                     else if (keyCode == 50) {
+                    else if (keyCode == 50) {
                         chr = String.fromCharCode(64);
                     }
                     //#
-                     else if (keyCode == 51) {
+                    else if (keyCode == 51) {
                         chr = String.fromCharCode(35);
                     }
                     //$
-                     else if (keyCode == 52) {
+                    else if (keyCode == 52) {
                         chr = String.fromCharCode(36);
                     }
                     //%
-                     else if (keyCode == 53) {
+                    else if (keyCode == 53) {
                         chr = String.fromCharCode(37);
                     }
                      //^
                      else if (keyCode == 54) {
-                        chr = String.fromCharCode(94);
+                         chr = String.fromCharCode(94);
                     } //&
-                     else if (keyCode == 55 && !usearrow) {
+                    else if (keyCode == 55 && !usearrow) {
                         chr = String.fromCharCode(38);
                     }
                     //*
-                     else if (keyCode == 56) {
+                    else if (keyCode == 56) {
                         chr = String.fromCharCode(42);
                     }
                     //(
-                     else if (keyCode == 57 && !usearrow) {
+                    else if (keyCode == 57 && !usearrow) {
                         chr = String.fromCharCode(40);
 
                     }
                     //) 
-                     else if (keyCode == 48) {
+                    else if (keyCode == 48) {
                         chr = String.fromCharCode(41);
                     }
-                      
-               }
-               _KernelInputQueue.enqueue(chr); 
-             
+                    
+                }
+                _KernelInputQueue.enqueue(chr); 
+                
             }    
                 //delete/backspace
                 else if (keyCode==8){
-                 
-                 chr = String.fromCharCode(keyCode);
-                 _KernelInputQueue.enqueue(chr);
+                    
+                    chr = String.fromCharCode(keyCode);
+                    _KernelInputQueue.enqueue(chr);
 
                 }
                 //tabcomplete    
-                  else if (keyCode==9){
-                 
-                 chr = String.fromCharCode(keyCode);
-                 _KernelInputQueue.enqueue(chr);
+                else if (keyCode==9){
+                    
+                    chr = String.fromCharCode(keyCode);
+                    _KernelInputQueue.enqueue(chr);
 
                 }
                 //capslock
-                   else if (keyCode==20){
-                 
-                 capsLock=!capsLock;
+                else if (keyCode==20){
+                    
+                    capsLock=!capsLock;
 
                 }
                   //up arrow and down arrow  
                   else if ((keyCode==38 ||keyCode ==40)&& !usearrow){
-                 usearrow=true;
-                 chr = String.fromCharCode(keyCode);
-                 _KernelInputQueue.enqueue(chr);
+                      usearrow=true;
+                      chr = String.fromCharCode(keyCode);
+                      _KernelInputQueue.enqueue(chr);
 
-                }
+                  }
 
-           
-             else {                      
-                chr = String.fromCharCode(keyCode);
-                
-                 if (isShifted) {
+                  
+                  else {                      
+                      chr = String.fromCharCode(keyCode);
+                      
+                      if (isShifted) {
                    //~
-                     if (keyCode == 192){
-                 
-                        chr = String.fromCharCode(126);
-                    }
+                   if (keyCode == 192){
+                       
+                       chr = String.fromCharCode(126);
+                   }
                     //_
-                     else if (keyCode == 189) {
+                    else if (keyCode == 189) {
                         chr = String.fromCharCode(95);
                     }
                     //+
-                     else if (keyCode == 187) {
+                    else if (keyCode == 187) {
                         chr = String.fromCharCode(43);
                     }
                     //{
-                     else if (keyCode == 219) {
-                        chr = String.fromCharCode(123);
-                    }
+                        else if (keyCode == 219) {
+                            chr = String.fromCharCode(123);
+                        }
                     //}
-                     else if (keyCode == 221) {
+                    else if (keyCode == 221) {
                         chr = String.fromCharCode(125);
                     }
                      // |
                      else if (keyCode == 220) {
-                        chr = String.fromCharCode(124);
+                         chr = String.fromCharCode(124);
                     } //:
-                     else if (keyCode == 186) {
+                    else if (keyCode == 186) {
                         chr = String.fromCharCode(58);
                     }
                     //"
-                     else if (keyCode == 222) {
+                    else if (keyCode == 222) {
                         chr = String.fromCharCode(34);
                     }
                     //<
-                     else if (keyCode == 188) {
+                    else if (keyCode == 188) {
                         chr = String.fromCharCode(60);
                     }
                     //>
-                     else if (keyCode == 190) {
+                    else if (keyCode == 190) {
                         chr = String.fromCharCode(62);
                     }
                     //?
-                     else if (keyCode == 191) {
+                    else if (keyCode == 191) {
                         chr = String.fromCharCode(63);
                     }
-                   
+                    
                 }
 
 
                     //non shitfted chars
-                        else {
+                    else {
                         //`
                         if (keyCode == 192){
-                     
+                            
                             chr = String.fromCharCode(96);
                         }
                         //-
-                         else if (keyCode == 189) {
+                        else if (keyCode == 189) {
                             chr = String.fromCharCode(45);
                         }
                         //=
-                         else if (keyCode == 187) {
+                        else if (keyCode == 187) {
                             chr = String.fromCharCode(61);
                         }
                         //[
-                         else if (keyCode == 219) {
+                        else if (keyCode == 219) {
                             chr = String.fromCharCode(91);
                         }
                         //]
-                         else if (keyCode == 221) {
+                        else if (keyCode == 221) {
                             chr = String.fromCharCode(93);
                         }
                          // \
                          else if (keyCode == 220) {
-                            chr = String.fromCharCode(92);
+                             chr = String.fromCharCode(92);
                         } //;
-                         else if (keyCode == 186) {
+                        else if (keyCode == 186) {
                             chr = String.fromCharCode(59);
                         }
                         //'
-                         else if (keyCode == 222) {
+                        else if (keyCode == 222) {
                             chr = String.fromCharCode(39);
                         }
                         //,
-                         else if (keyCode == 188) {
+                        else if (keyCode == 188) {
                             chr = String.fromCharCode(44);
                         }
                         //.
-                         else if (keyCode == 190) {
+                        else if (keyCode == 190) {
                             chr = String.fromCharCode(46);
                         }
                         // /
-                         else if (keyCode == 191) {
+                        else if (keyCode == 191) {
                             chr = String.fromCharCode(47);
                         }
-                       
+                        
                     }
-              _KernelInputQueue.enqueue(chr);
-               }
-              
+                    _KernelInputQueue.enqueue(chr);
+                }
+                
                 
             }
-         
+            
         }
     }
 

@@ -17,65 +17,61 @@
 
      module TSOS {
 
-         export class Cpu {
+       export class Cpu {
 
-             constructor(public PC: number = 0,
-                 public Acc: number = 0,
-                 public Xreg: number = 0,
-                 public Yreg: number = 0,
-                 public Zflag: number = 0,
-                 public isExecuting: boolean = false,
-                 public instruction: string = "00",
-                 public curPCB= null) {
+         constructor(public PC: number = 0,
+           public Acc: number = 0,
+           public Xreg: number = 0,
+           public Yreg: number = 0,
+           public Zflag: number = 0,
+           public isExecuting: boolean = false,
+           public instruction: string = "00",
+           public curPCB= null) {
 
-             }
+         }
 
-             public init(): void {
-                 this.PC = 0;
-                 this.Acc = 0;
-                 this.Xreg = 0;
-                 this.Yreg = 0;
-                 this.Zflag = 0;
-                 this.isExecuting = false;
-             }
+         public init(): void {
+           this.PC = 0;
+           this.Acc = 0;
+           this.Xreg = 0;
+           this.Yreg = 0;
+           this.Zflag = 0;
+           this.isExecuting = false;
+         }
         //loads the values from the running pcb into the cpu
         public loadFromPcb(pcb){
-            this.PC = pcb.PC
-            this.Acc = pcb.Acc
-            this.Xreg = pcb.Xreg
-            this.Yreg = pcb.Yreg
-            this.Zflag = pcb.Zflag
-            this.curPCB=pcb
+          this.PC = pcb.PC
+          this.Acc = pcb.Acc
+          this.Xreg = pcb.Xreg
+          this.Yreg = pcb.Yreg
+          this.Zflag = pcb.Zflag
+          this.curPCB=pcb
         }
         //updates the curpcb with values inside the cpu
 
         public updateCurPcb(){
-            
-            this.curPCB.updatePcb(this.PC,this.Acc,this.Xreg,this.Yreg,this.Zflag)
-            
+
+          this.curPCB.updatePcb(this.PC,this.Acc,this.Xreg,this.Yreg,this.Zflag)
+
 
         }
         public cycle(): void {
-            _Kernel.krnTrace('CPU cycle');
-            this.updateCurPcb();
+          _Kernel.krnTrace('CPU cycle');
+          this.updateCurPcb();
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             //if the cpu is executing
             if(this.isExecuting){
                 //set the current instruction to the value in memory at the PC
                 this.instruction = ""+_Memory.memory[this.PC];
-                document.getElementById("pc_field").innerText=""+this.PC
-               //update dispaly of pcbs so the user can see 
-               document.getElementById("pcbs_PC"+this.curPCB.Pid).innerText=""+this.PC
-                //update the cpu dispaly so you can see the instruction being read
-                document.getElementById("instr_field").innerText=this.instruction
+                
                 switch (this.instruction) {
                             //load the accumulator with a constant
                             case "A9":         
                             this.PC++                      
                             this.Acc=parseInt(_Memory.memory[this.PC],16);                                             
                                    // alert("the cur Acc = "+this.Acc);
-                                   document.getElementById("Acc_field").innerText=""+this.Acc; 
+                                   
                                    this.PC++                  
                                    break;
                             //load acc from memory
@@ -88,23 +84,23 @@
                                    this.PC++   
                                    //assign the new acc                           
                                    this.Acc=decOfLoc;
-                                   document.getElementById("Acc_field").innerText=""+this.Acc;                                                    
+                                                                                     
                                    // alert("the cur Acc = "+this.Acc);       
                                    this.PC++
                                    
                                    break;
                                 //store the acc value some where in memory
                                 case "8D":
-                                this.PC++
-                                var memloc="00"+_Memory.memory[this.PC];
-                                var memIndex= parseInt(memloc,16);                                                             
+                                  this.PC++
+                                  var memloc="00"+_Memory.memory[this.PC];
+                                  var memIndex= parseInt(memloc,16);                                                             
                                 
-                                this.PC++    
-                                var newVal =this.Acc.toString(16)  
+                                  this.PC++    
+                                  var newVal =this.Acc.toString(16)  
                                    //if the new val is only one digit we ad a 0 to keep to the two hex format  
                                    if(newVal.length<=1){   
-                                       newVal="0"+newVal;
-                                       
+                                     newVal="0"+newVal;
+
                                    }
                                    _Memory.memoryUpdate(newVal,memIndex); 
 
@@ -114,23 +110,23 @@
                                    break;
                                 //Add with carry
                                 case "6D":
-                                this.PC++
-                                var memloc="00"+_Memory.memory[this.PC];                                                             
+                                    this.PC++
+                                    var memloc="00"+_Memory.memory[this.PC];                                                             
                                     // alert("the cur Acc = "+this.Acc);     
                                     var decOfLoc= _Memory.getFromMemory(memloc);
                                     var awcResult= decOfLoc+this.Acc;
                                     this.PC++
                                     this.Acc=awcResult;
-                                    document.getElementById("Acc_field").innerText=""+this.Acc;    
+                                     
                                     
                                      // alert("the cur Acc = "+this.Acc);  
                                      this.PC++     
                                      break;
                                 //load x reg with constant 
                                 case "A2":
-                                this.PC++                     
-                                this.Xreg= parseInt(_Memory.memory[this.PC]);
-                                document.getElementById("xreg_field").innerText=""+this.Xreg;    
+                                    this.PC++                     
+                                    this.Xreg= parseInt(_Memory.memory[this.PC]);
+                                     
                                 
                                     // alert("the cur x Reg= "+this.Xreg); 
                                     this.PC++                 
@@ -138,25 +134,25 @@
                                     break;
                                 //load x reg from value in mem
                                 case "AE":
-                                this.PC++
-                                var memloc="00"+_Memory.memory[this.PC];                              
+                                    this.PC++
+                                    var memloc="00"+_Memory.memory[this.PC];                              
                                 
                                 
-                                var decOfLoc= _Memory.getFromMemory(memloc)
-                                this.PC++
+                                    var decOfLoc= _Memory.getFromMemory(memloc)
+                                    this.PC++
                                 
-                                this.Xreg=decOfLoc
-                                document.getElementById("xreg_field").innerText=""+this.Xreg;    
+                                    this.Xreg=decOfLoc
+
                                    // alert("the cur X reg = "+this.Xreg);    
-                                   this.PC++   
+                                    this.PC++   
                                    
-                                   break;
+                                    break;
                                 //load y reg with value
                                 case "A0":
-                                this.PC++
-                                this.Yreg= parseInt(_Memory.memory[this.PC],16);
+                                    this.PC++
+                                    this.Yreg= parseInt(_Memory.memory[this.PC],16);
                                 
-                                document.getElementById("yreg_field").innerText=""+this.Yreg;                                                
+                                                                                   
                                    // alert("the cur y Reg= "+this.Yreg);                 
                                    this.PC++  
                                    
@@ -169,7 +165,7 @@
                                 
                                 this.Yreg=decOfLoc;
                                 this.PC++
-                                document.getElementById("yreg_field").innerText=""+this.Yreg;    
+                                 
                                 
                                    // alert("the cur y reg = "+this.Yreg);     
                                    this.PC++  
@@ -201,7 +197,7 @@
                                 document.getElementById("Acc_field").innerText="0" 
 
                                 if (_ProcessManager.readyQueue.getSize() == 0) {
-                                    this.isExecuting = false;
+                                  this.isExecuting = false;
                                 }
                                 _StdOut.putText("Finished running program.",true);
                                 _StdOut.advanceLine();
@@ -214,12 +210,12 @@
                             var memloc="00"+_Memory.memory[this.PC];                                                                                            
                             var decOfLoc= _Memory.getFromMemory(memloc);
                             if(this.Xreg==decOfLoc){
-                                this.Zflag=1;
-                                document.getElementById("zflag_field").innerText=""+this.Zflag;  
+                              this.Zflag=1;
+                             
                             }
                             else{
-                                this.Zflag=0;
-                                document.getElementById("zflag_field").innerText=""+this.Zflag;  
+                              this.Zflag=0;
+                              
                             }
                             this.PC++
                                 // alert("the cur Z flag = "+this.Zflag);
@@ -231,22 +227,22 @@
                                 this.PC++
                               //  alert("dec of EF="+parseInt("EF",16));
                               if (this.Zflag==0){
-                                  var memVal=_Memory.memory[this.PC];  
-                                  
-                                  
-                                  this.PC++ 
-                                  var newPC=this.PC+parseInt(memVal,16);  
+                                var memVal=_Memory.memory[this.PC];  
 
-                                  if(newPC>255) {                           
-                                      this.PC=newPC-256;
-                                  }
-                                  else{
 
-                                      this.PC=newPC;
-                                  }
+                                this.PC++ 
+                                var newPC=this.PC+parseInt(memVal,16);  
+
+                                if(newPC>255) {                           
+                                  this.PC=newPC-256;
+                                }
+                                else{
+
+                                  this.PC=newPC;
+                                }
                               }
                               else {
-                                  this.PC++
+                                this.PC++
                               }
                               break;
                                 //increment a byte value at a address
@@ -258,7 +254,7 @@
                                     // alert("the register value we are incrementing "+decOfLoc);     
                                     var newVal =(decOfLoc+1).toString(16);
                                     if (newVal.length<2){
-                                        newVal="0"+newVal;
+                                      newVal="0"+newVal;
                                     }
                                     this.PC++
                                     _Memory.memoryUpdate(newVal,parseInt(memloc,16))
@@ -271,24 +267,24 @@
                                case "FF":
                                
                                if (this.Xreg==1){
-                                   
-                                   _StdOut.putText(""+(this.Yreg),true);
-                                   _StdOut.advanceLine();
+
+                                 _StdOut.putText(""+(this.Yreg),true);
+                                 _StdOut.advanceLine();
                                }
                                else if (this.Xreg==2){
-                                   
-                                   var tempPrint="";
-                                   var printPointer=this.Yreg;
-                                   while(_Memory.memory[printPointer]!="00"){
-                                       var newLetter= this.hexToChar(_Memory.memory[printPointer])
-                                       tempPrint+= ""+newLetter;
-                                       printPointer++;
-                                   }    
-                                   
-                                   _StdOut.putText(tempPrint,true)
-                                   _StdOut.advanceLine();
-                                   
-                                   
+
+                                 var tempPrint="";
+                                 var printPointer=this.Yreg;
+                                 while(_Memory.memory[printPointer]!="00"){
+                                   var newLetter= this.hexToChar(_Memory.memory[printPointer])
+                                   tempPrint+= ""+newLetter;
+                                   printPointer++;
+                                 }    
+
+                                 _StdOut.putText(tempPrint,true)
+                                 _StdOut.advanceLine();
+
+
                                }
                                this.PC++
                                break;
@@ -300,24 +296,24 @@
                             _Kernel.krnShutdown();
                             clearInterval(_hardwareClockID);
                             break;
+                          }
+
+
+
                         }
 
 
 
-                    }
+
+                      }
 
 
-
-
-                }
-
-
-                public hexToChar(hexLetter){
+                      public hexToChar(hexLetter){
             var hex = hexLetter.toString();//force conversion
             var str = '';
             for (var i = 0; i < hex.length; i += 2)
-                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+              str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
             return str;
+          }
         }
-    }
-}    
+      }    

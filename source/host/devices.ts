@@ -19,13 +19,13 @@
      Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
      ------------ */
 
-module TSOS {
+     module TSOS {
 
-    export class Devices {
+         export class Devices {
 
-        constructor() {
-            _hardwareClockID = -1;
-        }
+             constructor() {
+                 _hardwareClockID = -1;
+             }
 
         //
         // Hardware/Host Clock Pulse

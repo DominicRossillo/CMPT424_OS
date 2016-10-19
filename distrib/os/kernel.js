@@ -86,12 +86,31 @@ var TSOS;
                 if (document.getElementById("steptoggle").checked && canStep == true) {
                     _CPU.cycle();
                     canStep = false;
+                    document.getElementById("Acc_field").innerText = "" + _CPU.Acc;
+                    document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
+                    document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
+                    document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
+                    document.getElementById("pc_field").innerText = "" + _CPU.PC;
+                    //update dispaly of pcbs so the user can see 
+                    document.getElementById("pcbs_PC" + _CPU.curPCB.Pid).innerText = "" + _CPU.PC;
+                    //update the cpu dispaly so you can see the instruction being read
+                    document.getElementById("instr_field").innerText = _CPU.instruction;
                 }
                 else if (document.getElementById("steptoggle").checked && canStep == false) {
                     this.krnTrace("Idle");
                 }
                 else if (!document.getElementById("steptoggle").checked) {
                     _CPU.cycle();
+                    //update display
+                    document.getElementById("Acc_field").innerText = "" + _CPU.Acc;
+                    document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
+                    document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
+                    document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
+                    document.getElementById("pc_field").innerText = "" + _CPU.PC;
+                    //update dispaly of pcbs so the user can see 
+                    document.getElementById("pcbs_PC" + _CPU.curPCB.Pid).innerText = "" + _CPU.PC;
+                    //update the cpu dispaly so you can see the instruction being read
+                    document.getElementById("instr_field").innerText = _CPU.instruction;
                 }
             }
             else {

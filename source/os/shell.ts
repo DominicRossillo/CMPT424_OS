@@ -11,7 +11,7 @@
 
     Note: While fun and learning are the primary goals of all enrichment center activities,
           serious injuries may occur when trying to write your own Operating System.
-   ------------ */
+          ------------ */
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
@@ -32,89 +32,89 @@ module TSOS {
             // Load the command list.
 			//bsod
 			sc = new ShellCommand(this.shellBSOD,
-                                  "bsod",
-                                  "- crashes the os.");
+                "bsod",
+                "- crashes the os.");
             this.commandList[this.commandList.length] = sc;
             // ver
             sc = new ShellCommand(this.shellVer,
-                                  "ver",
-                                  "- Displays the current version data.");
+                "ver",
+                "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
 
             // help
             sc = new ShellCommand(this.shellHelp,
-                                  "help",
-                                  "- This is the help command. Seek help.");
+                "help",
+                "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
-			
+            
 			//whereami
 			sc = new ShellCommand(this.shellWhereami,
-								  "whereami",
-                                  "- Tells you what your current location is.");
+                "whereami",
+                "- Tells you what your current location is.");
             this.commandList[this.commandList.length] = sc;
-			
+            
 			//whatislove
 			sc = new ShellCommand(this.shellWhatislove,
-								  "whatislove",
-                                  "- Tells you what love really is.");
+                "whatislove",
+                "- Tells you what love really is.");
             this.commandList[this.commandList.length] = sc;
-			
+            
 			//date and time
 			sc = new ShellCommand(this.shellDate,
-								  "date",
-                                  "- Tells you the current date and time.");
+                "date",
+                "- Tells you the current date and time.");
             this.commandList[this.commandList.length] = sc;
             //load hex file
             sc = new ShellCommand(this.shellLoad,
-                                  "load",
-                                  "- checks to see if code in the taProgramInput is valid hex");
+                "load",
+                "- checks to see if code in the taProgramInput is valid hex");
             this.commandList[this.commandList.length] = sc;
             //status
             sc = new ShellCommand(this.shellStatus,
-                                  "status",
-                                  "- updates the current status, takes a string");
+                "status",
+                "- updates the current status, takes a string");
             this.commandList[this.commandList.length] = sc;
-			
-			
+            
+            
             // shutdown
             sc = new ShellCommand(this.shellShutdown,
-                                  "shutdown",
-                                  "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
+                "shutdown",
+                "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
 
             // cls
             sc = new ShellCommand(this.shellCls,
-                                  "cls",
-                                  "- Clears the screen and resets the cursor position.");
+                "cls",
+                "- Clears the screen and resets the cursor position.");
             this.commandList[this.commandList.length] = sc;
              // run <PID>
-            sc = new ShellCommand(this.shellRun,
-                                  "run",
-                                  "- Runs a loaded program of a given <PID>.");
-            this.commandList[this.commandList.length] = sc;
+             sc = new ShellCommand(this.shellRun,
+                 "run",
+                 "- Runs a loaded program of a given <PID>.");
+             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
-                                  "man",
-                                  "<topic> - Displays the MANual page for <topic>.");
+                "man",
+                "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
 
             // trace <on | off>
             sc = new ShellCommand(this.shellTrace,
-                                  "trace",
-                                  "<on | off> - Turns the OS trace on or off.");
+                "trace",
+                "<on | off> - Turns the OS trace on or off.");
             this.commandList[this.commandList.length] = sc;
 
             // rot13 <string>
             sc = new ShellCommand(this.shellRot13,
-                                  "rot13",
-                                  "<string> - Does rot13 obfuscation on <string>.");
+                "rot13",
+                "<string> - Does rot13 obfuscation on <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // prompt <string>
             sc = new ShellCommand(this.shellPrompt,
-                                  "prompt",
-                                  "<string> - Sets the prompt.");
+                "prompt",
+                "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
@@ -138,8 +138,8 @@ module TSOS {
             // ... and assign the command and args to local variables.
             var cmd = userCommand.command;
             var args = userCommand.args;
-				
-			
+            
+            
             //
             // Determine the command and execute it.
             //
@@ -236,14 +236,14 @@ module TSOS {
         }
 
         public shellApology() {
-           if (_SarcasticMode) {
-              _StdOut.putText("I think we can put our differences behind us.",true);
-              _StdOut.advanceLine();
-              _StdOut.putText("For science . . . You monster.",true);
-              _SarcasticMode = false;
-           } else {
-              _StdOut.putText("For what?",true);
-           }
+            if (_SarcasticMode) {
+                _StdOut.putText("I think we can put our differences behind us.",true);
+                _StdOut.advanceLine();
+                _StdOut.putText("For science . . . You monster.",true);
+                _SarcasticMode = false;
+            } else {
+                _StdOut.putText("For what?",true);
+            }
         }
 
         public shellVer(args) {
@@ -257,15 +257,15 @@ module TSOS {
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description,true);
             }
         }
-		
-		
-		public shellWhereami(args) {
+        
+        
+        public shellWhereami(args) {
             _StdOut.putText("You are infront of a computer, life is great.",true);
             
         }
-		
-		public shellWhatislove(args) {
-			if (_SarcasticMode) {
+        
+        public shellWhatislove(args) {
+            if (_SarcasticMode) {
                 _StdOut.putText("Alan of course, he is the master of all minions.",true);
                 
                 
@@ -279,22 +279,22 @@ module TSOS {
 		public shellBSOD(args) {
             _StdOut.clearScreen();
             _StdOut.resetXY();
-			var ctx = _Canvas.getContext("2d");
+            var ctx = _Canvas.getContext("2d");
             //drawing blue square over cli
-			ctx.beginPath();
-			ctx.fillStyle = "blue";
-			ctx.fillRect(0,0,500,500);
-			ctx.fill();
+            ctx.beginPath();
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0,0,500,500);
+            ctx.fill();
             _StdOut.putText("An error has occured, you broke something.");
             _Kernel.krnShutdown();
-	        
+            
         }
-		
-		public shellDate(args) {
+        
+        public shellDate(args) {
             //prints the current date, time and time zone
 
-			_StdOut.putText((Date().toString()),true);
-             _StdOut.advanceLine();
+            _StdOut.putText((Date().toString()),true);
+            _StdOut.advanceLine();
         }
         //load function to test if code in the taprograminput is valid hex code
         public shellLoad(args) {
@@ -305,30 +305,30 @@ module TSOS {
             var memtable=document.getElementById('memoryTable');
 
             if(testcode.length>0){
-           
+                
                 while ((m = re.exec(testcode)) !== null) {
-                      if (m.index === re.lastIndex) {
-                            re.lastIndex++;
-                            
-                            
-                      }
-                      else{
-                            testpass=false;
-                            break;
-                          }                      
+                    if (m.index === re.lastIndex) {
+                        re.lastIndex++;
+                        
+                        
                     }
+                    else{
+                        testpass=false;
+                        break;
+                    }                      
                 }
-                else{
-                    testpass=false;
-                } 
-                if (testpass){
-                        var curcode=0;
-                        var hexin=testcode.split(" ");
-                        var newPCB= _ProcessManager.load();
+            }
+            else{
+                testpass=false;
+            } 
+            if (testpass){
+                var curcode=0;
+                var hexin=testcode.split(" ");
+                var newPCB= _ProcessManager.load();
 
-                        for(var i=0; i<Math.ceil((hexin.length/8)); i++){
-                       
-                             for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
+                for(var i=0; i<Math.ceil((hexin.length/8)); i++){
+                    
+                    for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
                                     //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
                                    // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
                                     //var newPcb = new Pcb(1,2,3,4,5,true);
@@ -340,34 +340,34 @@ module TSOS {
                                     //alert(hexin[curcode]);
 
                                     curcode++;
-                                   
-                             }
+                                    
+                                }
 
-                        }
-                         _StdOut.putText("This is valid hexcode",true);
-                        _StdOut.advanceLine();
-                        _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
-                        _StdOut.advanceLine();
-                        allPcb.push(newPCB);
+                            }
+                            _StdOut.putText("This is valid hexcode",true);
+                            _StdOut.advanceLine();
+                            _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
+                                _StdOut.advanceLine();
+                                allPcb.push(newPCB);
                       // alert(_Memory.memory);
-                     
-                }
-                else{
-                     _StdOut.putText("This is not valid hexcode",true);
                       
-                }        
-        }
+                  }
+                  else{
+                      _StdOut.putText("This is not valid hexcode",true);
+                      
+                  }        
+              }
 
-        public shellStatus(args) {
+              public shellStatus(args) {
             //command to update status title outside of the cli
             if(args.length>0){
                 var status = "";
-               
+                
                 //loop that makes gets multiple word statuses 
                 for(var i=0; i<args.length;i++){
                     status+=args[i]+" ";
                 }
-            
+                
                 document.getElementById("status_title").innerText=status;
             }
             else {
@@ -376,9 +376,9 @@ module TSOS {
         }
 
         public shellShutdown(args) {
-             _StdOut.putText("Shutting down...");
+            _StdOut.putText("Shutting down...");
              // Call Kernel shutdown routine.
-            _Kernel.krnShutdown();
+             _Kernel.krnShutdown();
             // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
         }
 
@@ -392,41 +392,41 @@ module TSOS {
                 var topic = args[0];
                 switch (topic) {
                     case "help":
-                        _StdOut.putText("Help displays a list of (hopefully) valid commands.",true);
-                        break;
+                    _StdOut.putText("Help displays a list of (hopefully) valid commands.",true);
+                    break;
                     case "run":
-                        _StdOut.putText("Runs a program loaded into memory referenced by a <PID>.",true);
-                        break;
-					case "ver":
-                        _StdOut.putText("Ver Displays the current version of the OS.",true);
-                        break;
-					case "whereami":
-                        _StdOut.putText("Where am i, helps you figure out where you are in real life.",true);
-                        break;
-					case "date":
-                        _StdOut.putText("Date can be used to find out the current Date and Time.",true);
-                        break;
-					case "load":
-                        _StdOut.putText("Checks the text in the text area is valid hex code.",true);
-                        break;
+                    _StdOut.putText("Runs a program loaded into memory referenced by a <PID>.",true);
+                    break;
+                    case "ver":
+                    _StdOut.putText("Ver Displays the current version of the OS.",true);
+                    break;
+                    case "whereami":
+                    _StdOut.putText("Where am i, helps you figure out where you are in real life.",true);
+                    break;
+                    case "date":
+                    _StdOut.putText("Date can be used to find out the current Date and Time.",true);
+                    break;
+                    case "load":
+                    _StdOut.putText("Checks the text in the text area is valid hex code.",true);
+                    break;
                     case "status":
-                        _StdOut.putText("Change the status title on the page.",true);
-                        break;
+                    _StdOut.putText("Change the status title on the page.",true);
+                    break;
                     case "whatislove":
-                        _StdOut.putText("What is love is used to find what you really love.",true);
-                        break;
+                    _StdOut.putText("What is love is used to find what you really love.",true);
+                    break;
                     case "bsod":
-                        _StdOut.putText("Crashes the OS.",true);
-                        break;
+                    _StdOut.putText("Crashes the OS.",true);
+                    break;
                     case "trace":
-                        _StdOut.putText("Turns the OS trace on or off.",true);
-                        break;
+                    _StdOut.putText("Turns the OS trace on or off.",true);
+                    break;
                     case "prompt":
-                        _StdOut.putText("Set the prompt.",true);
-                        break;
+                    _StdOut.putText("Set the prompt.",true);
+                    break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
-                        _StdOut.putText("No manual entry for " + args[0] + ".",true);
+                    _StdOut.putText("No manual entry for " + args[0] + ".",true);
                 }
             } else {
                 _StdOut.putText("Usage: man <topic>  Please supply a topic.",true);
@@ -438,19 +438,19 @@ module TSOS {
                 var setting = args[0];
                 switch (setting) {
                     case "on":
-                        if (_Trace && _SarcasticMode) {
-                            _StdOut.putText("Trace is already on, doofus.",true);
-                        } else {
-                            _Trace = true;
-                            _StdOut.putText("Trace ON",true);
-                        }
-                        break;
+                    if (_Trace && _SarcasticMode) {
+                        _StdOut.putText("Trace is already on, doofus.",true);
+                    } else {
+                        _Trace = true;
+                        _StdOut.putText("Trace ON",true);
+                    }
+                    break;
                     case "off":
-                        _Trace = false;
-                        _StdOut.putText("Trace OFF",true);
-                        break;
+                    _Trace = false;
+                    _StdOut.putText("Trace OFF",true);
+                    break;
                     default:
-                        _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.",true);
+                    _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.",true);
                 }
             } else {
                 _StdOut.putText("Usage: trace <on | off>",true);
@@ -478,21 +478,21 @@ module TSOS {
             if (args.length>0){
                 var foundPID=false;
                 for (var i=0; i<allPcb.length;i++){
-                     if(allPcb[i].Pid==args){
-                         foundPID=true;
-                         var tarPcb= allPcb[i];
-                         break; 
-                     }
+                    if(allPcb[i].Pid==args){
+                        foundPID=true;
+                        var tarPcb= allPcb[i];
+                        break; 
+                    }
 
                 }
                 //if the pid exists run it
                 if(foundPID==true){
 
-                _ProcessManager.runPid(args);
+                    _ProcessManager.runPid(args);
 
                 }
                 else
-                   _StdOut.putText("The PID you entered is not valid.")
+                    _StdOut.putText("The PID you entered is not valid.")
                 
             }
             else {

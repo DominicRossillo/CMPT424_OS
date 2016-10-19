@@ -64,18 +64,12 @@ var TSOS;
             if (this.isExecuting) {
                 //set the current instruction to the value in memory at the PC
                 this.instruction = "" + _Memory.memory[this.PC];
-                document.getElementById("pc_field").innerText = "" + this.PC;
-                //update dispaly of pcbs so the user can see 
-                document.getElementById("pcbs_PC" + this.curPCB.Pid).innerText = "" + this.PC;
-                //update the cpu dispaly so you can see the instruction being read
-                document.getElementById("instr_field").innerText = this.instruction;
                 switch (this.instruction) {
                     //load the accumulator with a constant
                     case "A9":
                         this.PC++;
                         this.Acc = parseInt(_Memory.memory[this.PC], 16);
                         // alert("the cur Acc = "+this.Acc);
-                        document.getElementById("Acc_field").innerText = "" + this.Acc;
                         this.PC++;
                         break;
                     //load acc from memory
@@ -88,7 +82,6 @@ var TSOS;
                         this.PC++;
                         //assign the new acc                           
                         this.Acc = decOfLoc;
-                        document.getElementById("Acc_field").innerText = "" + this.Acc;
                         // alert("the cur Acc = "+this.Acc);       
                         this.PC++;
                         break;
@@ -117,7 +110,6 @@ var TSOS;
                         var awcResult = decOfLoc + this.Acc;
                         this.PC++;
                         this.Acc = awcResult;
-                        document.getElementById("Acc_field").innerText = "" + this.Acc;
                         // alert("the cur Acc = "+this.Acc);  
                         this.PC++;
                         break;
@@ -125,7 +117,6 @@ var TSOS;
                     case "A2":
                         this.PC++;
                         this.Xreg = parseInt(_Memory.memory[this.PC]);
-                        document.getElementById("xreg_field").innerText = "" + this.Xreg;
                         // alert("the cur x Reg= "+this.Xreg); 
                         this.PC++;
                         break;
@@ -136,7 +127,6 @@ var TSOS;
                         var decOfLoc = _Memory.getFromMemory(memloc);
                         this.PC++;
                         this.Xreg = decOfLoc;
-                        document.getElementById("xreg_field").innerText = "" + this.Xreg;
                         // alert("the cur X reg = "+this.Xreg);    
                         this.PC++;
                         break;
@@ -144,7 +134,6 @@ var TSOS;
                     case "A0":
                         this.PC++;
                         this.Yreg = parseInt(_Memory.memory[this.PC], 16);
-                        document.getElementById("yreg_field").innerText = "" + this.Yreg;
                         // alert("the cur y Reg= "+this.Yreg);                 
                         this.PC++;
                         break;
@@ -155,7 +144,6 @@ var TSOS;
                         var decOfLoc = _Memory.getFromMemory(memloc);
                         this.Yreg = decOfLoc;
                         this.PC++;
-                        document.getElementById("yreg_field").innerText = "" + this.Yreg;
                         // alert("the cur y reg = "+this.Yreg);     
                         this.PC++;
                         break;
@@ -194,11 +182,9 @@ var TSOS;
                         var decOfLoc = _Memory.getFromMemory(memloc);
                         if (this.Xreg == decOfLoc) {
                             this.Zflag = 1;
-                            document.getElementById("zflag_field").innerText = "" + this.Zflag;
                         }
                         else {
                             this.Zflag = 0;
-                            document.getElementById("zflag_field").innerText = "" + this.Zflag;
                         }
                         this.PC++;
                         // alert("the cur Z flag = "+this.Zflag);
