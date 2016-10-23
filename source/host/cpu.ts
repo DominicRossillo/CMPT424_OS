@@ -85,7 +85,7 @@
                                 
                                    this.PC++   
                                    //assign the new acc          
-                                   alert(parseInt(_Memory.memory[decOfLoc],16))                 
+                                 //  alert(parseInt(_Memory.memory[decOfLoc],16))                 
                                    this.Acc=parseInt(_Memory.memory[decOfLoc],16)
                                                                                      
                                    // alert("the cur Acc = "+this.Acc);       
