@@ -76,13 +76,12 @@ var TSOS;
                     case "AD": {
                         //test string A9 01 A9 02 A9 1A A9 08 AD 05 00
                         this.PC++;
-                        //  var memloc="00"+_Memory.getFromMemory(this.PC)   
+                        var memloc = "00" + _Memory.getFromMemory(this.PC);
                         //get the dec value of the pc in memory                                                  
-                        var decOfLoc = parseInt(_Memory.memory[this.PC], 16);
+                        var decOfLoc = _Memory.getFromMemory(memloc);
                         this.PC++;
-                        //assign the new acc          
-                        alert(parseInt(_Memory.memory[decOfLoc], 16));
-                        this.Acc = parseInt(_Memory.memory[decOfLoc], 16);
+                        //assign the new acc                           
+                        this.Acc = decOfLoc;
                         // alert("the cur Acc = "+this.Acc);       
                         this.PC++;
                         break;
@@ -92,16 +91,15 @@ var TSOS;
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
                         var memIndex = parseInt(memloc, 16);
-                        var newVal = (this.Acc).toString(16);
+                        this.PC++;
+                        var newVal = this.Acc.toString(16);
                         //if the new val is only one digit we ad a 0 to keep to the two hex format  
                         if (newVal.length <= 1) {
                             newVal = "0" + newVal;
                         }
-                        _Memory.memory[memIndex] = newVal;
-                        // _Memory.memoryUpdate(newVal,memIndex); 
+                        _Memory.memoryUpdate(newVal, memIndex);
                         // alert("the Acc store location = "+_Memory.memory[memIndex]); 
                         // alert(_Memory.memory);    
-                        this.PC++;
                         this.PC++;
                         break;
                     }
@@ -109,9 +107,8 @@ var TSOS;
                     case "6D": {
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
-                        var decIndex = parseInt(memloc, 16);
                         // alert("the cur Acc = "+this.Acc);     
-                        var decOfLoc = parseInt(_Memory.memory[decIndex], 16);
+                        var decOfLoc = _Memory.getFromMemory(memloc);
                         var awcResult = decOfLoc + this.Acc;
                         this.PC++;
                         this.Acc = awcResult;
@@ -163,44 +160,38 @@ var TSOS;
                         break;
                     }
                     //break syscall to signal that we finished the program 
-                    case "00":
-                        {
-                            document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
-                            this.updateCurPcb();
-                            _ProcessManager.terminateProcess();
-                            // this.curPCB=null;
-                            // this.PC = 0;
-                            // this.Acc = 0;
-                            // this.Xreg = 0; 
-                            // this.Yreg = 0;
-                            // this.Zflag = 0;
-                            // //display to user that we finished and reset the CPU for the next program
-                            // document.getElementById("zflag_field").innerText="0";
-                            // document.getElementById("pc_field").innerText="0";
-                            // document.getElementById("yreg_field").innerText="0"
-                            // document.getElementById("xreg_field").innerText="0"
-                            // document.getElementById("Acc_field").innerText="0" 
-                            if (_ProcessManager.readyQueue.getSize() == 0) {
-                                this.isExecuting = false;
-                            }
-                            _StdOut.putText("Finished running program.", true);
-                            _StdOut.advanceLine();
-                            _Memory.clearAllMemory();
-                            break;
-                        }
+                    // case "00":
+                    //           {document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
+                    //           this.updateCurPcb();
+                    //           _ProcessManager.terminateProcess();
+                    //           // this.curPCB=null;
+                    //           // this.PC = 0;
+                    //           // this.Acc = 0;
+                    //           // this.Xreg = 0; 
+                    //           // this.Yreg = 0;
+                    //           // this.Zflag = 0;
+                    //           // //display to user that we finished and reset the CPU for the next program
+                    //           // document.getElementById("zflag_field").innerText="0";
+                    //           // document.getElementById("pc_field").innerText="0";
+                    //           // document.getElementById("yreg_field").innerText="0"
+                    //           // document.getElementById("xreg_field").innerText="0"
+                    //           // document.getElementById("Acc_field").innerText="0" 
+                    //           if (_ProcessManager.readyQueue.getSize() == 0) {
+                    //             this.isExecuting = false;
+                    //           }
+                    //           _StdOut.putText("Finished running program.",true);
+                    //           _StdOut.advanceLine();
+                    //           _Memory.clearAllMemory();
+                    //           break;}
                     //compare a byte in memory to x reg
                     case "EC": {
                         this.PC++;
                         var memloc = "00" + _Memory.memory[this.PC];
                         var decOfLoc = _Memory.getFromMemory(memloc);
-                        //  alert("xreg value in EC="+this.Xreg)
-                        //  alert("location in mem value in EC= "+decOfLoc)
-                        if (this.Xreg == decOfLoc) {
-                            //  alert("changing z flag to 1 at pc:"+this.PC)
+                        if (this.Xreg === decOfLoc) {
                             this.Zflag = 1;
                         }
                         else {
-                            //  alert("changing z flag to 0 at pc:"+this.PC)
                             this.Zflag = 0;
                         }
                         this.PC++;

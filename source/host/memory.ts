@@ -19,9 +19,9 @@ module TSOS {
         }
          //function to update the memory and display it properly 
          public memoryUpdate(newValue,address){
-             _Memory.memory[address]=newValue;
+             this.memory[address]=newValue;
              document.getElementById("cell"+address).innerText=newValue;
-             _Memory.memPoint++;
+             this.memPoint++;
 
          }
          //function to get values from memory and convert them to dec
@@ -29,16 +29,16 @@ module TSOS {
              var tarReg= parseInt(index,16);
              // alert("get from mem tarReg ="+tarReg)
              // alert("value at index = "+_Memory.memory[tarReg])
-             return parseInt(_Memory.memory[tarReg],16);
+             return parseInt(this.memory[tarReg],16);
          }
          //function to set all values in mem to 00
          public clearAllMemory(){
-             for (var i=0 ; i<_Memory.memory.length;i++){
+             for (var i=0 ; i<this.memory.length;i++){
                  _Memory.memory[i]="00";
                  document.getElementById("cell"+i).innerText="00";
                  
              }
-             _Memory.memPoint=0;
+             this.memPoint=0;
              
 
 
