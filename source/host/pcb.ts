@@ -9,7 +9,10 @@ export class Pcb {
     public Xreg: number = 0,
     public Yreg: number = 0,
     public Zflag: number = 0,
-    public isExecuting: boolean = false) {
+    public isExecuting: boolean = false,
+    public logicaladdress: number= null,
+    public baseRegister: number = -1,
+    public limitRegister: number = -1) {
 
   }
         //funciton to update your current pcb with new values taken from the cpu

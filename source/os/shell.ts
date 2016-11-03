@@ -116,7 +116,11 @@ module TSOS {
                 "prompt",
                 "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
-
+             // clearmem
+            sc = new ShellCommand(this.shellClearmem,
+                "clearmem",
+                "- Clear all memory segments.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -424,6 +428,11 @@ module TSOS {
                     case "prompt":
                     _StdOut.putText("Set the prompt.",true);
                     break;
+                    case "clearmem":
+                    _StdOut.putText("Clear all memory segments",true);
+                    break;
+
+
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                     _StdOut.putText("No manual entry for " + args[0] + ".",true);
@@ -499,6 +508,12 @@ module TSOS {
                 _StdOut.putText("Usage: status <run>  Please supply a pid.",true);
             }
         }
+
+       
+         public shellClearmem(args){
+            _Memory.clearAllMemory();
+
+         }
 
     }
 }
