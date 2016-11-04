@@ -44,15 +44,13 @@ module TSOS {
 
          }
 
-         public clearMemSeg(base,limit){
-             for (var i=base ; i<=limit;i++){
+         public clearMemSeg(pcb){
+             for (var i=pcb.baseRegister ; i<pcb.limitRegister;i++){
                  _Memory.memory[i]="00";
                  document.getElementById("cell"+i).innerText="00";
                  
-             }       
-
-
-         }
+             }  
+        }
 
          
 

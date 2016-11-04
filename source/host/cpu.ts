@@ -46,6 +46,7 @@
           this.Yreg = pcb.Yreg
           this.Zflag = pcb.Zflag
           this.curPCB=pcb
+          this.isExecuting = pcb.isExecuting;
         }
         //updates the curpcb with values inside the cpu
 
@@ -195,29 +196,17 @@
                                           {document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
                                           this.updateCurPcb();
                                           
-                                          _ProcessManager.terminateProcess();
-                                          // this.curPCB=null;
-                                          // this.PC = 0;
-                                          // this.Acc = 0;
-                                          // this.Xreg = 0; 
-                                          // this.Yreg = 0;
-                                          // this.Zflag = 0;
-                                          // //display to user that we finished and reset the CPU for the next program
-                                          // document.getElementById("zflag_field").innerText="0";
-
-                                          // document.getElementById("pc_field").innerText="0";
-                                          // document.getElementById("yreg_field").innerText="0"
-                                          // document.getElementById("xreg_field").innerText="0"
-                                          // document.getElementById("Acc_field").innerText="0" 
+                                          _ProcessManager.terminateProcess();                                        
 
                                           if (_ProcessManager.readyQueue.getSize() == 0) {
                                             this.isExecuting = false;
                                           }
                                           _StdOut.putText("Finished running program.",true);
                                           _StdOut.advanceLine();
-                                          
-                                          _Memory.clearAllMemory();
-                                          break;}
+                                          _Memory.clearMemSeg(this.curPCB);
+                                         
+                                          break;
+                                          }
                                       //compare a byte in memory to x reg
                                 case "EC":{
                                     this.PC++
