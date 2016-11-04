@@ -21,6 +21,7 @@ module TSOS {
         		var pcb = new Pcb();     		
                 pcb.Pid= this.residentList.length;
                 this.residentList[pcb.Pid]=pcb;
+                alert(this.residentList);
                 _MemoryManager.allocateMem(pcb.Pid);
                 document.getElementById('pcbTable').innerHTML+="<tr> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
                 return this.residentList[pcb.Pid];

@@ -21,7 +21,9 @@ module TSOS {
             //alert("allocate length is "+this.allocated.length)
             if (freeMem.length>0){
                 var freebase =parseInt(freeMem[0]);
+                alert("free base "+freebase);
                 var freelimit= freebase+255
+                alert("free limit "+freelimit);
                 pcb.baseRegister=freebase
                 pcb.limitRegister=freelimit
                 _ProcessManager.residentList[pid]=pcb;
@@ -66,30 +68,34 @@ module TSOS {
            var usedSegments=[];
            var allSegments= ["0","256","512"];
            var allfound=[];
-           for (var i=0; i<_ProcessManager.readyQueue.getSize();i++){
-               usedSegments.push(_ProcessManager.readyQueue[i].baseRegister);
+
+           for (var i=0; i<_ProcessManager.residentList.length && _ProcessManager.residentList.length>0;i++){
+               usedSegments.push(_ProcessManager.residentList[i].baseRegister);
+            //   alert("usedSegments has " +usedSegments)
            }
-           if(_CPU.isExecuting){
+           if(_ProcessManager.runningQueue.getSize()>0){
                usedSegments.push(_ProcessManager.runningQueue[0].baseRegister);
            }
            for (var i=0; i<allSegments.length; i++){
-               var missingSeg= false;
+               var missingSeg= true;
+               alert("usedSegments size"+ usedSegments.length)    
                for(var j=0; j<usedSegments.length;j++){
                        if(usedSegments[j]==allSegments[i]){
                            missingSeg= false;
+                           alert("found " +allSegments[i])
                            break;
                        }
-                       else{
-                           missingSeg=true;
-                       }
+                       
 
                }
-               if(missingSeg=true){
+               if(missingSeg==true){
+
                    allfound.push(allSegments[i]);
+                   alert("all missing segments"+ allSegments[i])
                }
                
-               }
-
+            }
+               alert("all found is "+allfound)
                return allfound;
                
            }
