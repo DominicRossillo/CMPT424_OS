@@ -44,6 +44,7 @@
             //initialize memory
             _Memory= new Memory();
             _ProcessManager= new ProcessManager();
+             _MemoryManager= new MemoryManager();
           //  _MemoryManager= new MemoryManager();
             //
             // ... more?

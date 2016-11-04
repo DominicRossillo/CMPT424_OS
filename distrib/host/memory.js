@@ -30,6 +30,12 @@ var TSOS;
             }
             this.memPoint = 0;
         };
+        Memory.prototype.clearMemSeg = function (base, limit) {
+            for (var i = base; i <= limit; i++) {
+                _Memory.memory[i] = "00";
+                document.getElementById("cell" + i).innerText = "00";
+            }
+        };
         return Memory;
     }());
     TSOS.Memory = Memory;

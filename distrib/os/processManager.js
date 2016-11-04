@@ -8,11 +8,13 @@ var TSOS;
         }
         //load a pcb into resident que 
         ProcessManager.prototype.load = function () {
+            //alert(_MemoryManager.allocated.length)
             var pcb = new TSOS.Pcb();
             pcb.Pid = this.residentList.length;
             this.residentList[pcb.Pid] = pcb;
+            _MemoryManager.allocateMem(pcb.Pid);
             document.getElementById('pcbTable').innerHTML += "<tr> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
-            return pcb;
+            return this.residentList[pcb.Pid];
         };
         //run a program by putting it into the readque and telling the cpu to run by setting it to executing
         ProcessManager.prototype.runPid = function (pid) {

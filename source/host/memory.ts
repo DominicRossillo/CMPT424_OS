@@ -44,6 +44,16 @@ module TSOS {
 
          }
 
+         public clearMemSeg(base,limit){
+             for (var i=base ; i<=limit;i++){
+                 _Memory.memory[i]="00";
+                 document.getElementById("cell"+i).innerText="00";
+                 
+             }       
+
+
+         }
+
          
 
          

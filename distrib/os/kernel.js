@@ -39,6 +39,7 @@ var TSOS;
             //initialize memory
             _Memory = new TSOS.Memory();
             _ProcessManager = new TSOS.ProcessManager();
+            _MemoryManager = new TSOS.MemoryManager();
             //  _MemoryManager= new MemoryManager();
             //
             // ... more?

@@ -68,5 +68,7 @@ var _Memory;
 var allPcb = [];
 //init process manger
 var _ProcessManager;
+//init memory manager
+var _MemoryManager;
 //global to check if we can step
 var canStep = false;

@@ -326,9 +326,15 @@ module TSOS {
                 testpass=false;
             } 
             if (testpass){
+                if (_MemoryManager.allocated.length>=3){
+                     _StdOut.putText("Memory is already full.",true);
+                    return;
+                }
                 var curcode=0;
                 var hexin=testcode.split(" ");
                 var newPCB= _ProcessManager.load();
+                alert(newPCB.baseRegister);
+                _Memory.memPoint= newPCB.baseRegister
 
                 for(var i=0; i<Math.ceil((hexin.length/8)); i++){
                     

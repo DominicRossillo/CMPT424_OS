@@ -86,6 +86,7 @@ var _Memory: TSOS.Memory;
 var allPcb = [];
 //init process manger
 var _ProcessManager: TSOS.ProcessManager
-
+//init memory manager
+var _MemoryManager: TSOS.MemoryManager
 //global to check if we can step
 var canStep= false;
