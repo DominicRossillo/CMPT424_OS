@@ -17,6 +17,7 @@ module TSOS {
         //load a pcb into resident que 
     	public load(){
             //alert(_MemoryManager.allocated.length)
+            alert("resident LIST SIZE "+this.residentList.length)
             if(this.residentList.length<3){
             		var pcb = new Pcb();     		
                     pcb.Pid= allPcb.length;
@@ -46,7 +47,7 @@ module TSOS {
 
             for(var i=0; i<this.residentList.length; i++){
                 if(this.residentList[i].Pid==pid){
-                    alert(i)
+                    
                     var pcb= this.residentList[i];  
                     break;
                 }
@@ -55,10 +56,18 @@ module TSOS {
     		
           //  alert("the pcb "+pcb);
             // alert("before ready queue "+this.readyQueue[0]);
-            alert(i)
+            
             this.readyQueue.enqueue(pcb);
             // alert("before length"+this.residentList.length);
-            this.residentList.splice(i,1);
+            for(var i=0; i<this.residentList.length; i++){
+                if(this.residentList[i].Pid==pid){
+                    alert("splice")
+                    this.residentList.splice(i,1);  
+                    break;
+                }
+                
+            }
+            
             // alert("after length"+this.residentList.length);
     		
             // alert("ready queue "+this.readyQueue[0]);

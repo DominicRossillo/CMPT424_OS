@@ -51,8 +51,8 @@ var TSOS;
                 if (curSeg.Pid == pid) {
                     alert("deAlocated " + curSeg.baseRegister);
                     this.allocated.splice(i, 1);
+                    break;
                 }
-                break;
             }
         };
         MemoryManager.prototype.findFreeMem = function () {

@@ -65,15 +65,17 @@
             //if the cpu is executing
             if(this.isExecuting){
                 //set the current instruction to the value in memory at the PC
-                var physicalAddress= this.PC+ this.curPCB.baseRegister;
+                var physicalAddress= this.findPhysicalAddress();
                 this.instruction = ""+_Memory.memory[physicalAddress];
                 
                 switch (this.instruction) {
                             //load the accumulator with a constant
                             case "A9":     {    
-                              this.PC++                      
-                              this.Acc=parseInt(_Memory.memory[this.PC],16);                                             
+                                  this.PC++                      
+                                                                      
                                    // alert("the cur Acc = "+this.Acc);
+                                   
+                                   this.op_A9(_Memory.memory[this.findPhysicalAddress()])
                                    
                                    this.PC++                  
                                    break;
@@ -82,110 +84,78 @@
                             case "AD":{
                             //test string A9 01 A9 02 A9 1A A9 08 AD 05 00
                                   this.PC++
-                                  //  var memloc="00"+_Memory.getFromMemory(this.PC)   
-                                   //get the dec value of the pc in memory                                                  
-                                   var decOfLoc= parseInt(_Memory.memory[this.PC],16);
-                                
-                                   this.PC++   
-                                   //assign the new acc          
-                                 //  alert(parseInt(_Memory.memory[decOfLoc],16))                 
-                                   this.Acc=parseInt(_Memory.memory[decOfLoc],16)
-                                                                                     
-                                   // alert("the cur Acc = "+this.Acc);       
+                                  
+                                  var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
+                                  this.PC++
+                                  var memloc2=""+_Memory.memory[this.findPhysicalAddress()];                               
+                                  
                                    this.PC++
+                                   this.op_AD(memloc2+memloc1) 
                                    
                                    break;
                                  }
                                 //store the acc value some where in memory
                                 case "8D":{
                                   this.PC++
-                                  var memloc="00"+_Memory.memory[this.PC];
-                                  var memIndex= parseInt(memloc,16);                                                             
-                                
-                                 
-                                  var newVal =(this.Acc).toString(16)  
-                                   //if the new val is only one digit we ad a 0 to keep to the two hex format  
-                                   if(newVal.length<=1){   
-                                     newVal="0"+newVal;
+                                  var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
+                                  this.PC++
+                                  var memloc2=""+_Memory.memory[this.findPhysicalAddress()];
 
-                                   }
-                                   _Memory.memory[memIndex]=newVal
-                                  // _Memory.memoryUpdate(newVal,memIndex); 
-
-                                   // alert("the Acc store location = "+_Memory.memory[memIndex]); 
-                                   // alert(_Memory.memory);    
-                                     this.PC++   
+                                  this.op_8D(memloc2+memloc1);                                                                                                  
+                                        
                                    this.PC++
                                    break;
                                  }
                                 //Add with carry
                                 case "6D":{
                                     this.PC++
-                                    var memloc="00"+_Memory.memory[this.PC];    
-                                    var decIndex= parseInt(memloc,16);                                               
-                                    // alert("the cur Acc = "+this.Acc);     
-                                    var decOfLoc= parseInt(_Memory.memory[decIndex],16)
-                                    var awcResult= decOfLoc+this.Acc;
+                                    var memloc1=""+_Memory.memory[this.findPhysicalAddress()]; 
                                     this.PC++
-                                    this.Acc=awcResult;
-                                     
-                                    
-                                     // alert("the cur Acc = "+this.Acc);  
-                                     this.PC++     
+                                    var memloc2=""+_Memory.memory[this.findPhysicalAddress()]; 
+                                     this.PC++ 
+                                     this.op_6D(memloc2+memloc1)    
                                      break;
                                    }
                                 //load x reg with constant 
                                 case "A2":{
-                                    this.PC++                     
-                                    this.Xreg= parseInt(_Memory.memory[this.PC]);
-                                     
-                                
-                                    // alert("the cur x Reg= "+this.Xreg); 
+                                    this.PC++  
+                                    this.op_A2(_Memory.memory[this.findPhysicalAddress()])                   
                                     this.PC++                 
-                                    
                                     break;
                                   }
                                 //load x reg from value in mem
                                 case "AE":{
                                     this.PC++
-                                    var memloc="00"+_Memory.memory[this.PC];                              
-                                
-                                
-                                    var decOfLoc= _Memory.getFromMemory(memloc)
+                                  
+                                    var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
                                     this.PC++
-                                
-                                    this.Xreg=decOfLoc
-
-                                   // alert("the cur X reg = "+this.Xreg);    
-                                    this.PC++   
+                                    var memloc2=""+_Memory.memory[this.findPhysicalAddress()];                               
+                                  
+                                    this.PC++
+                                    this.op_AE(memloc2+memloc1) 
                                    
-                                    break;
+                                   break;
                                   }
                                 //load y reg with value
                                 case "A0":{
-                                      this.PC++
-                                      this.Yreg= parseInt(_Memory.memory[this.PC],16);
-                                  
-                                                                                     
-                                     // alert("the cur y Reg= "+this.Yreg);                 
-                                     this.PC++  
-                                     
+                                      this.PC++  
+                                      this.op_A0(_Memory.memory[this.findPhysicalAddress()])                   
+                                      this.PC++                 
+                                    
                                      break;
                                    }
                                 //load y reg with value from memory
                                 case "AC":{
                                       this.PC++
-                                      var memloc="00"+_Memory.memory[this.PC]                                                                                                   
-                                      var decOfLoc= _Memory.getFromMemory(memloc)
-                                      
-                                      this.Yreg=decOfLoc;
-                                      this.PC++
-                                       
-                                      
-                                         // alert("the cur y reg = "+this.Yreg);     
-                                         this.PC++  
-                                         
-                                       break;
+                                  
+                                    var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
+                                    this.PC++
+                                    var memloc2=""+_Memory.memory[this.findPhysicalAddress()];                               
+                                  
+                                    this.PC++
+                                    this.op_AC(memloc2+memloc1) 
+                                   
+                                   break;
                                      }
                                 //do nothing cause yea
                                 case "EA":{
@@ -195,7 +165,8 @@
                                         }
                                           //break syscall to signal that we finished the program 
                                 case "00":
-                                          {document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
+                                          {
+                                          document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
                                           this.updateCurPcb();
 
                                          
@@ -213,25 +184,17 @@
                                           }
                                       //compare a byte in memory to x reg
                                 case "EC":{
+                                     this.PC++
+                                  
+                                    var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
                                     this.PC++
-                                    var memloc="00"+_Memory.memory[this.PC];                                                                                            
-                                    var decOfLoc= _Memory.getFromMemory(memloc);
+                                    var memloc2=""+_Memory.memory[this.findPhysicalAddress()]; 
+                                    this.PC++
+                                    this.op_EC(memloc2+memloc1);
                                   //  alert("xreg value in EC="+this.Xreg)
                                   //  alert("location in mem value in EC= "+decOfLoc)
-                                    if(this.Xreg==decOfLoc){
-                                    //  alert("changing z flag to 1 at pc:"+this.PC)
-                                      this.Zflag=1;
-                                      
-                                    }
-                                    else{
-
-                                     //  alert("changing z flag to 0 at pc:"+this.PC)
-                                      this.Zflag=0;
-                                      
-                                    }
-                                    this.PC++
-                                        // alert("the cur Z flag = "+this.Zflag);
-                                        this.PC++
+                                    
+                                    
                                         break;
                                       }
 
@@ -239,68 +202,32 @@
                                       //jump pc
                                       this.PC++
                                     //  alert("dec of EF="+parseInt("EF",16));
-                                    if (this.Zflag==0){
-                                      var memVal=_Memory.memory[this.PC];  
-
-
-                                      this.PC++ 
-                                      var newPC=this.PC+parseInt(memVal,16);  
-
-                                      if(newPC>255) {                           
-                                        this.PC=newPC-256;
-                                      }
-                                      else{
-
-                                        this.PC=newPC;
-                                      }
-                                    }
-                                    else {
-                                      this.PC++
-                                    }
+                                      this.op_D0(parseInt(_Memory.memory[this.findPhysicalAddress()],16));
+                                    
                                     break;
                                   }
                                       //increment a byte value at a address
                                 case "EE":{
-                                      this.PC++
-                                      var memloc="00"+_Memory.memory[this.PC]                                                            
-                                      
-                                      var decOfLoc= _Memory.getFromMemory(memloc);
+                                       this.PC++
+                                  
+                                       var memloc1=""+_Memory.memory[this.findPhysicalAddress()];
+                                       this.PC++
+                                       var memloc2=""+_Memory.memory[this.findPhysicalAddress()]; 
+                                       this.PC++
+                                       this.op_EE(memloc2+memloc1);
                                           // alert("the register value we are incrementing "+decOfLoc);     
-                                          var newVal =(decOfLoc+1).toString(16);
-                                          if (newVal.length<2){
-                                            newVal="0"+newVal;
-                                          }
-                                          this.PC++
-                                          _Memory.memoryUpdate(newVal,parseInt(memloc,16))
+                                       
                                        // _Memory.memory[parseInt(memloc,16)]=(decOfLoc+1).toString(16);
                                        
-                                       this.PC++           
+                                              
                                             // alert("the register value we incremented "+_Memory.memory[parseInt(memloc,16)]);       
                                             break; 
                                           }
                                      //sys call to write to the clis
                                case "FF":{
+                                     this.op_FF()
                                
-                                     if (this.Xreg==1){
-
-                                       _StdOut.putText(""+(this.Yreg),true);
-                                       _StdOut.advanceLine();
-                                     }
-                                     else if (this.Xreg==2){
-
-                                       var tempPrint="";
-                                       var printPointer=this.Yreg;
-                                       while(_Memory.memory[printPointer]!="00"){
-                                         var newLetter= this.hexToChar(_Memory.memory[printPointer])
-                                         tempPrint+= ""+newLetter;
-                                         printPointer++;
-                                       }    
-
-                                       _StdOut.putText(tempPrint,true)
-                                       _StdOut.advanceLine();
-
-
-                                     }
+                                     
                                      this.PC++
                                      break;
                                    }
@@ -325,12 +252,130 @@
                       }
 
 
-                      public hexToChar(hexLetter){
+          public hexToChar(hexLetter){
             var hex = hexLetter.toString();//force conversion
             var str = '';
             for (var i = 0; i < hex.length; i += 2)
               str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
             return str;
           }
+
+          public findPhysicalAddress(){
+
+              return this.PC + this.curPCB.baseRegister;
+
+          }
+          public op_A9(constent: string){
+              this.Acc=parseInt(constent,16);     
+
+          }
+
+          public op_AD(register: string){
+            var decRegister= parseInt(register,16)
+            this.Acc=parseInt(_Memory.memory[decRegister],16)
+                                                                                     
+          }
+
+          public op_8D(tarRegister : string){
+            var decRegister= parseInt(tarRegister,16)
+            var newVal =(this.Acc).toString(16)  
+                                 
+            if(newVal.length<=1){   
+               newVal="0"+newVal;
+            }
+           _Memory.memory[decRegister]=newVal
+           
+          }
+          public op_6D(tarRegister: string){
+            var decRegister= parseInt(tarRegister,16)
+            this.Acc=this.Acc+parseInt(_Memory.memory[decRegister],16)
+
+          }
+
+          public op_A2(constent: string){
+            this.Xreg= parseInt(constent,16);
+
+
+
+          }
+          public op_AE(tarRegister: string){
+             var decRegister= parseInt(tarRegister,16)
+             this.Xreg=parseInt(_Memory.memory[decRegister],16)
+
+          }
+          public op_A0(constent:string){
+             this.Yreg= parseInt(constent,16);
+          }
+          public op_AC(tarRegister: string){
+             var decRegister= parseInt(tarRegister,16)
+             this.Yreg=parseInt(_Memory.memory[decRegister],16)
+
+          }
+          public op_EC(tarRegister: string){
+            var decRegister= parseInt(tarRegister,16)
+            if(this.Xreg==parseInt(_Memory.memory[decRegister])){
+                                    //  alert("changing z flag to 1 at pc:"+this.PC)
+              this.Zflag=1;
+            }                         
+            else{
+               this.Zflag=0;
+                       
+              }
+          }
+          public op_D0(jumpSize: number){
+
+            if (this.Zflag==0){
+              
+
+
+              this.PC++ 
+              var newPC=this.PC+jumpSize;  
+              if(newPC>255) {                           
+                             this.PC=newPC-256;
+              }
+              else{
+                   this.PC=newPC;
+                                      }
+           }
+           else {
+            this.PC++
+           }
+
+         }
+        public op_EE(tarRegister: string){
+           var decRegister = parseInt(tarRegister,16)
+           var decOfLoc= _Memory.memory[decRegister];
+           var newVal =(parseInt(decOfLoc,16)+1).toString(16);
+           if (newVal.length<2){
+                  newVal="0"+newVal;
+                                          }
+                    
+              _Memory.memoryUpdate(newVal,decRegister)
+
+        }
+        public op_FF(){
+            if (this.Xreg==1){
+
+               _StdOut.putText(""+(this.Yreg),true);
+               _StdOut.advanceLine();
+             }
+             else if (this.Xreg==2){
+
+               var tempPrint="";
+               var printPointer=this.Yreg+this.curPCB.baseRegister;
+               while(_Memory.memory[printPointer]!="00"){
+                 var newLetter= this.hexToChar(_Memory.memory[printPointer])
+                 tempPrint+= ""+newLetter;
+                 printPointer++;
+               }    
+
+               _StdOut.putText(tempPrint,true)
+               _StdOut.advanceLine();
+
+
+             }
+
+        }
+
         }
       }    
