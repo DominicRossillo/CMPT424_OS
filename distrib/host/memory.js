@@ -31,10 +31,12 @@ var TSOS;
             this.memPoint = 0;
         };
         Memory.prototype.clearMemSeg = function (pcb) {
-            for (var i = pcb.baseRegister; i < pcb.limitRegister; i++) {
+            var clearStart = pcb.baseRegister;
+            for (var i = clearStart; i < pcb.limitRegister; i++) {
                 _Memory.memory[i] = "00";
                 document.getElementById("cell" + i).innerText = "00";
             }
+            _MemoryManager.deAllocateMem(pcb.Pid);
         };
         return Memory;
     }());

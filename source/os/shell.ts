@@ -326,41 +326,52 @@ module TSOS {
                 testpass=false;
             } 
             if (testpass){
-                if (_MemoryManager.allocated.length>=3){
-                     _StdOut.putText("Memory is already full.",true);
-                    return;
-                }
-                var curcode=0;
-                var hexin=testcode.split(" ");
-                var newPCB= _ProcessManager.load();
-                alert(newPCB.baseRegister);
-                _Memory.memPoint= newPCB.baseRegister
-
-                for(var i=0; i<Math.ceil((hexin.length/8)); i++){
+                if (_MemoryManager.allocated.length<3){
                     
-                    for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
-                                    //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
-                                   // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
-                                    //var newPcb = new Pcb(1,2,3,4,5,true);
-                                   // alert(newPcb);
-                                   
-                                   _Memory.memoryUpdate(hexin[curcode],_Memory.memPoint);
-
-                                  //  memtable.innerHTML=hexin[curcode];
-                                    //alert(hexin[curcode]);
-
-                                    curcode++;
-                                    
-                                }
-
+                    
+                
+                    var curcode=0;
+                    var hexin=testcode.split(" ");
+                    if(hexin.length<256){
+                            var newPCB= _ProcessManager.load();
+                            if (newPCB== null){
+                                return;    
                             }
-                            _StdOut.putText("This is valid hexcode",true);
-                            _StdOut.advanceLine();
-                            _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
-                                _StdOut.advanceLine();
-                                allPcb.push(newPCB);
-                      // alert(_Memory.memory);
-                      
+                            alert(newPCB.baseRegister);
+                            _Memory.memPoint= newPCB.baseRegister
+
+                            for(var i=0; i<Math.ceil((hexin.length/8)); i++){
+                                
+                                for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
+                                                //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
+                                               // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
+                                                //var newPcb = new Pcb(1,2,3,4,5,true);
+                                               // alert(newPcb);
+                                               
+                                               _Memory.memoryUpdate(hexin[curcode],_Memory.memPoint);
+
+                                              //  memtable.innerHTML=hexin[curcode];
+                                                //alert(hexin[curcode]);
+
+                                                curcode++;
+                                                
+                                            }
+
+                                        }
+                                        _StdOut.putText("This is valid hexcode",true);
+                                        _StdOut.advanceLine();
+                                        _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
+                                            _StdOut.advanceLine();
+                                            allPcb.push(newPCB);
+                                  // alert(_Memory.memory);
+                            }
+                            else{
+                                 _StdOut.putText("This program is too large.",true);
+                            }
+                     }
+                     else{
+                          _StdOut.putText("Memory is already full.",true);
+                     } 
                   }
                   else{
                       _StdOut.putText("This is not valid hexcode",true);
@@ -492,10 +503,10 @@ module TSOS {
         public shellRun(args) {
             if (args.length>0){
                 var foundPID=false;
-                for (var i=0; i<allPcb.length;i++){
-                    if(allPcb[i].Pid==args){
+                for (var i=0; i<_ProcessManager.residentList.length;i++){
+                    if(_ProcessManager.residentList[i].Pid==args){
                         foundPID=true;
-                        var tarPcb= allPcb[i];
+                        var tarPcb= _ProcessManager.residentList[i];
                         break; 
                     }
 
@@ -507,7 +518,7 @@ module TSOS {
 
                 }
                 else
-                    _StdOut.putText("The PID you entered is not valid.")
+                    _StdOut.putText("The PID you entered is not valid.", true)
                 
             }
             else {

@@ -50,7 +50,7 @@ var TSOS;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
             this.curPCB = pcb;
-            this.isExecuting = pcb.isExecuting;
+            this.isExecuting = true;
         };
         //updates the curpcb with values inside the cpu
         Cpu.prototype.updateCurPcb = function () {
@@ -63,7 +63,8 @@ var TSOS;
             //if the cpu is executing
             if (this.isExecuting) {
                 //set the current instruction to the value in memory at the PC
-                this.instruction = "" + _Memory.memory[this.PC];
+                var physicalAddress = this.PC + this.curPCB.baseRegister;
+                this.instruction = "" + _Memory.memory[physicalAddress];
                 switch (this.instruction) {
                     //load the accumulator with a constant
                     case "A9": {
@@ -169,12 +170,12 @@ var TSOS;
                             document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
                             this.updateCurPcb();
                             _ProcessManager.terminateProcess();
-                            if (_ProcessManager.readyQueue.getSize() == 0) {
+                            if (_ProcessManager.runningQueue.getSize() == 0) {
+                                // alert("in if")
                                 this.isExecuting = false;
                             }
                             _StdOut.putText("Finished running program.", true);
                             _StdOut.advanceLine();
-                            _Memory.clearMemSeg(this.curPCB);
                             break;
                         }
                     //compare a byte in memory to x reg

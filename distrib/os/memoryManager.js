@@ -8,14 +8,21 @@ var TSOS;
             //     this.memorySize=_Memory.memory.size           
         }
         MemoryManager.prototype.allocateMem = function (pid) {
-            var pcb = _ProcessManager.residentList[pid];
+            alert("resident list length " + _ProcessManager.residentList.length);
+            for (var i = 0; i < _ProcessManager.residentList.length; i++) {
+                if (_ProcessManager.residentList[i].Pid == pid) {
+                    var pcb = _ProcessManager.residentList[i];
+                    break;
+                }
+            }
             var freeMem = this.findFreeMem();
+            alert(freeMem);
             //alert("allocate length is "+this.allocated.length)
             if (freeMem.length > 0) {
                 var freebase = parseInt(freeMem[0]);
-                alert("free base " + freebase);
+                //  alert("free base "+freebase);
                 var freelimit = freebase + 255;
-                alert("free limit " + freelimit);
+                //   alert("free limit "+freelimit);
                 pcb.baseRegister = freebase;
                 pcb.limitRegister = freelimit;
                 _ProcessManager.residentList[pid] = pcb;
@@ -39,36 +46,42 @@ var TSOS;
         MemoryManager.prototype.deAllocateMem = function (pid) {
             for (var i = 0; i < this.allocated.length; i++) {
                 var curSeg = this.allocated[i];
+                alert(" curSeg = " + curSeg);
+                alert(" pid = " + pid);
                 if (curSeg.Pid == pid) {
-                    this.allocated[i].Pid = -1;
+                    alert("deAlocated " + curSeg.baseRegister);
+                    this.allocated.splice(i, 1);
                 }
                 break;
             }
-            _Memory.clearMemSeg(curSeg);
         };
         MemoryManager.prototype.findFreeMem = function () {
             var usedSegments = [];
             var allSegments = ["0", "256", "512"];
             var allfound = [];
             for (var i = 0; i < _ProcessManager.residentList.length && _ProcessManager.residentList.length > 0; i++) {
+                //alert("residentList is this big:"+_ProcessManager.residentList.length)
                 usedSegments.push(_ProcessManager.residentList[i].baseRegister);
             }
+            for (var i = 0; i < _ProcessManager.readyQueue.getSize() && !_ProcessManager.readyQueue.isEmpty(); i++) {
+                //  alert("ready queue is this big:"+_ProcessManager.readyQueue.getSize())
+                usedSegments.push(_ProcessManager.readyQueue.q[i].baseRegister);
+            }
             if (_ProcessManager.runningQueue.getSize() > 0) {
-                usedSegments.push(_ProcessManager.runningQueue[0].baseRegister);
+                usedSegments.push(_ProcessManager.runningQueue.q[0].baseRegister);
             }
             for (var i = 0; i < allSegments.length; i++) {
                 var missingSeg = true;
-                alert("usedSegments size" + usedSegments.length);
+                //  alert("usedSegments size"+ usedSegments.length)    
                 for (var j = 0; j < usedSegments.length; j++) {
                     if (usedSegments[j] == allSegments[i]) {
                         missingSeg = false;
-                        alert("found " + allSegments[i]);
+                        //  alert("found " +allSegments[i])
                         break;
                     }
                 }
                 if (missingSeg == true) {
                     allfound.push(allSegments[i]);
-                    alert("all missing segments" + allSegments[i]);
                 }
             }
             alert("all found is " + allfound);
