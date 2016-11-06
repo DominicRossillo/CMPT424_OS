@@ -277,7 +277,7 @@
           }
 
           public op_8D(tarRegister : string){
-            var decRegister= parseInt(tarRegister,16)
+            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
             var newVal =(this.Acc).toString(16)  
                                  
             if(newVal.length<=1){   
@@ -286,8 +286,9 @@
            _Memory.memory[decRegister]=newVal
            
           }
+
           public op_6D(tarRegister: string){
-            var decRegister= parseInt(tarRegister,16)
+            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
             this.Acc=this.Acc+parseInt(_Memory.memory[decRegister],16)
 
           }
@@ -299,7 +300,7 @@
 
           }
           public op_AE(tarRegister: string){
-             var decRegister= parseInt(tarRegister,16)
+             var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
              this.Xreg=parseInt(_Memory.memory[decRegister],16)
 
           }
@@ -307,12 +308,12 @@
              this.Yreg= parseInt(constent,16);
           }
           public op_AC(tarRegister: string){
-             var decRegister= parseInt(tarRegister,16)
+             var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
              this.Yreg=parseInt(_Memory.memory[decRegister],16)
 
           }
           public op_EC(tarRegister: string){
-            var decRegister= parseInt(tarRegister,16)
+            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
             if(this.Xreg==parseInt(_Memory.memory[decRegister])){
                                     //  alert("changing z flag to 1 at pc:"+this.PC)
               this.Zflag=1;
@@ -343,7 +344,7 @@
 
          }
         public op_EE(tarRegister: string){
-           var decRegister = parseInt(tarRegister,16)
+           var decRegister = parseInt(tarRegister,16)+this.curPCB.baseRegister
            var decOfLoc= _Memory.memory[decRegister];
            var newVal =(parseInt(decOfLoc,16)+1).toString(16);
            if (newVal.length<2){

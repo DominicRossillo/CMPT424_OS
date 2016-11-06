@@ -8,49 +8,49 @@ var TSOS;
             //     this.memorySize=_Memory.memory.size           
         }
         MemoryManager.prototype.allocateMem = function (pid) {
-            alert("resident list length " + _ProcessManager.residentList.length);
+            console.log("allocateMem run");
+            console.log("resident list length At start of allocate " + _ProcessManager.residentList.length);
             for (var i = 0; i < _ProcessManager.residentList.length; i++) {
                 if (_ProcessManager.residentList[i].Pid == pid) {
                     var pcb = _ProcessManager.residentList[i];
                     break;
                 }
             }
+            // console.log(this.findFreeMem())
             var freeMem = this.findFreeMem();
-            alert(freeMem);
+            //alert(freeMem)
             //alert("allocate length is "+this.allocated.length)
+            // console.log("find fre mem length "+this.findFreeMem.length)
             if (freeMem.length > 0) {
                 var freebase = parseInt(freeMem[0]);
                 //  alert("free base "+freebase);
                 var freelimit = freebase + 255;
                 //   alert("free limit "+freelimit);
+                //      console.log("free base is" +freebase)
                 pcb.baseRegister = freebase;
                 pcb.limitRegister = freelimit;
-                _ProcessManager.residentList[pid] = pcb;
+                //      console.log("allocate baseReg is "+pcb.baseRegister)
+                for (var i = 0; i < _ProcessManager.residentList.length; i++) {
+                    if (_ProcessManager.residentList[i].Pid == pid) {
+                        _ProcessManager.residentList[i] = pcb;
+                        break;
+                    }
+                }
+                this.allocated.push(pcb);
             }
-            // if (this.allocated.length==2){
-            //       pcb.baseRegister=512
-            //       pcb.limitRegister=767
-            //       this.allocated[2]=pcb
-            // }
-            // else if (this.allocated.length==1){
-            //       pcb.baseRegister=256
-            //        pcb.limitRegister=511
-            //        this.allocated[1]=pcb
-            // }
-            // else{
-            //     pcb.baseRegister=0
-            //     pcb.limitRegister=255
-            //     this.allocated[0]=pcb
-            // }
+            //      console.log("resident list After allocate mem everything" +this.residentList.length)
         };
         MemoryManager.prototype.deAllocateMem = function (pid) {
+            console.log("deAllocate start length" + this.allocated.length);
             for (var i = 0; i < this.allocated.length; i++) {
                 var curSeg = this.allocated[i];
-                alert(" curSeg = " + curSeg);
-                alert(" pid = " + pid);
-                if (curSeg.Pid == pid) {
-                    alert("deAlocated " + curSeg.baseRegister);
+                // console.log(" curSeg = "+curSeg)
+                // console.log(" pid = "+pid)
+                if (this.allocated[i].Pid == pid) {
+                    //console.log("deAlocated "+curSeg.baseRegister)
+                    // console.log("dealocate index "+i)
                     this.allocated.splice(i, 1);
+                    console.log("deallocateMem run");
                     break;
                 }
             }

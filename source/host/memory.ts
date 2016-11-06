@@ -38,6 +38,11 @@ module TSOS {
                  document.getElementById("cell"+i).innerText="00";
                  
              }
+             _MemoryManager.allocated=[];
+             _ProcessManager.readyQueue.q=[];
+             _ProcessManager.runningQueue.q=[];
+             _ProcessManager.residentList=[]
+             
              this.memPoint=0;
              
 
@@ -45,14 +50,14 @@ module TSOS {
          }
 
          public clearMemSeg(pcb){
-           
+             _MemoryManager.deAllocateMem(pcb.Pid);
              var clearStart= pcb.baseRegister;
              for (var i=clearStart ; i<pcb.limitRegister;i++){
                  _Memory.memory[i]="00";
                  document.getElementById("cell"+i).innerText="00";
                  
              }  
-             _MemoryManager.deAllocateMem(pcb.Pid);
+             
         }
 
          

@@ -227,7 +227,7 @@ var TSOS;
             this.Acc = parseInt(_Memory.memory[decRegister], 16);
         };
         Cpu.prototype.op_8D = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             var newVal = (this.Acc).toString(16);
             if (newVal.length <= 1) {
                 newVal = "0" + newVal;
@@ -235,25 +235,25 @@ var TSOS;
             _Memory.memory[decRegister] = newVal;
         };
         Cpu.prototype.op_6D = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             this.Acc = this.Acc + parseInt(_Memory.memory[decRegister], 16);
         };
         Cpu.prototype.op_A2 = function (constent) {
             this.Xreg = parseInt(constent, 16);
         };
         Cpu.prototype.op_AE = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             this.Xreg = parseInt(_Memory.memory[decRegister], 16);
         };
         Cpu.prototype.op_A0 = function (constent) {
             this.Yreg = parseInt(constent, 16);
         };
         Cpu.prototype.op_AC = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             this.Yreg = parseInt(_Memory.memory[decRegister], 16);
         };
         Cpu.prototype.op_EC = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             if (this.Xreg == parseInt(_Memory.memory[decRegister])) {
                 //  alert("changing z flag to 1 at pc:"+this.PC)
                 this.Zflag = 1;
@@ -278,7 +278,7 @@ var TSOS;
             }
         };
         Cpu.prototype.op_EE = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16);
+            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
             var decOfLoc = _Memory.memory[decRegister];
             var newVal = (parseInt(decOfLoc, 16) + 1).toString(16);
             if (newVal.length < 2) {

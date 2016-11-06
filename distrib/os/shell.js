@@ -261,14 +261,14 @@ var TSOS;
                         if (newPCB == null) {
                             return;
                         }
-                        alert(newPCB.baseRegister);
+                        alert("new base register for load" + newPCB.baseRegister);
                         _Memory.memPoint = newPCB.baseRegister;
                         for (var i = 0; i < Math.ceil((hexin.length / 8)); i++) {
                             for (var j = 1; (j <= hexin.length && j < 9 && curcode < hexin.length); j++) {
                                 //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
                                 // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
                                 //var newPcb = new Pcb(1,2,3,4,5,true);
-                                // alert(newPcb);
+                                //    console.log("mempoint is "+_Memory.memPoint);
                                 _Memory.memoryUpdate(hexin[curcode], _Memory.memPoint);
                                 //  memtable.innerHTML=hexin[curcode];
                                 //alert(hexin[curcode]);
