@@ -90,3 +90,5 @@ var _ProcessManager: TSOS.ProcessManager
 var _MemoryManager: TSOS.MemoryManager
 //global to check if we can step
 var canStep= false;
+// setting up scheduler
+var _Scheduler: TSOS.Scheduler;

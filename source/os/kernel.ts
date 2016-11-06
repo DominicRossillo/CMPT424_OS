@@ -45,6 +45,7 @@
             _Memory= new Memory();
             _ProcessManager= new ProcessManager();
              _MemoryManager= new MemoryManager();
+             _Scheduler= new Scheduler();
           //  _MemoryManager= new MemoryManager();
             //
             // ... more?

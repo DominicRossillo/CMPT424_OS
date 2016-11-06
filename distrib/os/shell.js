@@ -58,6 +58,9 @@ var TSOS;
             // run <PID>
             sc = new TSOS.ShellCommand(this.shellRun, "run", "- Runs a loaded program of a given <PID>.");
             this.commandList[this.commandList.length] = sc;
+            // runall
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs all loaded programs.");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -325,6 +328,9 @@ var TSOS;
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.", true);
                         break;
                     case "run":
+                        _StdOut.putText("Runs all program loaded into memory.", true);
+                        break;
+                    case "runall":
                         _StdOut.putText("Runs a program loaded into memory referenced by a <PID>.", true);
                         break;
                     case "ver":
@@ -432,6 +438,17 @@ var TSOS;
         };
         Shell.prototype.shellClearmem = function (args) {
             _Memory.clearAllMemory();
+        };
+        Shell.prototype.shellRunAll = function (args) {
+            if (_ProcessManager.residentList.length > 0) {
+                while (_ProcessManager.residentList.length > 0) {
+                    console.log("runall loop");
+                    _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
+                }
+            }
+            else {
+                _StdOut.putText("No programs are loaded to run.", true);
+            }
         };
         return Shell;
     }());

@@ -40,6 +40,7 @@ var TSOS;
             _Memory = new TSOS.Memory();
             _ProcessManager = new TSOS.ProcessManager();
             _MemoryManager = new TSOS.MemoryManager();
+            _Scheduler = new TSOS.Scheduler();
             //  _MemoryManager= new MemoryManager();
             //
             // ... more?

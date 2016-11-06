@@ -72,3 +72,5 @@ var _ProcessManager;
 var _MemoryManager;
 //global to check if we can step
 var canStep = false;
+// setting up scheduler
+var _Scheduler;

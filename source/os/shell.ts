@@ -92,6 +92,11 @@ module TSOS {
                  "run",
                  "- Runs a loaded program of a given <PID>.");
              this.commandList[this.commandList.length] = sc;
+             // runall
+             sc = new ShellCommand(this.shellRunAll,
+                 "runall",
+                 "- Runs all loaded programs.");
+             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -417,6 +422,9 @@ module TSOS {
                     _StdOut.putText("Help displays a list of (hopefully) valid commands.",true);
                     break;
                     case "run":
+                    _StdOut.putText("Runs all program loaded into memory.",true);
+                    break;
+                    case "runall":
                     _StdOut.putText("Runs a program loaded into memory referenced by a <PID>.",true);
                     break;
                     case "ver":
@@ -530,6 +538,29 @@ module TSOS {
        
          public shellClearmem(args){
             _Memory.clearAllMemory();
+
+         }
+
+         public shellRunAll(args){
+             if(_ProcessManager.residentList.length>0){
+                 
+                     
+                        while (_ProcessManager.residentList.length>0){
+                            
+                                console.log("runall loop")
+                                 _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
+                                
+                            
+                            
+                    }
+                //if
+
+                 
+
+             }
+             else{
+                 _StdOut.putText("No programs are loaded to run.",true);
+             }
 
          }
 
