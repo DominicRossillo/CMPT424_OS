@@ -85,7 +85,7 @@ var TSOS;
                     allfound.push(allSegments[i]);
                 }
             }
-            alert("all found is " + allfound);
+            //   alert("all found is "+allfound)
             return allfound;
         };
         return MemoryManager;

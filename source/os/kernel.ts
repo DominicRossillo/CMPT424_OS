@@ -87,6 +87,7 @@
                that it has to look for interrupts and process them if it finds any.                           */
                var curentTime=Date().toString()
                document.getElementById("time_title").innerText=Date();
+               
             // Check for an interrupt, are any. Page 560
            // console.log("size of running queue on clock pulse"+_ProcessManager.runningQueue.getSize())
             console.log("running queue size="+_ProcessManager.runningQueue.getSize()+" and isExecuting ="+_CPU.isExecuting)
@@ -146,7 +147,7 @@
                     document.getElementById("pc_field").innerText=""+_CPU.PC;
                    //update dispaly of pcbs so the user can see 
 
-                    document.getElementById("pcbs_PC"+_CPU.curPCB.Pid).innerText=""+_CPU.PC;
+                 //   document.getElementById("pcbs_PC"+_CPU.curPCB.Pid).innerText=""+_CPU.PC;
                     //update the cpu dispaly so you can see the instruction being read
                     document.getElementById("instr_field").innerText=_CPU.instruction;
                                      }

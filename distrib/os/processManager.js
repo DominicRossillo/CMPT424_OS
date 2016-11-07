@@ -23,7 +23,7 @@ var TSOS;
                 }
                 // alert(this.residentList);
                 _MemoryManager.allocateMem(pcb.Pid);
-                document.getElementById('pcbTable').innerHTML += "<tr> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
+                document.getElementById('pcbTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
                 //  console.log("load pcb baseReg is "+pcb.baseRegister)
                 return pcb;
             }
@@ -61,11 +61,17 @@ var TSOS;
                 // alert(this.runningQueue[0]);
                 _CPU.loadFromPcb(this.runningQueue.q[0]);
                 console.log("resident list After Running" + this.residentList.length);
-                document.getElementById('pcbs_Status' + pcb.Pid).innerText = "" + this.runningQueue.q[0].isExecuting;
+                document.getElementById('pcbs_Status' + _CPU.curPCB.Pid).innerText = "true";
             }
         };
         //stop the cpu from runnning once it runs out of things to run
         ProcessManager.prototype.terminateProcess = function () {
+            // document.getElementById('pcbTable').innerHTML=""
+            var newtable = "";
+            for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                newtable += "<tr id=pidrow" + this.readyQueue.q[i].Pid + "> <td id='pcbs_PID" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].Pid + "</td> <td id='pcbs_Status" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].isExecuting + "</td> <td id='pcbs_PC" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].PC + "</td></tr>";
+            }
+            document.getElementById('pcbTable').innerHTML = newtable;
             _Memory.clearMemSeg(_CPU.curPCB);
             //_CPU.isExecuting= false;
             _Scheduler.curQuan = _Scheduler.quantum;

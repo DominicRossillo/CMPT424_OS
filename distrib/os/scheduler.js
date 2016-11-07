@@ -30,6 +30,7 @@ var TSOS;
             }
         };
         Scheduler.prototype.contextSwitch = function () {
+            document.getElementById('pcbs_Status' + _CPU.curPCB.Pid).innerText = "false";
             console.log("contextSwitch");
             _CPU.updateCurPcb();
             _ProcessManager.runningQueue.q[0] = _CPU.curPCB;

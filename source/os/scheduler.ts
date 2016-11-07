@@ -36,7 +36,7 @@ module TSOS {
 
     	public contextSwitch(){
     		 
-    		  
+    		    document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="false"
     			console.log("contextSwitch")
     			_CPU.updateCurPcb()
     			_ProcessManager.runningQueue.q[0]=_CPU.curPCB;
@@ -49,6 +49,7 @@ module TSOS {
     			console.log(newPCB);
     			_ProcessManager.runningQueue.enqueue(newPCB)
     			_CPU.loadFromPcb(_ProcessManager.runningQueue.q[0])
+
 
 
 

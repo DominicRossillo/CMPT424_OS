@@ -51,12 +51,20 @@ var TSOS;
             this.Zflag = pcb.Zflag;
             this.curPCB = pcb;
             this.isExecuting = true;
+            document.getElementById('pcb_Pid').innerText = "" + pcb.Pid;
+            document.getElementById('pcb_pc').innerText = "" + pcb.PC;
+            document.getElementById('pcb_Acc').innerText = "" + pcb.Acc;
+            document.getElementById('pcb_xreg').innerText = "" + pcb.Xreg;
+            document.getElementById('pcb_yreg').innerText = "" + pcb.Yreg;
+            document.getElementById('pcb_zflag').innerText = "" + pcb.Zflag;
         };
         //updates the curpcb with values inside the cpu
         Cpu.prototype.updateCurPcb = function () {
             (this.curPCB).updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
         };
         Cpu.prototype.cycle = function () {
+            document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "true";
+            document.getElementById('pcbs_PC' + this.curPCB.Pid).innerText = "" + this.curPCB.PC;
             _Kernel.krnTrace('CPU cycle');
             _Scheduler.curQuan++;
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -150,7 +158,7 @@ var TSOS;
                         {
                             document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
                             _ProcessManager.terminateProcess();
-                            _Scheduler.curQuan = 0;
+                            //     document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="false"                                
                             // alert("in if")
                             _StdOut.putText("Finished running program.", true);
                             _StdOut.advanceLine();

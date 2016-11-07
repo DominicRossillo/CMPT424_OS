@@ -118,7 +118,7 @@ var TSOS;
                     document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
                     document.getElementById("pc_field").innerText = "" + _CPU.PC;
                     //update dispaly of pcbs so the user can see 
-                    document.getElementById("pcbs_PC" + _CPU.curPCB.Pid).innerText = "" + _CPU.PC;
+                    //   document.getElementById("pcbs_PC"+_CPU.curPCB.Pid).innerText=""+_CPU.PC;
                     //update the cpu dispaly so you can see the instruction being read
                     document.getElementById("instr_field").innerText = _CPU.instruction;
                 }

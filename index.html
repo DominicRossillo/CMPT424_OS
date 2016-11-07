@@ -118,7 +118,7 @@
   <label> PID     Running    PC
   </label>
   <table id="pcbTable" class="table" cellpadding="8">
-    
+   
    
     
 
@@ -128,6 +128,7 @@
 </div>
 
 <div id="divLog" style="margin-left:520px;">
+
   <label>
    Host Log
    <br>
@@ -137,6 +138,8 @@
    cols="48"
    ></textarea>
  </label>
+ 
+ 
 </div>
 <p></p>
 <label>
@@ -177,7 +180,35 @@
    cols="48"
    >A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00</textarea>
  </label>
+ <div>
+<table id="pcbTable" class="table">
+ <p></p>
+<label>
+  Current PCB 
+</label>
+  <tr>
+    <th>Pid</th>
+    <th>PC</th>
+    <th>Acc</th>
+    <th>X</th>
+    <th>Y</th>
+    <th>Z</th>
+  </tr>
+
+  <tr>
+    <td id="pcb_Pid">N/A</td>
+    <td id="pcb_pc">0</td>
+    <td id="pcb_Acc">0</td>
+    <td id="pcb_xreg">0</td>
+    <td id="pcb_yreg">0</td>
+    <td id="pcb_zflag">0</td>
+  </tr>
+
+</table>
 </div>
+
+</div>
+
 </div>
 
 
