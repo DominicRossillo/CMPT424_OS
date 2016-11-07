@@ -132,7 +132,15 @@ module TSOS {
                 "- Clear all memory segments.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
+            sc = new ShellCommand(this.shellPs,
+                "ps",
+                "- List all running program IDs.");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
+             sc = new ShellCommand(this.shellKill,
+                "kill",
+                "- Kill a program that is currently running.");
+            this.commandList[this.commandList.length] = sc;
 
             //
             // Display the initial prompt.
@@ -310,6 +318,11 @@ module TSOS {
             _StdOut.putText((Date().toString()),true);
             _StdOut.advanceLine();
         }
+
+
+
+
+
         //load function to test if code in the taprograminput is valid hex code
         public shellLoad(args) {
             var re =/([^a-f^A-F^0-9^\s])+/g; 
@@ -465,6 +478,13 @@ module TSOS {
                     case "quantum":
                     _StdOut.putText("Change the quantum of the round robbin schedualer.",true);
                     break;
+                    case "ps":
+                    _StdOut.putText("List all running programs.",true);
+                    break;
+                    case "ps":
+                    _StdOut.putText("Kill a program currently executing.",true);
+                    break;
+
 
 
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
@@ -542,10 +562,52 @@ module TSOS {
                 _StdOut.putText("Usage: status <run>  Please supply a pid.",true);
             }
         }
+        //kill running program
+        public shellKill(args) {
+            if (args.length>0){
+                var foundPID=false;
+                for (var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+                    if(_ProcessManager.readyQueue.q[i].Pid==args){
+                        foundPID=true;
+                        var tarPcb= _ProcessManager.readyQueue.q[i];
+                        break; 
+                    }
+
+                }
+                if(_ProcessManager.runningQueue.q[0].Pid==args&& !foundPID){
+                    foundPID=true;
+                }
+                //if the pid exists run it
+                if(foundPID==true){
+
+                    _ProcessManager.killProcess(args);
+
+                }
+                else
+                    _StdOut.putText("The PID you entered is not valid.", true)
+                
+            }
+            else {
+                _StdOut.putText("Usage: status <kill>  Please supply a pid.",true);
+            }
+        }
 
        
          public shellClearmem(args){
             _Memory.clearAllMemory();
+
+         }
+          public shellPs(args){
+              _StdOut.putText("Current running programs:",true);
+              _StdOut.advanceLine();
+              var currentPros="";
+              if(_ProcessManager.runningQueue.getSize()+_ProcessManager.readyQueue.getSize()>0){
+                  for(var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+                     currentPros+=" Pid "+_ProcessManager.readyQueue.q[i].Pid+" , "
+                 }
+                 currentPros+="Pid "+_ProcessManager.runningQueue.q[0].Pid
+             }
+             _StdOut.putText(currentPros,true);
 
          }
 

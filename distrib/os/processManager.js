@@ -91,6 +91,43 @@ var TSOS;
             else
                 _CPU.isExecuting = false;
         };
+        ProcessManager.prototype.killProcess = function (pid) {
+            // document.getElementById('pcbTable').innerHTML=""
+            var rempcb;
+            if (this.runningQueue.q[0].Pid == pid) {
+                rempcb = this.runningQueue.dequeue();
+            }
+            else {
+                for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                    if (this.readyQueue.q[i].Pid != pid) {
+                        this.readyQueue.enqueue(this.readyQueue.dequeue());
+                    }
+                    else {
+                        rempcb = this.readyQueue.dequeue();
+                    }
+                }
+            }
+            var newtable = "";
+            for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                newtable += "<tr id=pidrow" + this.readyQueue.q[i].Pid + "> <td id='pcbs_PID" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].Pid + "</td> <td id='pcbs_Status" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].isExecuting + "</td> <td id='pcbs_PC" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].PC + "</td></tr>";
+            }
+            if (!this.runningQueue.isEmpty()) {
+                newtable += "<tr id=pidrow" + this.runningQueue.q[0].Pid + "> <td id='pcbs_PID" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].Pid + "</td> <td id='pcbs_Status" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].isExecuting + "</td> <td id='pcbs_PC" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].PC + "</td></tr>";
+            }
+            document.getElementById('pcbTable').innerHTML = newtable;
+            _Memory.clearMemSeg(rempcb);
+            //_CPU.isExecuting= false;
+            this.finishedQueue.enqueue(rempcb);
+            _StdOut.putText("PID " + rempcb.Pid + " has been terminated.", true);
+            _StdOut.advancedLine();
+            _Scheduler.curQuan = 0;
+            if (!this.readyQueue.isEmpty() && this.runningQueue.isEmpty()) {
+                this.runningQueue.enqueue(this.readyQueue.dequeue());
+                _CPU.loadFromPcb(this.runningQueue.q[0]);
+            }
+            else
+                _CPU.isExecuting = false;
+        };
         return ProcessManager;
     }());
     TSOS.ProcessManager = ProcessManager;
