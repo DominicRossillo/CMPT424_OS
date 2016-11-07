@@ -26,11 +26,11 @@ var TSOS;
         }
         //funciton to update your current pcb with new values taken from the cpu
         Pcb.prototype.updatePcb = function (newPC, newAcc, newXreg, newYreg, newZflag) {
-            this.PC = newPC;
-            this.Acc = newAcc;
-            this.Xreg = newXreg;
-            this.Yreg = newYreg;
-            this.Zflag = newZflag;
+            _CPU.curPCB.PC = newPC;
+            _CPU.curPCB.Acc = newAcc;
+            _CPU.curPCB.Xreg = newXreg;
+            _CPU.curPCB.Yreg = newYreg;
+            _CPU.curPCB.Zflag = newZflag;
         };
         return Pcb;
     }());

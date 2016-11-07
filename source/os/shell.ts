@@ -545,14 +545,19 @@ module TSOS {
              if(_ProcessManager.residentList.length>0){
                  
                      
-                        while (_ProcessManager.residentList.length>0){
+                        for (var i=0;i<_ProcessManager.residentList.length;i++){
                             
                                 console.log("runall loop")
-                                 _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
+                                _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i])
+                            //    _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
                                 
                             
                             
                     }
+                    _ProcessManager.residentList=[];
+                    _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
+                // alert(this.runningQueue[0]);
+                    _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
                 //if
 
                  

@@ -56,22 +56,32 @@ var TSOS;
             // alert("after length"+this.residentList.length);
             // alert("ready queue "+this.readyQueue[0]);
             //var frontQueue=this.readyQueue.dequeue();
-            this.runningQueue.enqueue(this.readyQueue.dequeue());
-            // alert(this.runningQueue[0]);
-            _CPU.loadFromPcb(this.runningQueue.q[0]);
-            console.log("resident list After Running" + this.residentList.length);
-            document.getElementById('pcbs_Status' + pcb.Pid).innerText = "" + this.runningQueue.q[0].isExecuting;
+            if (this.runningQueue.isEmpty) {
+                this.runningQueue.enqueue(this.readyQueue.dequeue());
+                // alert(this.runningQueue[0]);
+                _CPU.loadFromPcb(this.runningQueue.q[0]);
+                console.log("resident list After Running" + this.residentList.length);
+                document.getElementById('pcbs_Status' + pcb.Pid).innerText = "" + this.runningQueue.q[0].isExecuting;
+            }
         };
         //stop the cpu from runnning once it runs out of things to run
         ProcessManager.prototype.terminateProcess = function () {
             _Memory.clearMemSeg(_CPU.curPCB);
             _CPU.isExecuting = false;
+            _Scheduler.curQuan = _Scheduler.quantum;
             console.log("running queue " + this.runningQueue.getSize());
             var rempcb = this.runningQueue.q[0];
             this.runningQueue.dequeue();
             console.log("running queue " + this.runningQueue.getSize());
             this.finishedQueue.enqueue(rempcb);
             console.log("resident list After Terminate" + this.residentList.length);
+            console.log("isExecuting " + _CPU.isExecuting);
+            console.log("running queue size" + this.runningQueue.getSize());
+            if (!this.readyQueue.isEmpty() && this.runningQueue.isEmpty()) {
+                console.log("we enqueued after terminating");
+                this.runningQueue.enqueue(this.readyQueue.dequeue());
+                _CPU.isExecuting = false;
+            }
         };
         return ProcessManager;
     }());

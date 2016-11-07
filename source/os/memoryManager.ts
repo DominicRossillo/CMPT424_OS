@@ -60,11 +60,12 @@ module TSOS {
                var curSeg= this.allocated[i]
               // console.log(" curSeg = "+curSeg)
               // console.log(" pid = "+pid)
-                if(this.allocated[i].Pid==pid){
+                if(curSeg.Pid==pid){
                     //console.log("deAlocated "+curSeg.baseRegister)
                    // console.log("dealocate index "+i)
                     this.allocated.splice(i,1);
                      console.log("deallocateMem run")
+                      console.log("deAllocate end length"+this.allocated.length)
                     break;
                 }
                 

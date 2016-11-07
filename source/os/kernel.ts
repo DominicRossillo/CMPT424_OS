@@ -88,12 +88,34 @@
                var curentTime=Date().toString()
                document.getElementById("time_title").innerText=Date();
             // Check for an interrupt, are any. Page 560
+           // console.log("size of running queue on clock pulse"+_ProcessManager.runningQueue.getSize())
+            console.log("running queue size="+_ProcessManager.runningQueue.getSize()+" and isExecuting ="+_CPU.isExecuting)
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
+            } 
+
+            else if(_ProcessManager.runningQueue.getSize()>0 && !(_CPU.isExecuting)){
+                console.log("in context switch clock pulse")
+
+                  _Scheduler.callScheduler()
+                 
+                  _CPU.isExecuting=true;
+
+              
+                
+
+            }
+
+
+
+            else if (_CPU.isExecuting) {
+
+                  if(_Scheduler.schType="rr"){
+                _Scheduler.curQuan++;
+                }  // If there are no interrupts then run one CPU cycle if there is anything being processed. {
                 //if step mode is toggled and we are allowed to step
                 if((<HTMLInputElement>document.getElementById("steptoggle")).checked && canStep==true) {
                       _CPU.cycle();
@@ -108,6 +130,9 @@
                 //update the cpu dispaly so you can see the instruction being read
                      document.getElementById("instr_field").innerText=_CPU.instruction;
                 }
+
+
+
                 //else if we are in step mode and are not allowed to step 
                 else if ((<HTMLInputElement>document.getElementById("steptoggle")).checked && canStep==false ){
                     this.krnTrace("Idle");
@@ -118,16 +143,23 @@
                     document.getElementById("Acc_field").innerText=""+_CPU.Acc; 
                     document.getElementById("yreg_field").innerText=""+_CPU.Yreg; 
                     document.getElementById("xreg_field").innerText=""+_CPU.Xreg;
-                    document.getElementById("zflag_field").innerText=""+_CPU.Zflag;
+                    document.getElementById("zflag_field").innerText=""+_CPU.Zflag;    
                     document.getElementById("pc_field").innerText=""+_CPU.PC;
                    //update dispaly of pcbs so the user can see 
+
                     document.getElementById("pcbs_PC"+_CPU.curPCB.Pid).innerText=""+_CPU.PC;
                     //update the cpu dispaly so you can see the instruction being read
                     document.getElementById("instr_field").innerText=_CPU.instruction;
                                      }
-            } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
+                           
+            }
+
+
+
+             else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
+
         }
 
 
@@ -171,6 +203,7 @@
             }
 
             public krnTimerISR() {
+                 _Scheduler.callScheduler();
             // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
             // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
         }

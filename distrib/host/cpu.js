@@ -50,14 +50,15 @@ var TSOS;
             this.Yreg = pcb.Yreg;
             this.Zflag = pcb.Zflag;
             this.curPCB = pcb;
-            this.isExecuting = true;
+            this.isExecuting = pcb.isExecuting;
         };
         //updates the curpcb with values inside the cpu
         Cpu.prototype.updateCurPcb = function () {
-            this.curPCB.updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+            (this.curPCB).updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
+            _Scheduler.curQuan++;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             //if the cpu is executing
@@ -148,14 +149,11 @@ var TSOS;
                     case "00":
                         {
                             document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
-                            this.updateCurPcb();
                             _ProcessManager.terminateProcess();
-                            if (_ProcessManager.runningQueue.getSize() == 0) {
-                                // alert("in if")
-                                this.isExecuting = false;
-                            }
+                            // alert("in if")
                             _StdOut.putText("Finished running program.", true);
                             _StdOut.advanceLine();
+                            _CPU.isExecuting = false;
                             break;
                         }
                     //compare a byte in memory to x reg
@@ -198,7 +196,7 @@ var TSOS;
                     }
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default: {
-                        //if no cases are met me blue screan because of a bad input
+                        //if no cases are met we blue screan because of a bad input
                         _StdOut.putText("This is not a valid Op Code " + this.instruction, true);
                         _Kernel.krnTrapError("bad op code");
                         _Kernel.krnShutdown();
@@ -207,7 +205,6 @@ var TSOS;
                     }
                 }
             }
-            this.updateCurPcb();
         };
         Cpu.prototype.hexToChar = function (hexLetter) {
             var hex = hexLetter.toString(); //force conversion

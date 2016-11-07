@@ -26,7 +26,7 @@
            public Zflag: number = 0,
            public isExecuting: boolean = false,
            public instruction: string = "00",
-           public curPCB= null) {
+           public curPCB: Pcb = null) {
 
          }
 
@@ -47,18 +47,19 @@
           this.Yreg = pcb.Yreg;
           this.Zflag = pcb.Zflag;
           this.curPCB=pcb;
-          this.isExecuting = true;
+          this.isExecuting = pcb.isExecuting;
         }
         //updates the curpcb with values inside the cpu
 
         public updateCurPcb(){
 
-          this.curPCB.updatePcb(this.PC,this.Acc,this.Xreg,this.Yreg,this.Zflag)
+         (this.curPCB).updatePcb(this.PC,this.Acc,this.Xreg,this.Yreg,this.Zflag);
 
 
         }
         public cycle(): void {
           _Kernel.krnTrace('CPU cycle');
+          _Scheduler.curQuan++
          
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
@@ -167,18 +168,20 @@
                                 case "00":
                                           {
                                           document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
-                                          this.updateCurPcb();
+
+                                       
 
                                          
                                           _ProcessManager.terminateProcess();                                        
 
-                                          if (_ProcessManager.runningQueue.getSize() == 0) {
+                                         
                                            // alert("in if")
-                                            this.isExecuting = false;
-                                          }
+                                          
+                                          
                                           _StdOut.putText("Finished running program.",true);
                                           _StdOut.advanceLine();
-                                        
+                                        _CPU.isExecuting= false;
+            
                                          
                                           break;
                                           }
@@ -233,7 +236,7 @@
                                    }
                             // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                             default:{
-                            //if no cases are met me blue screan because of a bad input
+                            //if no cases are met we blue screan because of a bad input
                             _StdOut.putText("This is not a valid Op Code "+this.instruction,true);
                             _Kernel.krnTrapError("bad op code");
                             _Kernel.krnShutdown();
@@ -246,7 +249,7 @@
 
                         }
 
-                           this.updateCurPcb();
+                          
 
 
                       }
@@ -313,7 +316,7 @@
 
           }
           public op_EC(tarRegister: string){
-            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
+            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;  
             if(this.Xreg==parseInt(_Memory.memory[decRegister])){
                                     //  alert("changing z flag to 1 at pc:"+this.PC)
               this.Zflag=1;

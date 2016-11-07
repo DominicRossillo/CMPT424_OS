@@ -17,12 +17,12 @@ export class Pcb {
   }
         //funciton to update your current pcb with new values taken from the cpu
         public updatePcb(newPC,newAcc,newXreg,newYreg,newZflag){
-          this.PC=newPC;
-          this.Acc=newAcc;
-          this.Xreg=newXreg;
-          this.Yreg=newYreg;
-          this.Zflag=newZflag;
-        }
+          _CPU.curPCB.PC=newPC;
+          _CPU.curPCB.Acc=newAcc;
+          _CPU.curPCB.Xreg=newXreg;
+          _CPU.curPCB.Yreg=newYreg;
+          _CPU.curPCB.Zflag=newZflag;
+          }
     	 // PC: number;
       //    PCID:number;
       //    Acc: number;
