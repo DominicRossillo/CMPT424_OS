@@ -91,23 +91,28 @@ module TSOS {
     	//stop the cpu from runnning once it runs out of things to run
     	public terminateProcess(){
             _Memory.clearMemSeg(_CPU.curPCB);
-    		_CPU.isExecuting= false;
+    		//_CPU.isExecuting= false;
             _Scheduler.curQuan=_Scheduler.quantum
             console.log("running queue "+ this.runningQueue.getSize())
-            var rempcb= this.runningQueue.q[0]
-            this.runningQueue.dequeue();
+            var rempcb= this.runningQueue.dequeue();
+            
             console.log("running queue "+ this.runningQueue.getSize())
            
             this.finishedQueue.enqueue(rempcb);
             console.log("resident list After Terminate" +this.residentList.length)
             console.log("isExecuting "+_CPU.isExecuting)
             console.log("running queue size"+ this.runningQueue.getSize())
+             _Scheduler.curQuan=0;
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
                 console.log("we enqueued after terminating")
                 this.runningQueue.enqueue(this.readyQueue.dequeue())
-                _CPU.isExecuting= false;
+                _CPU.loadFromPcb(this.runningQueue.q[0])
+              
             
             }
+            else
+                _CPU.isExecuting= false;
+
     	}
 
 

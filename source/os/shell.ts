@@ -558,6 +558,7 @@ module TSOS {
                     _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
                 // alert(this.runningQueue[0]);
                     _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
+                    
                 //if
 
                  

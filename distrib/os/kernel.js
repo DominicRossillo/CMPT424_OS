@@ -79,21 +79,19 @@ var TSOS;
             // Check for an interrupt, are any. Page 560
             // console.log("size of running queue on clock pulse"+_ProcessManager.runningQueue.getSize())
             console.log("running queue size=" + _ProcessManager.runningQueue.getSize() + " and isExecuting =" + _CPU.isExecuting);
+            console.log("curQuan is " + _Scheduler.curQuan);
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if (_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) {
+            else if ((_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) || ((_CPU.isExecuting) && _Scheduler.curQuan == _Scheduler.quantum)) {
                 console.log("in context switch clock pulse");
                 _Scheduler.callScheduler();
-                _CPU.isExecuting = true;
             }
             else if (_CPU.isExecuting) {
-                if (_Scheduler.schType = "rr") {
-                    _Scheduler.curQuan++;
-                } // If there are no interrupts then run one CPU cycle if there is anything being processed. {
+                // If there are no interrupts then run one CPU cycle if there is anything being processed. {
                 //if step mode is toggled and we are allowed to step
                 if (document.getElementById("steptoggle").checked && canStep == true) {
                     _CPU.cycle();

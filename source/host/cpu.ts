@@ -47,7 +47,7 @@
           this.Yreg = pcb.Yreg;
           this.Zflag = pcb.Zflag;
           this.curPCB=pcb;
-          this.isExecuting = pcb.isExecuting;
+          this.isExecuting = true;
         }
         //updates the curpcb with values inside the cpu
 
@@ -173,15 +173,15 @@
 
                                          
                                           _ProcessManager.terminateProcess();                                        
-
+                                           _Scheduler.curQuan=0;
                                          
                                            // alert("in if")
                                           
                                           
                                           _StdOut.putText("Finished running program.",true);
                                           _StdOut.advanceLine();
-                                        _CPU.isExecuting= false;
-            
+                                          
+             
                                          
                                           break;
                                           }
