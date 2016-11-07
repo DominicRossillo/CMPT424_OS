@@ -66,6 +66,7 @@
 
         }
         public cycle(): void {
+          
           document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
           document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
 

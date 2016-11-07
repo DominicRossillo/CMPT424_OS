@@ -17,10 +17,8 @@ var TSOS;
                     //_CPU.updateCurPcb()
                     //_ProcessManager.runningQueue.q[0]=_CPU.curPCB;
                     //if(this.curQuan>=this.quantum){
-                    if (!_ProcessManager.readyQueue.isEmpty()) {
-                        console.log("inside if of scheduler");
-                        this.contextSwitch();
-                    }
+                    console.log("inside if of scheduler");
+                    this.contextSwitch();
                     //_CPU.updateCurPcb()
                     this.curQuan = 0;
                     break;

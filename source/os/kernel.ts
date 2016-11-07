@@ -81,13 +81,14 @@
 
 
         public krnOnCPUClockPulse() {
+            
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
                that it has to look for interrupts and process them if it finds any.                           */
                var curentTime=Date().toString()
                document.getElementById("time_title").innerText=Date();
-               
+
             // Check for an interrupt, are any. Page 560
            // console.log("size of running queue on clock pulse"+_ProcessManager.runningQueue.getSize())
             console.log("running queue size="+_ProcessManager.runningQueue.getSize()+" and isExecuting ="+_CPU.isExecuting)
@@ -101,7 +102,7 @@
 
             else if((_ProcessManager.runningQueue.getSize()>0 && !(_CPU.isExecuting))||((_CPU.isExecuting)&&_Scheduler.curQuan==_Scheduler.quantum)){
                   console.log("in context switch clock pulse")
-
+                   _CPU.updateCurPcb();
                   _Scheduler.callScheduler()
                  
                  // _CPU.isExecuting=true;

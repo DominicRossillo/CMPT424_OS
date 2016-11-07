@@ -271,7 +271,7 @@ var TSOS;
                         if (newPCB == null) {
                             return;
                         }
-                        alert("new base register for load" + newPCB.baseRegister);
+                        // alert("new base register for load"+newPCB.baseRegister);
                         _Memory.memPoint = newPCB.baseRegister;
                         for (var i = 0; i < Math.ceil((hexin.length / 8)); i++) {
                             for (var j = 1; (j <= hexin.length && j < 9 && curcode < hexin.length); j++) {

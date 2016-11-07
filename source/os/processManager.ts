@@ -92,6 +92,7 @@ module TSOS {
     	//stop the cpu from runnning once it runs out of things to run
     	public terminateProcess(){
            // document.getElementById('pcbTable').innerHTML=""
+
             var newtable="";
              for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
                
@@ -99,24 +100,25 @@ module TSOS {
                 
              }
                  document.getElementById('pcbTable').innerHTML=newtable
-            
+            _ProcessManager.runningQueue.q[0]=_CPU.curPCB;
             _Memory.clearMemSeg(_CPU.curPCB);
     		//_CPU.isExecuting= false;
-            _Scheduler.curQuan=_Scheduler.quantum
-            console.log("running queue "+ this.runningQueue.getSize())
+            _Scheduler.curQuan=_Scheduler.quantum;
+            // console.log("running queue "+ this.runningQueue.getSize())
             var rempcb= this.runningQueue.dequeue();
             
-            console.log("running queue "+ this.runningQueue.getSize())
+            // console.log("running queue "+ this.runningQueue.getSize())
            
             this.finishedQueue.enqueue(rempcb);
-            console.log("resident list After Terminate" +this.residentList.length)
-            console.log("isExecuting "+_CPU.isExecuting)
-            console.log("running queue size"+ this.runningQueue.getSize())
-             _Scheduler.curQuan=0;
+            // console.log("resident list After Terminate" +this.residentList.length)
+            // console.log("isExecuting "+_CPU.isExecuting)
+            // console.log("running queue size"+ this.runningQueue.getSize())
+             
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
                 console.log("we enqueued after terminating")
                 this.runningQueue.enqueue(this.readyQueue.dequeue())
                 _CPU.loadFromPcb(this.runningQueue.q[0])
+                
               
             
             }

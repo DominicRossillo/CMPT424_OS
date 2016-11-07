@@ -360,7 +360,7 @@ module TSOS {
                             if (newPCB== null){
                                 return;    
                             }
-                            alert("new base register for load"+newPCB.baseRegister);
+                           // alert("new base register for load"+newPCB.baseRegister);
 
                             _Memory.memPoint= newPCB.baseRegister
 

@@ -88,6 +88,7 @@ var TSOS;
             }
             else if ((_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) || ((_CPU.isExecuting) && _Scheduler.curQuan == _Scheduler.quantum)) {
                 console.log("in context switch clock pulse");
+                _CPU.updateCurPcb();
                 _Scheduler.callScheduler();
             }
             else if (_CPU.isExecuting) {
