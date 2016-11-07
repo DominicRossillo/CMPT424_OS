@@ -97,6 +97,11 @@ module TSOS {
                  "runall",
                  "- Runs all loaded programs.");
              this.commandList[this.commandList.length] = sc;
+              // quantum <Int>
+             sc = new ShellCommand(this.shellQuantum,
+                 "quantum",
+                 "- Change the quantum of the round robin schedual to a new <Int>.");
+             this.commandList[this.commandList.length] = sc;
 
             // man <topic>
             sc = new ShellCommand(this.shellMan,
@@ -457,6 +462,9 @@ module TSOS {
                     case "clearmem":
                     _StdOut.putText("Clear all memory segments",true);
                     break;
+                    case "quantum":
+                    _StdOut.putText("Change the quantum of the round robbin schedualer.",true);
+                    break;
 
 
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
@@ -558,7 +566,7 @@ module TSOS {
                     _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
                 // alert(this.runningQueue[0]);
                     _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
-                    
+
                 //if
 
                  
@@ -569,6 +577,26 @@ module TSOS {
              }
 
          }
+         public shellQuantum(args) {
+            //command to update status title outside of the cli
+            if(args.length>0){
+                var newquantum = null;
+                if (args<=0){
+                    _StdOut.putText("Quantum is required to be 1 or greater for Round Robbin",true);
+                }
+                else {
+                    _StdOut.putText("Quantum has been changed to "+ args,true);
+                    _Scheduler.quantum=args
+                }
+                
+                //loop that makes gets multiple word statuses 
+              
+                
+            }
+            else {
+                _StdOut.putText("Usage: quantum <number> Please supply a quantum size.",true);
+            }
+        }
 
     }
 }

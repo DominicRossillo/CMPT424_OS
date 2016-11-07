@@ -61,6 +61,9 @@ var TSOS;
             // runall
             sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs all loaded programs.");
             this.commandList[this.commandList.length] = sc;
+            // quantum <Int>
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Change the quantum of the round robin schedual to a new <Int>.");
+            this.commandList[this.commandList.length] = sc;
             // man <topic>
             sc = new TSOS.ShellCommand(this.shellMan, "man", "<topic> - Displays the MANual page for <topic>.");
             this.commandList[this.commandList.length] = sc;
@@ -363,6 +366,9 @@ var TSOS;
                     case "clearmem":
                         _StdOut.putText("Clear all memory segments", true);
                         break;
+                    case "quantum":
+                        _StdOut.putText("Change the quantum of the round robbin schedualer.", true);
+                        break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".", true);
@@ -452,6 +458,22 @@ var TSOS;
             }
             else {
                 _StdOut.putText("No programs are loaded to run.", true);
+            }
+        };
+        Shell.prototype.shellQuantum = function (args) {
+            //command to update status title outside of the cli
+            if (args.length > 0) {
+                var newquantum = null;
+                if (args <= 0) {
+                    _StdOut.putText("Quantum is required to be 1 or greater for Round Robbin", true);
+                }
+                else {
+                    _StdOut.putText("Quantum has been changed to " + args, true);
+                    _Scheduler.quantum = args;
+                }
+            }
+            else {
+                _StdOut.putText("Usage: quantum <number> Please supply a quantum size.", true);
             }
         };
         return Shell;
