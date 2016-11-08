@@ -81,15 +81,29 @@
 
 
         public krnOnCPUClockPulse() {
-                document.getElementById("Acc_field").innerText=""+_CPU.Acc; 
-                     document.getElementById("yreg_field").innerText=""+_CPU.Yreg; 
-                     document.getElementById("xreg_field").innerText=""+_CPU.Xreg; 
-                     document.getElementById("zflag_field").innerText=""+_CPU.Zflag;    
-                     document.getElementById("pc_field").innerText=""+_CPU.PC;
-                      document.getElementById("instr_field").innerText=_CPU.instruction;
-                      if (_CPU.curPCB !=null){
-                          document.getElementById("pc_field").innerText=""+_CPU.PC+"("+(_CPU.curPCB.baseRegister+_CPU.PC)+")";
-                      }
+             document.getElementById("Acc_field").innerText=""+_CPU.Acc; 
+             document.getElementById("yreg_field").innerText=""+_CPU.Yreg; 
+             document.getElementById("xreg_field").innerText=""+_CPU.Xreg; 
+             document.getElementById("zflag_field").innerText=""+_CPU.Zflag;    
+             document.getElementById("pc_field").innerText=""+_CPU.PC;
+             document.getElementById("instr_field").innerText=_CPU.instruction;
+              if (_CPU.curPCB !=null){
+                  document.getElementById("pc_field").innerText=""+_CPU.PC+"("+(_CPU.curPCB.baseRegister+_CPU.PC)+")";
+              }
+              //if there are items in the readyqueue increment each of their turnaround time and wait time
+              if(_ProcessManager.readyQueue.getSize()>0){
+                  for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
+                      _ProcessManager.readyQueue.q[i].turnAroundTime++;
+                      _ProcessManager.readyQueue.q[i].waitTime++;
+                  }
+              }
+              //ifsomething is in the running queue incrememnt its turnaround time
+              if(_ProcessManager.runningQueue.getSize()>0){
+                  _ProcessManager.runningQueue.q[0].turnAroundTime++;
+              }
+
+
+
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel

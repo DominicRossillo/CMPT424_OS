@@ -193,7 +193,7 @@
                                            // alert("in if")
                                           
                                           
-                                          _StdOut.putText("Finished running program.",true);
+                                          _StdOut.putText("Finished running pid: "+this.curPCB.Pid+ " with a TT ="+this.curPCB.turnAroundTime+" and a WT of "+this.curPCB.waitTime ,true);
 
                                           _StdOut.advanceLine();
                                           _Scheduler.curQuan=0
