@@ -84,7 +84,7 @@ module TSOS {
             
             // alert(this.runningQueue[0]);
     		_CPU.loadFromPcb(this.runningQueue.q[0]);	
-            console.log("resident list After Running" +this.residentList.length);
+            // console.log("resident list After Running" +this.residentList.length);
     		document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="true";
 
             }
@@ -92,29 +92,35 @@ module TSOS {
     	//stop the cpu from runnning once it runs out of things to run
     	public terminateProcess(){
            // document.getElementById('pcbTable').innerHTML=""
-
+           //update the process table by removing the program that just finished from it 
             var newtable="";
              for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
                
                  newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
                 
              }
+
              document.getElementById('pcbTable').innerHTML=newtable;
+             //take the curPCB and set its values = to what the pu has in it
             _CPU.updateCurPcb();
+            //update the PCB in the running queue to these values
             _ProcessManager.runningQueue.q[0]=_CPU.curPCB;
+            //clear and deallocate the memory that this pcb uses
             _Memory.clearMemSeg(_CPU.curPCB);
     		//_CPU.isExecuting= false;
             
             // console.log("running queue "+ this.runningQueue.getSize())
+            //de queue it
             var rempcb= this.runningQueue.dequeue();
             
             // console.log("running queue "+ this.runningQueue.getSize())
-           
+            //add it to our finished queue           
             this.finishedQueue.enqueue(rempcb);
             // console.log("resident list After Terminate" +this.residentList.length)
             // console.log("isExecuting "+_CPU.isExecuting)
             // console.log("running queue size"+ this.runningQueue.getSize())
-             
+
+            //if the ready queue isnt empty and the running queue is thene want to deqeue from ready and enqueue onto running 
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
 
                 console.log("we enqueued after terminating");
@@ -124,6 +130,7 @@ module TSOS {
               
             
             }
+            //otherwise set the _CPU execute to false so we show that it is idle in the trace
             else
                 _CPU.isExecuting= false;
 
@@ -133,10 +140,12 @@ module TSOS {
         public killProcess(pid){
            // document.getElementById('pcbTable').innerHTML=""
             var rempcb;
-                
+                //if whats in the running queue is the pid we want to kill we dequeue it
                if(this.runningQueue.q[0].Pid==pid){
                   rempcb= this.runningQueue.dequeue()
                }
+               //else we want to loop through the ready queue and find if the pid is in there
+               //if it is we dequeue it 
                else{
                    for(var i=0; i<this.readyQueue.getSize();i++){
                        if(this.readyQueue.q[i].Pid!=pid){
@@ -148,31 +157,36 @@ module TSOS {
 
                    }
                }
+               //update the process table to reflect our changes
                 var newtable="";
                  for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
                    
                      newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
                     
                  }
+
                  if(!this.runningQueue.isEmpty()){
                      newtable+="<tr id=pidrow"+this.runningQueue.q[0].Pid+"> <td id='pcbs_PID"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].Pid+"</td> <td id='pcbs_Status"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].isExecuting+"</td> <td id='pcbs_PC"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].PC+"</td></tr>";
                     
                  }
                  document.getElementById('pcbTable').innerHTML=newtable
-                
+                //clear memory space of the process that was killed
                  _Memory.clearMemSeg(rempcb);
                 //_CPU.isExecuting= false;
                
                
                
               
-               
+               //add to our finished queue
                 this.finishedQueue.enqueue(rempcb);
                   _StdOut.putText("PID "+rempcb.Pid+" has been terminated.", true)
+                  //inform the user that the item deleted succesfully
                   _StdOut.advancedLine();
-                 _Scheduler.curQuan=0;
+
+                 
                 if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
-                    
+                      //reset the cur quan since we are going to load a new process into running
+                    _Scheduler.curQuan=0;
                     this.runningQueue.enqueue(this.readyQueue.dequeue())
                     _CPU.loadFromPcb(this.runningQueue.q[0])
                      _CPU.isExecuting= true;

@@ -10,7 +10,6 @@ export class Pcb {
     public Yreg: number = 0,
     public Zflag: number = 0,
     public isExecuting: boolean = false,
-    public logicaladdress: number= null,
     public baseRegister: number = -1,
     public limitRegister: number = -1) {
 

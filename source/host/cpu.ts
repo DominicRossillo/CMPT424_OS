@@ -185,7 +185,7 @@
 
                                        
 
-                                         
+                                         //kill the program that hits 00
                                           _ProcessManager.terminateProcess();        
                                      //     document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="false"                                
 
@@ -270,7 +270,7 @@
 
                       }
 
-
+             //convert hex to a letter
           public hexToChar(hexLetter){
             var hex = hexLetter.toString();//force conversion
             var str = '';
@@ -278,26 +278,27 @@
               str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
             return str;
           }
-
+          //convert the logical address to the physcial address for pc
           public findPhysicalAddress(){
 
               return this.PC + this.curPCB.baseRegister;
 
           }
+          //load acc with a constent
           public op_A9(constent: string){
               this.Acc=parseInt(constent,16);     
 
           }
-
+          //set the acc to value in memory
           public op_AD(register: string){
             var decRegister= parseInt(register,16)+this.curPCB.baseRegister;
             this.Acc=parseInt(_Memory.memory[decRegister],16)
                                                                                      
           }
-
+          //store the acc to a place in mem
           public op_8D(tarRegister : string){
             var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
-            console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
+         //   console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
             var newVal =(this.Acc).toString(16)  
                                  
             if(newVal.length<=1){   
@@ -307,27 +308,30 @@
            _Memory.memoryUpdate(newVal,decRegister)
            
           }
-
+          //add with carry func, set acc = to sum
           public op_6D(tarRegister: string){
             var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
             this.Acc=this.Acc+parseInt(_Memory.memory[decRegister],16)
 
           }
-
+           //load x reg with constant 
           public op_A2(constent: string){
             this.Xreg= parseInt(constent,16);
 
 
 
           }
+           //load x reg from value in mem
           public op_AE(tarRegister: string){
              var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
              this.Xreg=parseInt(_Memory.memory[decRegister],16)
 
           }
+           //load y reg with constent
           public op_A0(constent:string){
              this.Yreg= parseInt(constent,16);
           }
+           //load y reg with value from mem
           public op_AC(tarRegister: string){
              var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
              this.Yreg=parseInt(_Memory.memory[decRegister],16)
@@ -364,6 +368,7 @@
            }
 
          }
+         //compare a byte in memory to x reg
         public op_EE(tarRegister: string){
            var decRegister = parseInt(tarRegister,16)+this.curPCB.baseRegister
            var decOfLoc= _Memory.memory[decRegister];
@@ -375,6 +380,7 @@
               _Memory.memoryUpdate(newVal,decRegister)
 
         }
+        //print things
         public op_FF(){
             if (this.Xreg==1){
 

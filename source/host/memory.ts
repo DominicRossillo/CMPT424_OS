@@ -48,10 +48,11 @@ module TSOS {
 
 
          }
-
+         //take a pcb anc clear the places in memory it is
          public clearMemSeg(pcb){
              _MemoryManager.deAllocateMem(pcb.Pid);
              var clearStart= pcb.baseRegister;
+             //loop through table and update values
              for (var i=clearStart ; i<pcb.limitRegister;i++){
                  _Memory.memory[i]="00";
                  document.getElementById("cell"+i).innerText="00";

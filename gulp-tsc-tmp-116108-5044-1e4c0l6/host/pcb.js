@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     //pcb object
     var Pcb = (function () {
-        function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting, baseRegister, limitRegister) {
+        function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting, logicaladdress, baseRegister, limitRegister) {
             if (Pid === void 0) { Pid = 0; }
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
@@ -10,6 +10,7 @@ var TSOS;
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
             if (isExecuting === void 0) { isExecuting = false; }
+            if (logicaladdress === void 0) { logicaladdress = null; }
             if (baseRegister === void 0) { baseRegister = -1; }
             if (limitRegister === void 0) { limitRegister = -1; }
             this.Pid = Pid;
@@ -19,6 +20,7 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
+            this.logicaladdress = logicaladdress;
             this.baseRegister = baseRegister;
             this.limitRegister = limitRegister;
         }
