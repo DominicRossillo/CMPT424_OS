@@ -116,7 +116,7 @@ module TSOS {
             // console.log("running queue size"+ this.runningQueue.getSize())
              
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
-                
+
                 console.log("we enqueued after terminating");
                 this.runningQueue.enqueue(this.readyQueue.dequeue())
                 _CPU.loadFromPcb(this.runningQueue.q[0])
@@ -175,6 +175,7 @@ module TSOS {
                     
                     this.runningQueue.enqueue(this.readyQueue.dequeue())
                     _CPU.loadFromPcb(this.runningQueue.q[0])
+                     _CPU.isExecuting= true;
                   
                 
                 }
