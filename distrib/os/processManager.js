@@ -72,10 +72,10 @@ var TSOS;
                 newtable += "<tr id=pidrow" + this.readyQueue.q[i].Pid + "> <td id='pcbs_PID" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].Pid + "</td> <td id='pcbs_Status" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].isExecuting + "</td> <td id='pcbs_PC" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].PC + "</td></tr>";
             }
             document.getElementById('pcbTable').innerHTML = newtable;
+            _CPU.updateCurPcb();
             _ProcessManager.runningQueue.q[0] = _CPU.curPCB;
             _Memory.clearMemSeg(_CPU.curPCB);
             //_CPU.isExecuting= false;
-            _Scheduler.curQuan = _Scheduler.quantum;
             // console.log("running queue "+ this.runningQueue.getSize())
             var rempcb = this.runningQueue.dequeue();
             // console.log("running queue "+ this.runningQueue.getSize())

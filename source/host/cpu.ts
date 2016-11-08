@@ -48,6 +48,8 @@
           this.Zflag = pcb.Zflag;
           this.curPCB=pcb;
           this.isExecuting = true;
+          
+   
            
 
           document.getElementById('pcb_Pid').innerText=""+pcb.Pid
@@ -66,7 +68,7 @@
 
         }
         public cycle(): void {
-          
+
           document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
           document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
 
@@ -192,8 +194,9 @@
                                           
                                           
                                           _StdOut.putText("Finished running program.",true);
+
                                           _StdOut.advanceLine();
-                                          
+                                          _Scheduler.curQuan=0
              
                                          
                                           break;
@@ -287,19 +290,21 @@
           }
 
           public op_AD(register: string){
-            var decRegister= parseInt(register,16)
+            var decRegister= parseInt(register,16)+this.curPCB.baseRegister;
             this.Acc=parseInt(_Memory.memory[decRegister],16)
                                                                                      
           }
 
           public op_8D(tarRegister : string){
             var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
+            console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
             var newVal =(this.Acc).toString(16)  
                                  
             if(newVal.length<=1){   
                newVal="0"+newVal;
             }
-           _Memory.memory[decRegister]=newVal
+          // _Memory.memory[decRegister]=newVal
+           _Memory.memoryUpdate(newVal,decRegister)
            
           }
 

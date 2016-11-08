@@ -70,6 +70,15 @@ var TSOS;
             this.krnTrace("end shutdown OS");
         };
         Kernel.prototype.krnOnCPUClockPulse = function () {
+            document.getElementById("Acc_field").innerText = "" + _CPU.Acc;
+            document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
+            document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
+            document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
+            document.getElementById("pc_field").innerText = "" + _CPU.PC;
+            document.getElementById("instr_field").innerText = _CPU.instruction;
+            if (_CPU.curPCB != null) {
+                document.getElementById("pc_field").innerText = "" + _CPU.PC + "(" + (_CPU.curPCB.baseRegister + _CPU.PC) + ")";
+            }
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
@@ -88,8 +97,9 @@ var TSOS;
             }
             else if ((_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) || ((_CPU.isExecuting) && _Scheduler.curQuan == _Scheduler.quantum)) {
                 console.log("in context switch clock pulse");
-                _CPU.updateCurPcb();
+                //_CPU.updateCurPcb();
                 _Scheduler.callScheduler();
+                this.krnTrace("Context_Switch");
             }
             else if (_CPU.isExecuting) {
                 // If there are no interrupts then run one CPU cycle if there is anything being processed. {
@@ -101,7 +111,7 @@ var TSOS;
                     document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
                     document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
                     document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
-                    document.getElementById("pc_field").innerText = "" + _CPU.PC;
+                    document.getElementById("pc_field").innerText = "" + _CPU.PC + "(" + _CPU.curPCB.baseRegister + _CPU.PC + ")";
                     //update dispaly of pcbs so the user can see 
                     document.getElementById("pcbs_PC" + _CPU.curPCB.Pid).innerText = "" + _CPU.PC;
                     //update the cpu dispaly so you can see the instruction being read

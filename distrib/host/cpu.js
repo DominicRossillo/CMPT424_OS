@@ -162,6 +162,7 @@ var TSOS;
                             // alert("in if")
                             _StdOut.putText("Finished running program.", true);
                             _StdOut.advanceLine();
+                            _Scheduler.curQuan = 0;
                             break;
                         }
                     //compare a byte in memory to x reg
@@ -228,16 +229,18 @@ var TSOS;
             this.Acc = parseInt(constent, 16);
         };
         Cpu.prototype.op_AD = function (register) {
-            var decRegister = parseInt(register, 16);
+            var decRegister = parseInt(register, 16) + this.curPCB.baseRegister;
             this.Acc = parseInt(_Memory.memory[decRegister], 16);
         };
         Cpu.prototype.op_8D = function (tarRegister) {
             var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
+            console.log("tar register before base " + parseInt(tarRegister, 16) + " and dec register after " + decRegister);
             var newVal = (this.Acc).toString(16);
             if (newVal.length <= 1) {
                 newVal = "0" + newVal;
             }
-            _Memory.memory[decRegister] = newVal;
+            // _Memory.memory[decRegister]=newVal
+            _Memory.memoryUpdate(newVal, decRegister);
         };
         Cpu.prototype.op_6D = function (tarRegister) {
             var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;

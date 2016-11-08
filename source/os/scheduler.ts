@@ -17,14 +17,14 @@ module TSOS {
                 			//_CPU.updateCurPcb()
                 			//_ProcessManager.runningQueue.q[0]=_CPU.curPCB;
                 		//if(this.curQuan>=this.quantum){
-                			
+                			if(!_ProcessManager.readyQueue.isEmpty()){
                 				console.log("inside if of scheduler")
                 				this.contextSwitch();
-
+                			}
                 				
                 		
-                				
-                			//_CPU.updateCurPcb()
+                			_CPU.isExecuting=true;	
+                			_CPU.updateCurPcb()
                 			this.curQuan=0;
                 			break;
                 	}
@@ -42,6 +42,7 @@ module TSOS {
     			_CPU.updateCurPcb()
     			_ProcessManager.runningQueue.q[0]=_CPU.curPCB;
     			var PCB = _ProcessManager.runningQueue.dequeue();
+    			console.log(PCB)
     			_ProcessManager.readyQueue.enqueue(PCB)
     			console.log("running queue context switch"+_ProcessManager.runningQueue.getSize()+"readyqueue size is  "+_ProcessManager.readyQueue.getSize())
     		

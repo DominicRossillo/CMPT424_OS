@@ -84,8 +84,8 @@ module TSOS {
             
             // alert(this.runningQueue[0]);
     		_CPU.loadFromPcb(this.runningQueue.q[0]);	
-            console.log("resident list After Running" +this.residentList.length)
-    		document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="true"
+            console.log("resident list After Running" +this.residentList.length);
+    		document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="true";
 
             }
     	}
@@ -99,11 +99,12 @@ module TSOS {
                  newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
                 
              }
-                 document.getElementById('pcbTable').innerHTML=newtable
+             document.getElementById('pcbTable').innerHTML=newtable;
+            _CPU.updateCurPcb();
             _ProcessManager.runningQueue.q[0]=_CPU.curPCB;
             _Memory.clearMemSeg(_CPU.curPCB);
     		//_CPU.isExecuting= false;
-            _Scheduler.curQuan=_Scheduler.quantum;
+            
             // console.log("running queue "+ this.runningQueue.getSize())
             var rempcb= this.runningQueue.dequeue();
             
@@ -115,10 +116,11 @@ module TSOS {
             // console.log("running queue size"+ this.runningQueue.getSize())
              
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
-                console.log("we enqueued after terminating")
+                
+                console.log("we enqueued after terminating");
                 this.runningQueue.enqueue(this.readyQueue.dequeue())
                 _CPU.loadFromPcb(this.runningQueue.q[0])
-                
+
               
             
             }
