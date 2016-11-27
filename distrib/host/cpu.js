@@ -239,14 +239,22 @@ var TSOS;
         };
         //store the acc to a place in mem
         Cpu.prototype.op_8D = function (tarRegister) {
-            var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
-            //   console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
-            var newVal = (this.Acc).toString(16);
-            if (newVal.length <= 1) {
-                newVal = "0" + newVal;
+            if (parseInt(tarRegister, 16) < 256) {
+                var decRegister = parseInt(tarRegister, 16) + this.curPCB.baseRegister;
+                //   console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
+                var newVal = (this.Acc).toString(16);
+                if (newVal.length <= 1) {
+                    newVal = "0" + newVal;
+                }
+                // _Memory.memory[decRegister]=newVal
+                _Memory.memoryUpdate(newVal, decRegister);
             }
-            // _Memory.memory[decRegister]=newVal
-            _Memory.memoryUpdate(newVal, decRegister);
+            else {
+                _StdOut.putText("Violated segment bounds" + this.instruction, true);
+                _Kernel.krnTrapError("Bounds Violation");
+                _Kernel.krnShutdown();
+                clearInterval(_hardwareClockID);
+            }
         };
         //add with carry func, set acc = to sum
         Cpu.prototype.op_6D = function (tarRegister) {

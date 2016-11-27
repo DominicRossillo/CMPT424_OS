@@ -223,7 +223,7 @@
                                     //  alert("dec of EF="+parseInt("EF",16));
                                       this.op_D0(parseInt(_Memory.memory[this.findPhysicalAddress()],16));
                                     
-                                    break;
+                                    break;  
                                   }
                                       //increment a byte value at a address
                                 case "EE":{
@@ -297,16 +297,25 @@
           }
           //store the acc to a place in mem
           public op_8D(tarRegister : string){
-            var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
-         //   console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
-            var newVal =(this.Acc).toString(16)  
-                                 
-            if(newVal.length<=1){   
-               newVal="0"+newVal;
-            }
-          // _Memory.memory[decRegister]=newVal
-           _Memory.memoryUpdate(newVal,decRegister)
+            if(parseInt(tarRegister,16)<256){
+                var decRegister= parseInt(tarRegister,16)+this.curPCB.baseRegister;
+             //   console.log("tar register before base "+ parseInt(tarRegister,16)+" and dec register after "+decRegister)
+                var newVal =(this.Acc).toString(16)  
+                                     
+                if(newVal.length<=1){   
+                   newVal="0"+newVal;
+                }
+              // _Memory.memory[decRegister]=newVal
+               _Memory.memoryUpdate(newVal,decRegister)
+           }
+           else{
+              _StdOut.putText("Violated segment bounds"+this.instruction,true);
+              _Kernel.krnTrapError("Bounds Violation");             
+              _Kernel.krnShutdown();
+              clearInterval(_hardwareClockID);
            
+
+           }
           }
           //add with carry func, set acc = to sum
           public op_6D(tarRegister: string){
