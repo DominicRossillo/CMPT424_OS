@@ -69,8 +69,8 @@
         }
         public cycle(): void {
 
-          document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
-          document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
+          //document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
+         // document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
 
           _Kernel.krnTrace('CPU cycle');
           _Scheduler.curQuan++
@@ -182,7 +182,7 @@
                                 case "00":
                                           {
                                           document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="false"
-
+                                            _StdOut.putText("Finished running pid: "+this.curPCB.Pid+ " with a TT ="+this.curPCB.turnAroundTime+" and a WT of "+this.curPCB.waitTime ,true);
                                        
 
                                          //kill the program that hits 00
@@ -193,7 +193,7 @@
                                            // alert("in if")
                                           
                                           
-                                          _StdOut.putText("Finished running pid: "+this.curPCB.Pid+ " with a TT ="+this.curPCB.turnAroundTime+" and a WT of "+this.curPCB.waitTime ,true);
+                                        
 
                                           _StdOut.advanceLine();
                                           _Scheduler.curQuan=0

@@ -566,25 +566,28 @@ module TSOS {
         public shellKill(args) {
             if (args.length>0){
                 var foundPID=false;
-                for (var i=0; i<_ProcessManager.readyQueue.getSize();i++){
-                    if(_ProcessManager.readyQueue.q[i].Pid==args){
-                        foundPID=true;
-                        var tarPcb= _ProcessManager.readyQueue.q[i];
-                        break; 
-                    }
+                if(!_ProcessManager.readyQueue.isEmpty()){
+                    for (var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+                        if(_ProcessManager.readyQueue.q[i].Pid==args){
+                            foundPID=true;
+                           
+                            _ProcessManager.killReadyProcess(args);
+                            break; 
+                        }
 
+
+                    }
                 }
-                if(_ProcessManager.runningQueue.q[0].Pid==args&& !foundPID){
-                    foundPID=true;
+                if(!_ProcessManager.runningQueue.isEmpty()){
+                    if(_ProcessManager.runningQueue.q[0].Pid==args){
+                        foundPID=true;
+                        _ProcessManager.killRunningProcess(args);
+                    }
                 }
                 //if the pid exists run it
-                if(foundPID==true){
-
-                    _ProcessManager.killProcess(args);
-
-                }
-                else
+                if(foundPID==false){  
                     _StdOut.putText("The PID you entered is not valid.", true)
+                }
                 
             }
             else {

@@ -63,8 +63,8 @@ var TSOS;
             (this.curPCB).updatePcb(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
         };
         Cpu.prototype.cycle = function () {
-            document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "true";
-            document.getElementById('pcbs_PC' + this.curPCB.Pid).innerText = "" + this.curPCB.PC;
+            //document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
+            // document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
             _Kernel.krnTrace('CPU cycle');
             _Scheduler.curQuan++;
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -157,11 +157,11 @@ var TSOS;
                     case "00":
                         {
                             document.getElementById('pcbs_Status' + this.curPCB.Pid).innerText = "false";
+                            _StdOut.putText("Finished running pid: " + this.curPCB.Pid + " with a TT =" + this.curPCB.turnAroundTime + " and a WT of " + this.curPCB.waitTime, true);
                             //kill the program that hits 00
                             _ProcessManager.terminateProcess();
                             //     document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="false"                                
                             // alert("in if")
-                            _StdOut.putText("Finished running pid: " + this.curPCB.Pid + " with a TT =" + this.curPCB.turnAroundTime + " and a WT of " + this.curPCB.waitTime, true);
                             _StdOut.advanceLine();
                             _Scheduler.curQuan = 0;
                             break;

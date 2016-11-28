@@ -74,3 +74,4 @@ var _MemoryManager;
 var canStep = false;
 // setting up scheduler
 var _Scheduler;
+var sch;

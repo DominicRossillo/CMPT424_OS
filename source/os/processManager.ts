@@ -137,39 +137,26 @@ module TSOS {
     	}
 
 
-        public killProcess(pid){
+        public killReadyProcess(pid){
            // document.getElementById('pcbTable').innerHTML=""
             var rempcb;
                 //if whats in the running queue is the pid we want to kill we dequeue it
-               if(this.runningQueue.q[0].Pid==pid){
-                  rempcb= this.runningQueue.dequeue()
-               }
+              
                //else we want to loop through the ready queue and find if the pid is in there
                //if it is we dequeue it 
-               else{
-                   for(var i=0; i<this.readyQueue.getSize();i++){
-                       if(this.readyQueue.q[i].Pid!=pid){
-                          this.readyQueue.enqueue(this.readyQueue.dequeue());
-                       }
-                       else{
-                           rempcb=this.readyQueue.dequeue();
-                       }
-
-                   }
+               
+           for(var i=0; i<this.readyQueue.getSize();i++){
+               if(this.readyQueue.q[i].Pid!=pid){
+                  this.readyQueue.enqueue(this.readyQueue.dequeue());
                }
-               //update the process table to reflect our changes
-                var newtable="";
-                 for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
-                   
-                     newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
-                    
-                 }
+               else{
+                   rempcb=this.readyQueue.dequeue();
+               }
 
-                 if(!this.runningQueue.isEmpty()){
-                     newtable+="<tr id=pidrow"+this.runningQueue.q[0].Pid+"> <td id='pcbs_PID"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].Pid+"</td> <td id='pcbs_Status"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].isExecuting+"</td> <td id='pcbs_PC"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].PC+"</td></tr>";
-                    
-                 }
-                 document.getElementById('pcbTable').innerHTML=newtable
+           }
+               
+               //update the process table to reflect our changes
+                this.updateProcessTable()
                 //clear memory space of the process that was killed
                  _Memory.clearMemSeg(rempcb);
                 //_CPU.isExecuting= false;
@@ -184,20 +171,34 @@ module TSOS {
                   _StdOut.advancedLine();
 
                  
-                if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
-                      //reset the cur quan since we are going to load a new process into running
-                    _Scheduler.curQuan=0;
-                    this.runningQueue.enqueue(this.readyQueue.dequeue())
-                    _CPU.loadFromPcb(this.runningQueue.q[0])
-                     _CPU.isExecuting= true;
-                  
                 
-                }
-                else
-                    _CPU.isExecuting= false;
-
+                
+                
+        }
+        public killRunningProcess(pid){
+                if(this.runningQueue.q[0].Pid==pid){
+                  var rempcb= this.runningQueue.dequeue()
                }
+               //add to our finished queue
+                 this.terminateProcess()
 
+           }     
+
+
+        public updateProcessTable(){
+            var newtable="";
+                 for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
+                   
+                     newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
+                    
+                 }
+
+                 if(!this.runningQueue.isEmpty()){
+                     newtable+="<tr id=pidrow"+this.runningQueue.q[0].Pid+"> <td id='pcbs_PID"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].Pid+"</td> <td id='pcbs_Status"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].isExecuting+"</td> <td id='pcbs_PC"+this.runningQueue.q[0].Pid+"'>"+this.runningQueue.q[0].PC+"</td></tr>";
+                    
+                 }
+                 document.getElementById('pcbTable').innerHTML=newtable
+        }
 
     }
     }	
