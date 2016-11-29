@@ -69,8 +69,8 @@
         }
         public cycle(): void {
 
-          //document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
-         // document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
+          document.getElementById('pcbs_Status'+this.curPCB.Pid).innerText="true"
+          document.getElementById('pcbs_PC'+this.curPCB.Pid).innerText=""+this.curPCB.PC;
 
           _Kernel.krnTrace('CPU cycle');
           _Scheduler.curQuan++

@@ -70,13 +70,13 @@ var TSOS;
             this.krnTrace("end shutdown OS");
         };
         Kernel.prototype.krnOnCPUClockPulse = function () {
-            document.getElementById("Acc_field").innerText = "" + _CPU.Acc;
-            document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
-            document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
-            document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
-            document.getElementById("pc_field").innerText = "" + _CPU.PC;
-            document.getElementById("instr_field").innerText = _CPU.instruction;
             if (_CPU.curPCB != null) {
+                document.getElementById("Acc_field").innerText = "" + _CPU.Acc;
+                document.getElementById("yreg_field").innerText = "" + _CPU.Yreg;
+                document.getElementById("xreg_field").innerText = "" + _CPU.Xreg;
+                document.getElementById("zflag_field").innerText = "" + _CPU.Zflag;
+                document.getElementById("pc_field").innerText = "" + _CPU.PC;
+                document.getElementById("instr_field").innerText = _CPU.instruction;
                 document.getElementById("pc_field").innerText = "" + _CPU.PC + "(" + (_CPU.curPCB.baseRegister + _CPU.PC) + ")";
             }
             //if there are items in the readyqueue increment each of their turnaround time and wait time

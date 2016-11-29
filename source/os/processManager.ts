@@ -35,7 +35,7 @@ module TSOS {
 
                     _MemoryManager.allocateMem(pcb.Pid);
 
-                    document.getElementById('pcbTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
+                    document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
                   //  console.log("load pcb baseReg is "+pcb.baseRegister)
                     return pcb;
             }
@@ -93,14 +93,14 @@ module TSOS {
     	public terminateProcess(){
            // document.getElementById('pcbTable').innerHTML=""
            //update the process table by removing the program that just finished from it 
-            var newtable="";
+            var newtable=" <tr style=\"text-align: center\"><th>PID</th><th>Running</th><th>PC</th></tr>";
              for(var i= 0 ; i<this.readyQueue.getSize();i++)   {
                
                  newtable+="<tr id=pidrow"+this.readyQueue.q[i].Pid+"> <td id='pcbs_PID"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].Pid+"</td> <td id='pcbs_Status"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].isExecuting+"</td> <td id='pcbs_PC"+this.readyQueue.q[i].Pid+"'>"+this.readyQueue.q[i].PC+"</td></tr>";
                 
              }
 
-             document.getElementById('pcbTable').innerHTML=newtable;
+             document.getElementById('processTable').innerHTML=newtable;
              //take the curPCB and set its values = to what the pu has in it
             _CPU.updateCurPcb();
             //update the PCB in the running queue to these values
