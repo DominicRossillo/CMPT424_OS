@@ -1,13 +1,20 @@
 <!DOCTYPE HTML>
+
+
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
  <meta name="author"             content="Alan G. Labouseur" />
  <link rel="stylesheet" href="tsos.css" type="text/css" media="screen" />
+ <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
  <title>
   TSOS - a browser-based virtual Operating System in TypeScript
 </title>
-
+ <link rel="stylesheet" href="foundation/css/foundation.css">
+    <link rel="stylesheet" href="foundation/css/app.css">
+<script type="text/css" src="foundation/css/app.css"></script>
+<script type="text/css" src="foundation/css/foundation.css"></script>
 <!-- Globals CONSTANTS and _Variables. Must included be first. -->
 <script type="text/javascript" src="distrib/globals.js"></script>
 
@@ -22,7 +29,7 @@
 <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
 <script type="text/javascript" src="distrib/os/processManager.js"></script>
 <script type="text/javascript" src="distrib/os/scheduler.js"></script>
-
+<script type="text/css" src="foundation\colss"></script>
 <script type="text/javascript" src="distrib/os/interrupt.js"></script>
 <script type="text/javascript" src="distrib/os/canvastext.js"></script>
 <script type="text/javascript" src="distrib/os/console.js"></script>
@@ -44,148 +51,161 @@
 
 <body onload="onDocumentLoad()">
 
-  <div id="divMain" style="width:100%;">
-   <h2>
+
+<div class="row">
+  <div class="large-6 columns" id="divMain" style="width:100%;">
+   <h3>
     Date and Time: <span id=time_title></span>
-  </h2>
-  <h2>
+  </h3>
+  <h4>
     Status: <span id=status_title></span>
-  </h2>
+  </h4>
+ </div>
+ </div>
+ <hr/>
+  <div class="row" id="divButtonBar" >
 
-  <div id="divButtonBar" style="margin:4px;">
-    <input type="button"
-    id = "btnStartOS"
-    name="brnStartOS"
-    class="normal_button"
-    value="Start"
-    tabindex="0"
-    onclick="TSOS.Control.hostBtnStartOS_click(this);">
-
-    <input type="button"
-    id = "btnHaltOS"
-    name="brnHaltOS"
-    class="normal_button"
-    disabled="disabled"
-    value="Halt"
-    tabindex="1"
-    onclick="TSOS.Control.hostBtnHaltOS_click(this);">
-
-    <input type="button"
-    id = "btnReset"
-    name="brnReset"
-    class="normal_button"
-    disabled="disabled"
-    value="Reset"
-    tabindex="2"
-    onclick="TSOS.Control.hostBtnReset_click(this);">
-
-
-  </div>
-  <label class="switch">
-    step by step
-    <input type="checkbox" id="steptoggle" onclick="TSOS.Control.hostBtnStep_toggle(btnStep);">
-    <input type="button"
-    id = "btnStep"
-    name="brnStep"
-    class="normal_button"
-    disabled="disabled"
-    value="Step"
-    
-    onclick="TSOS.Control.hostBtnStep_allow()">
-    <div class="slider round"></div>
-
-  </label>
-  <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
-    <canvas id="display"
-    width="500px"
-    height="500px"
-    tabindex="3"
-    >
-    
-  </canvas>
-  <label>
-   Process Memory
- </label>
- <div class="panel panel-default" >
-  <div class="panel-body" style="height:170px;overflow-y:auto;">
-    <table id="memoryTable" class="table" cellpadding="10">
-    </table>
-    
-  </div>
-</div>
-<br>
-<div class="panel-body" style="height:80px;overflow-y:auto;">
-  <label> PID     Running    PC
-  </label>
-  <table id="pcbTable" class="table" cellpadding="8">
-   
+      
+          <input type="button"
+          id = "btnStartOS"
+          name="brnStartOS"
+          class="normal_button, button"
+          value="Start"
+          tabindex="0"
+          onclick="TSOS.Control.hostBtnStartOS_click(this);">
    
     
+          <input type="button"
+          id = "btnHaltOS"
+          name="brnHaltOS"
+          class="normal_button, button"
+          disabled="disabled"
+          value="Halt"
+          tabindex="1"
+          onclick="TSOS.Control.hostBtnHaltOS_click(this);">
+      
+      
+          <input type="button"
+          id = "btnReset"
+          name="brnReset"
+          class="normal_button, button"
+          disabled="disabled"
+          value="Reset"
+          tabindex="2"
+          onclick="TSOS.Control.hostBtnReset_click(this);">
+    
+          
+   </div>
+  </div>
+  
+  <div class="row">
+    <div class="large-12 columns">
+      
+        <input type="checkbox" id="steptoggle" onclick="TSOS.Control.hostBtnStep_toggle(btnStep);">
+        <label for="steptoggle">
+        Step by Step
+        </label>
+        <input type="button"
+        id = "btnStep"
+        name="brnStep"
+        class="normal_button, button"
+        disabled="disabled"
+        value="Step"
+        
+        onclick="TSOS.Control.hostBtnStep_allow()">
+       <!--  <div class="slider round"></div> -->
 
-  </table>
+      
+    </div>
+  </div>
+  <div class="row">
+
+      <div class="large-6 columns" id="divConsole" >
+       
+        <canvas id="display"
+        width="500px"
+        height="500px"
+        tabindex="3"
+        >
+        
+      </canvas>
+     
+      </div>
+      <div class="large-6 columns" id="divLog" >
+
+      <label>
+       Host Log
+       <br>
+       <textarea name="taHostLog"
+       id  ="taHostLog"
+       rows="16"
+       cols="48"
+       ></textarea>
+     </label>
+     
+     
+    </div>
+  </div>
+  <div class="row">
+        <h3>
+         Process Memory
+       </h3>
+       <div class="panel panel-default" >
+        <div class="panel-body" style="height:170px;overflow-y:auto;">
+          <table id="memoryTable" class="table" cellpadding="10">
+          </table>
+          
+        </div>
+
+      <br>
+      <div class="panel-body" style="height:80px;overflow-y:auto;">
+        <label> PID     Running    PC
+        </label>
+        <table id="pcbTable" class="table" cellpadding="8">
+         
+         
+          
+
+        </table>
+      </div>
+
+      </div>
 </div>
+<div class="row">
+<div class="large-6 columns">
+      
+      <h3>
+        CPU Status
+      </h3>
 
+      <table id="processTable" class="table" >
+        <tr style="text-align: center">
+          <th>Instr</th>
+          <th>PC</th>
+          <th>Acc</th>
+          <th>X</th>
+          <th>Y</th>
+          <th>Z</th>
+        </tr>
+
+        <tr style="text-align: center">
+          <td id="instr_field">N/A</td>
+          <td id="pc_field">0</td>
+          <td id="Acc_field">0</td>
+          <td id="xreg_field">0</td>
+          <td id="yreg_field">0</td>
+          <td id="zflag_field">0</td>
+        </tr>
+
+      </table>
 </div>
-
-<div id="divLog" style="margin-left:520px;">
-
-  <label>
-   Host Log
-   <br>
-   <textarea name="taHostLog"
-   id  ="taHostLog"
-   rows="26"
-   cols="48"
-   ></textarea>
- </label>
- 
- 
-</div>
-<p></p>
-<label>
-  CPU Status
-</label>
-
-<table id="processTable" class="table">
-  <tr>
-    <th>Instr</th>
-    <th>PC</th>
-    <th>Acc</th>
-    <th>X</th>
-    <th>Y</th>
-    <th>Z</th>
-  </tr>
-
-  <tr>
-    <td id="instr_field">N/A</td>
-    <td id="pc_field">0</td>
-    <td id="Acc_field">0</td>
-    <td id="xreg_field">0</td>
-    <td id="yreg_field">0</td>
-    <td id="zflag_field">0</td>
-  </tr>
-
-</table>
-</div>
-<p></p>
-
-<br>
-<div id="divUserProgramInput" style="margin-left:520px;">
-  <label>
-   User Program Input
-   <br>
-   <textarea name="taProgramInput"
-   id  ="taProgramInput"
-   rows="8"
-   cols="48"
-   >A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00</textarea>
- </label>
- <div>
+ <div class="large-6 columns">
+      
 <table id="pcbTable" class="table">
- <p></p>
-<label>
+
+<h3>
   Current PCB 
-</label>
+</h3>
   <tr>
     <th>Pid</th>
     <th>PC</th>
@@ -195,7 +215,7 @@
     <th>Z</th>
   </tr>
 
-  <tr>
+  <tr style="text-align: center">
     <td id="pcb_Pid">N/A</td>
     <td id="pcb_pc">0</td>
     <td id="pcb_Acc">0</td>
@@ -206,12 +226,27 @@
 
 </table>
 </div>
+</div>
+<div class="row">
+<div id="divUserProgramInput" >
+  <h3>
+   User Program Input
+   </h3>
+   
+   <textarea name="taProgramInput"
+   id  ="taProgramInput"
+   rows="8"
+   cols="10"
+   >A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00</textarea>
+ 
 
+
+</div>
 </div>
 
 </div>
 
 
-
+ 
 </body>
 </html>
