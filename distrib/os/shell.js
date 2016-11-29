@@ -437,7 +437,6 @@ var TSOS;
                 for (var i = 0; i < _ProcessManager.residentList.length; i++) {
                     if (_ProcessManager.residentList[i].Pid == args) {
                         foundPID = true;
-                        var tarPcb = _ProcessManager.residentList[i];
                         break;
                     }
                 }
@@ -498,8 +497,11 @@ var TSOS;
         Shell.prototype.shellRunAll = function (args) {
             if (_ProcessManager.residentList.length > 0) {
                 for (var i = 0; i < _ProcessManager.residentList.length; i++) {
+                    var pcb = _ProcessManager.residentList[i];
                     console.log("runall loop");
                     _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
+                    //    _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
+                    document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
                 }
                 _ProcessManager.residentList = [];
                 _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());

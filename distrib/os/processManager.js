@@ -23,7 +23,6 @@ var TSOS;
                 }
                 // alert(this.residentList);
                 _MemoryManager.allocateMem(pcb.Pid);
-                document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
                 //  console.log("load pcb baseReg is "+pcb.baseRegister)
                 return pcb;
             }
@@ -52,6 +51,7 @@ var TSOS;
                 }
             }
             this.readyQueue.enqueue(pcb);
+            document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
             //  console.log("resident list After everything" +this.residentList.length)
             // alert("after length"+this.residentList.length);
             // alert("ready queue "+this.readyQueue[0]);
@@ -68,8 +68,10 @@ var TSOS;
         ProcessManager.prototype.terminateProcess = function () {
             // document.getElementById('pcbTable').innerHTML=""
             //update the process table by removing the program that just finished from it 
-            var newtable = " <tr style=\"text-align: center\"><th>PID</th><th>Running</th><th>PC</th></tr>";
+            var newtable = "<tr style=\"text-align: center\"><th>PID</th><th>Running</th><th>PC</th></tr>";
+            alert("ready queue size " + this.readyQueue.getSize());
             for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                alert("terminating number " + i);
                 newtable += "<tr id=pidrow" + this.readyQueue.q[i].Pid + "> <td id='pcbs_PID" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].Pid + "</td> <td id='pcbs_Status" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].isExecuting + "</td> <td id='pcbs_PC" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].PC + "</td></tr>";
             }
             document.getElementById('processTable').innerHTML = newtable;
@@ -81,7 +83,7 @@ var TSOS;
             _Memory.clearMemSeg(_CPU.curPCB);
             //_CPU.isExecuting= false;
             // console.log("running queue "+ this.runningQueue.getSize())
-            //de queue it
+            //de queue it    
             var rempcb = this.runningQueue.dequeue();
             // console.log("running queue "+ this.runningQueue.getSize())
             //add it to our finished queue           
@@ -138,7 +140,7 @@ var TSOS;
             if (!this.runningQueue.isEmpty()) {
                 newtable += "<tr id=pidrow" + this.runningQueue.q[0].Pid + "> <td id='pcbs_PID" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].Pid + "</td> <td id='pcbs_Status" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].isExecuting + "</td> <td id='pcbs_PC" + this.runningQueue.q[0].Pid + "'>" + this.runningQueue.q[0].PC + "</td></tr>";
             }
-            document.getElementById('pcbTable').innerHTML = newtable;
+            document.getElementById('processTable').innerHTML = newtable;
         };
         return ProcessManager;
     }());
