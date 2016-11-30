@@ -56,7 +56,7 @@ var TSOS;
             // alert("after length"+this.residentList.length);
             // alert("ready queue "+this.readyQueue[0]);
             //var frontQueue=this.readyQueue.dequeue();
-            if (this.runningQueue.isEmpty) {
+            if (this.runningQueue.isEmpty()) {
                 this.runningQueue.enqueue(this.readyQueue.dequeue());
                 // alert(this.runningQueue[0]);
                 _CPU.loadFromPcb(this.runningQueue.q[0]);
@@ -69,9 +69,7 @@ var TSOS;
             // document.getElementById('pcbTable').innerHTML=""
             //update the process table by removing the program that just finished from it 
             var newtable = "<tr style=\"text-align: center\"><th>PID</th><th>Running</th><th>PC</th></tr>";
-            alert("ready queue size " + this.readyQueue.getSize());
             for (var i = 0; i < this.readyQueue.getSize(); i++) {
-                alert("terminating number " + i);
                 newtable += "<tr id=pidrow" + this.readyQueue.q[i].Pid + "> <td id='pcbs_PID" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].Pid + "</td> <td id='pcbs_Status" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].isExecuting + "</td> <td id='pcbs_PC" + this.readyQueue.q[i].Pid + "'>" + this.readyQueue.q[i].PC + "</td></tr>";
             }
             document.getElementById('processTable').innerHTML = newtable;

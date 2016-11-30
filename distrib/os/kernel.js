@@ -106,9 +106,13 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if ((_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) || ((_CPU.isExecuting) && _Scheduler.curQuan == _Scheduler.quantum)) {
+            else if (((_ProcessManager.runningQueue.getSize() > 0 && !(_CPU.isExecuting)) || ((_CPU.isExecuting) && _Scheduler.curQuan == _Scheduler.quantum)) && _Scheduler.schType == "rr") {
                 //console.log("in context switch clock pulse")
                 //call the scheduler to do context switches 
+                _Scheduler.callScheduler();
+                this.krnTrace("Context_Switch");
+            }
+            else if (_ProcessManager.runningQueue.getSize() == 0 && (_CPU.isExecuting) && _Scheduler.schType == "fcfs") {
                 _Scheduler.callScheduler();
                 this.krnTrace("Context_Switch");
             }

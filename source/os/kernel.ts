@@ -123,7 +123,7 @@
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } 
             //if the running queue has something in it but the cpu isnt executing || if the cpu is executing and the curQuantum from the scheduler is max 
-            else if((_ProcessManager.runningQueue.getSize()>0 && !(_CPU.isExecuting))||((_CPU.isExecuting)&&_Scheduler.curQuan==_Scheduler.quantum)){
+            else if(((_ProcessManager.runningQueue.getSize()>0 && !(_CPU.isExecuting))||((_CPU.isExecuting)&&_Scheduler.curQuan==_Scheduler.quantum))&&_Scheduler.schType=="rr"){
                   //console.log("in context switch clock pulse")
                   //call the scheduler to do context switches 
                   _Scheduler.callScheduler()
@@ -132,6 +132,11 @@
 
               
                 
+
+            }
+            else if(_ProcessManager.runningQueue.getSize()==0&&(_CPU.isExecuting)&&_Scheduler.schType=="fcfs"){
+                 _Scheduler.callScheduler()
+                  this.krnTrace("Context_Switch");
 
             }
 

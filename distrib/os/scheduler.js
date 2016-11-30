@@ -26,8 +26,16 @@ var TSOS;
                     this.curQuan = 0;
                     break;
                 }
-                case "fcfs":
+                case "fcfs": {
+                    if (!_ProcessManager.readyQueue.isEmpty()) {
+                        console.log("inside if of scheduler");
+                        this.contextSwitch();
+                    }
+                    _CPU.isExecuting = true;
+                    _CPU.updateCurPcb();
+                    this.curQuan = 0;
                     break;
+                }
             }
         };
         // context switch
