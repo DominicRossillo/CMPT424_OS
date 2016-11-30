@@ -85,7 +85,31 @@ var TSOS;
             // kill <id> - kills the specified process id.
             sc = new TSOS.ShellCommand(this.shellKill, "kill", "- Kill a program that is currently running.");
             this.commandList[this.commandList.length] = sc;
+            // create <filename> - create the file filename 
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "- Create a file in memory.");
+            this.commandList[this.commandList.length] = sc;
+            // read <filename> - read the file filename 
+            sc = new TSOS.ShellCommand(this.shellRead, "read", "- Read a file in memory.");
+            this.commandList[this.commandList.length] = sc;
             //
+            // write <filename> "code" - write the file filename 
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", "- Write a file in memory.");
+            this.commandList[this.commandList.length] = sc;
+            // delete <filename> - delete the file filename 
+            sc = new TSOS.ShellCommand(this.shellDelete, "delete", "- Delete a file in memory.");
+            this.commandList[this.commandList.length] = sc;
+            // format format memory 
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Format memory in all tracks and sectors.");
+            this.commandList[this.commandList.length] = sc;
+            // ls - list files 
+            sc = new TSOS.ShellCommand(this.shellLs, "ls", "- List files on disk.");
+            this.commandList[this.commandList.length] = sc;
+            // setscheudle <schedule type> - create the file filename 
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setschedule", "- Change the current schedule algorithm.");
+            this.commandList[this.commandList.length] = sc;
+            // getschedule - find out current scheduling alg 
+            sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "- Get current scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -376,8 +400,29 @@ var TSOS;
                     case "ps":
                         _StdOut.putText("List all running programs.", true);
                         break;
-                    case "ps":
+                    case "kill":
                         _StdOut.putText("Kill a program currently executing.", true);
+                        break;
+                    case "create":
+                        _StdOut.putText("Creaete a file on disk.", true);
+                        break;
+                    case "read":
+                        _StdOut.putText("Read and display contents of a file on disk.", true);
+                        break;
+                    case "write":
+                        _StdOut.putText("Writes data to a specified file on disk.", true);
+                        break;
+                    case "delete":
+                        _StdOut.putText("Remove a file from disk by name.", true);
+                        break;
+                    case "format":
+                        _StdOut.putText("Initialize all blocks in all sectors in all tracks.", true);
+                        break;
+                    case "ls":
+                        _StdOut.putText("List files currently stored on disk.", true);
+                        break;
+                    case "setschedule":
+                        _StdOut.putText("Change the current scheduling algorithum to [rr,fcfs, priority].", true);
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
@@ -527,6 +572,23 @@ var TSOS;
             else {
                 _StdOut.putText("Usage: quantum <number> Please supply a quantum size.", true);
             }
+        };
+        Shell.prototype.shellCreate = function (args) {
+        };
+        Shell.prototype.shellRead = function (args) {
+        };
+        Shell.prototype.shellWrite = function (args) {
+        };
+        Shell.prototype.shellDelete = function (args) {
+        };
+        Shell.prototype.shellFormat = function (args) {
+        };
+        Shell.prototype.shellLs = function (args) {
+        };
+        Shell.prototype.shellGetSchedule = function (args) {
+            _StdOut.putText("Current schedule algorithm: " + _Scheduler.schType, true);
+        };
+        Shell.prototype.shellSetSchedule = function (args) {
         };
         return Shell;
     }());
