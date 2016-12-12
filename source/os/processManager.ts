@@ -17,13 +17,20 @@ module TSOS {
 
 
         //load a pcb into resident que 
-    	public load(){
+    	public load(priority){
             //alert(_MemoryManager.allocated.length)
+
+            if(priority==null){
+                priority=3;
+            }
             console.log("resident LIST SIZE "+this.residentList.length)
             if(this.residentList.length<3){
             		var pcb = new Pcb();     		
                     pcb.Pid= allPcb.length;
+                    pcb.priority=priority;
+                    alert(pcb.priority)
                     this.residentList.push(pcb);
+
                     for(var i=0; i<this.residentList.length; i++){
                         if(this.residentList[i].Pid==pcb.Pid){
                              pcb= this.residentList[i];  
@@ -71,6 +78,7 @@ module TSOS {
                 
             }
             this.readyQueue.enqueue(pcb);
+             
              document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
                   
             

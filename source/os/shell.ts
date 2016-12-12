@@ -395,7 +395,7 @@ module TSOS {
                     var curcode=0;
                     var hexin=testcode.split(" ");
                     if(hexin.length<256){
-                            var newPCB= _ProcessManager.load();
+                            var newPCB= _ProcessManager.load(args);
                             if (newPCB== null){
                                 return;    
                             }
@@ -677,7 +677,7 @@ module TSOS {
          public shellRunAll(args){
              if(_ProcessManager.residentList.length>0){
                  
-                     
+                    
                         for (var i=0;i<_ProcessManager.residentList.length;i++){
                                 var pcb= _ProcessManager.residentList[i]
                                 console.log("runall loop")
@@ -748,6 +748,14 @@ module TSOS {
            
          }
          public shellSetSchedule(args) {
+             if(args.length>0){
+
+                _Scheduler.updateScheduler(args);
+                
+            }
+            else {
+                _StdOut.putText("Usage: you must supply schedule type.(fcfs/rr/priority)",true);
+            }
            
         }
 

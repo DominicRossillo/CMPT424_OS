@@ -9,12 +9,17 @@ var TSOS;
             this.residentList = [];
         }
         //load a pcb into resident que 
-        ProcessManager.prototype.load = function () {
+        ProcessManager.prototype.load = function (priority) {
             //alert(_MemoryManager.allocated.length)
+            if (priority == null) {
+                priority = 3;
+            }
             console.log("resident LIST SIZE " + this.residentList.length);
             if (this.residentList.length < 3) {
                 var pcb = new TSOS.Pcb();
                 pcb.Pid = allPcb.length;
+                pcb.priority = priority;
+                alert(pcb.priority);
                 this.residentList.push(pcb);
                 for (var i = 0; i < this.residentList.length; i++) {
                     if (this.residentList[i].Pid == pcb.Pid) {

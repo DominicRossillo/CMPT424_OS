@@ -291,7 +291,7 @@ var TSOS;
                     var curcode = 0;
                     var hexin = testcode.split(" ");
                     if (hexin.length < 256) {
-                        var newPCB = _ProcessManager.load();
+                        var newPCB = _ProcessManager.load(args);
                         if (newPCB == null) {
                             return;
                         }
@@ -589,6 +589,12 @@ var TSOS;
             _StdOut.putText("Current schedule algorithm: " + _Scheduler.schType, true);
         };
         Shell.prototype.shellSetSchedule = function (args) {
+            if (args.length > 0) {
+                _Scheduler.updateScheduler(args);
+            }
+            else {
+                _StdOut.putText("Usage: you must supply schedule type.(fcfs/rr/priority)", true);
+            }
         };
         return Shell;
     }());
