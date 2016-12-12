@@ -81,6 +81,9 @@ var TSOS;
             }
             //if there are items in the readyqueue increment each of their turnaround time and wait time
             if (_ProcessManager.readyQueue.getSize() > 0) {
+                if (_ProcessManager.runningQueue.isEmpty()) {
+                    _Scheduler.callScheduler();
+                }
                 for (var i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
                     _ProcessManager.readyQueue.q[i].turnAroundTime++;
                     _ProcessManager.readyQueue.q[i].waitTime++;

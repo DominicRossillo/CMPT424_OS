@@ -93,11 +93,16 @@
               }
               //if there are items in the readyqueue increment each of their turnaround time and wait time
               if(_ProcessManager.readyQueue.getSize()>0){
+                  if(_ProcessManager.runningQueue.isEmpty()){
+                      _Scheduler.callScheduler()
+                  }
                   for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
                       _ProcessManager.readyQueue.q[i].turnAroundTime++;
                       _ProcessManager.readyQueue.q[i].waitTime++;
                   }
               }
+
+
               //ifsomething is in the running queue incrememnt its turnaround time
               if(_ProcessManager.runningQueue.getSize()>0){
                   _ProcessManager.runningQueue.q[0].turnAroundTime++;

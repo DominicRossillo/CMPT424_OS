@@ -689,7 +689,31 @@ module TSOS {
                             
                     }
                     _ProcessManager.residentList=[];
-                    _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
+                    if(_Scheduler.schType="priority"){
+                        var lowestPriority=_ProcessManager.readyQueue.dequeue();
+                        var curCheckPcb;
+                        for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
+                            curCheckPcb=_ProcessManager.readyQueue.dequeue();
+                            if(lowestPriority.priority>curCheckPcb.priority){
+                                _ProcessManager.readyQueue.enqueue(lowestPriority);
+                                lowestPriority=curCheckPcb;
+
+                            }
+                            else if(lowestPriority.priority=curCheckPcb.priority&& lowestPriority.waitTime<curCheckPcb.waitTime){
+                                _ProcessManager.readyQueue.enqueue(lowestPriority);
+                                lowestPriority=curCheckPcb;
+                            }
+                            else{
+                                _ProcessManager.readyQueue.enqueue(curCheckPcb);
+                                
+                            }
+                        }
+                        _ProcessManager.runningQueue.enqueue(lowestPriority);
+
+                    }
+                    else{
+                        _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
+                    }
                 // alert(this.runningQueue[0]);
                     _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
 

@@ -210,6 +210,27 @@ module TSOS {
                  }
                  document.getElementById('processTable').innerHTML=newtable
         }
+        public priorityRun(){
+            var lowestPriority=_ProcessManager.readyQueue.dequeue();
+                    var curCheckPcb;
+                    for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
+                        curCheckPcb=_ProcessManager.readyQueue.dequeue();
+                        if(lowestPriority.priority>curCheckPcb.priority){
+                            _ProcessManager.readyQueue.enqueue(lowestPriority);
+                            lowestPriority=curCheckPcb;
+
+                        }
+                        else if(lowestPriority.priority=curCheckPcb.priority&& lowestPriority.waitTime<curCheckPcb.waitTime){
+                            _ProcessManager.readyQueue.enqueue(lowestPriority);
+                            lowestPriority=curCheckPcb;
+                        }
+                        else{
+                            _ProcessManager.readyQueue.enqueue(curCheckPcb);
+                            
+                        }
+                    }
+                    _ProcessManager.runningQueue.enqueue(lowestPriority);
+        }
 
     }
     }	
