@@ -20,8 +20,8 @@ module TSOS {
     	public load(priority){
             //alert(_MemoryManager.allocated.length)
 
-            if(priority==null){
-                priority=3;
+            if(priority.length==0){
+                priority=5;
             }
             console.log("resident LIST SIZE "+this.residentList.length)
             if(this.residentList.length<3){
@@ -135,8 +135,13 @@ module TSOS {
             if(!this.readyQueue.isEmpty()&&this.runningQueue.isEmpty()){
 
                 console.log("we enqueued after terminating");
+                if(_Scheduler.schType=="priority"){
+                    this.priorityRun();
+                }
+                else{
                 this.runningQueue.enqueue(this.readyQueue.dequeue())
-                _CPU.loadFromPcb(this.runningQueue.q[0])
+                }
+                _CPU.loadFromPcb(this.runningQueue.q[0]);    
 
               
             
