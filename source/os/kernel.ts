@@ -41,6 +41,18 @@
             _krnKeyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
 
+            //Initialize the Hard Drive
+            _HardDrive= new HardDrive();
+            // Load the Hard Drive Device Driver
+            this.krnTrace("Loading the Hard Drive device driver.");
+            _krnHardDriveDriver = new DeviceDriverHardDrive();     // Construct it.
+             _krnHardDriveDriver.driverEntry() ;
+             _krnHardDriveDriver.initHardDrive();
+             // _krnHardDriveDriver.initHardDriveTable();                    // Call the initHardDriveTable() initialization routine.
+             this.krnTrace(_krnHardDriveDriver.status);
+         
+
+
             //initialize memory
             _Memory= new Memory();
             _ProcessManager= new ProcessManager();

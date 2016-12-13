@@ -45,6 +45,7 @@ var _OsShell;
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver; //  = null;
+var _krnHardDriveDriver; //  = null;
 var _hardwareClockID = null;
 // For testing (and enrichment)...
 var Glados = null; // This is the function Glados() in glados.js on Labouseur.com.
@@ -74,4 +75,5 @@ var _MemoryManager;
 var canStep = false;
 // setting up scheduler
 var _Scheduler;
-var sch;
+//declaring hardDrive
+var _HardDrive;

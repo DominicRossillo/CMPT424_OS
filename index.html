@@ -24,6 +24,7 @@
 <script type="text/javascript" src="distrib/host/memory.js"></script>
 <script type="text/javascript" src="distrib/host/cpu.js"></script>
 <script type="text/javascript" src="distrib/host/pcb.js"></script>
+<script type="text/javascript" src="distrib/host/hardDrive.js"></script>
 
 <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
 <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
@@ -35,6 +36,7 @@
 <script type="text/javascript" src="distrib/os/console.js"></script>
 <script type="text/javascript" src="distrib/os/deviceDriver.js"></script>
 <script type="text/javascript" src="distrib/os/deviceDriverKeyboard.js"></script>
+<script type="text/javascript" src="distrib/os/deviceDriverHardDrive.js"></script>
 <script type="text/javascript" src="distrib/os/queue.js"></script>
 <script type="text/javascript" src="distrib/os/shell.js"></script>
 <script type="text/javascript" src="distrib/os/shellCommand.js"></script>
@@ -153,6 +155,22 @@
        <div class="panel panel-default" >
         <div class="panel-body" style="height:170px;overflow-y:auto;">
           <table id="memoryTable" class="table" cellpadding="10">
+          </table>
+          
+        </div>
+
+      <br>
+     
+
+      </div>
+</div>
+<div class="row">
+        <h3>
+          Hard Drive
+       </h3>
+       <div class="panel panel-default" >
+        <div class="panel-body" style="height:170px;overflow-y:auto;">
+          <table id="hardDriveTable" class="table" cellpadding="10">
           </table>
           
         </div>

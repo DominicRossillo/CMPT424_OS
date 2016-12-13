@@ -58,7 +58,7 @@ var _SarcasticMode: boolean = false;
 
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver; //  = null;
-
+var _krnHardDriveDriver; //  = null;
 var _hardwareClockID: number = null;
 
 // For testing (and enrichment)...
@@ -85,12 +85,13 @@ var _Memory: TSOS.Memory;
 //init our array of pcbs
 var allPcb = [];
 //init process manger
-var _ProcessManager: TSOS.ProcessManager
+var _ProcessManager: TSOS.ProcessManager;
 //init memory manager
 var _MemoryManager: TSOS.MemoryManager
 //global to check if we can step
 var canStep= false;
 // setting up scheduler
 var _Scheduler: TSOS.Scheduler;
+//declaring hardDrive
+var _HardDrive: TSOS.HardDrive;
 
-var sch

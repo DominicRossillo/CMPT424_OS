@@ -144,7 +144,7 @@ module TSOS {
             // create <filename> - create the file filename 
              sc = new ShellCommand(this.shellCreate,
                 "create",
-                "- Create a file in memory.");
+                "- Create a file on disk with a <file name>.");
             this.commandList[this.commandList.length] = sc;
             // read <filename> - read the file filename 
              sc = new ShellCommand(this.shellRead,
@@ -749,6 +749,23 @@ module TSOS {
         }
 
          public shellCreate(args) {
+             if(args.length>0){
+                 var fileName= ""+args;
+                 var hex="";
+                 var result = "";
+                 for (var i=0; i<fileName.length; i++) {
+                    hex = fileName.charCodeAt(i).toString(16);
+                    alert(hex)
+                    result += (hex)
+                 }
+                 _krnHardDriveDriver.createFile(result);
+                 //return result
+                 alert("results ="+result)
+             }
+             else{
+                 _StdOut.putText("Usage: create <filename> Please Suppy a file name.",true);
+               
+             }
            
         }
          public shellRead(args) {
@@ -762,6 +779,9 @@ module TSOS {
         }
 
          public shellFormat(args) {
+              _krnHardDriveDriver.formatHardDrive();
+              _StdOut.putText("Hard Drive has been formatted  "+_Scheduler.schType,true);
+           
            
         }
          public shellLs(args) {
