@@ -601,12 +601,9 @@ var TSOS;
                 var result = "";
                 for (var i = 0; i < fileName.length; i++) {
                     hex = fileName.charCodeAt(i).toString(16);
-                    alert(hex);
                     result += (hex);
                 }
                 _krnHardDriveDriver.createFile(result);
-                //return result
-                alert("results =" + result);
             }
             else {
                 _StdOut.putText("Usage: create <filename> Please Suppy a file name.", true);
@@ -617,10 +614,11 @@ var TSOS;
         Shell.prototype.shellWrite = function (args) {
         };
         Shell.prototype.shellDelete = function (args) {
+            _krnHardDriveDriver.writeToDrive();
         };
         Shell.prototype.shellFormat = function (args) {
             _krnHardDriveDriver.formatHardDrive();
-            _StdOut.putText("Hard Drive has been formatted  " + _Scheduler.schType, true);
+            _StdOut.putText("Hard Drive has been formatted.", true);
         };
         Shell.prototype.shellLs = function (args) {
         };

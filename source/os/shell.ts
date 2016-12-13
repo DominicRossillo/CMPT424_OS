@@ -755,12 +755,12 @@ module TSOS {
                  var result = "";
                  for (var i=0; i<fileName.length; i++) {
                     hex = fileName.charCodeAt(i).toString(16);
-                    alert(hex)
+                    
                     result += (hex)
                  }
                  _krnHardDriveDriver.createFile(result);
                  //return result
-                 alert("results ="+result)
+                
              }
              else{
                  _StdOut.putText("Usage: create <filename> Please Suppy a file name.",true);
@@ -775,12 +775,12 @@ module TSOS {
            
         }
          public shellDelete(args) {
-           
+             _krnHardDriveDriver.writeToDrive();
         }
 
          public shellFormat(args) {
               _krnHardDriveDriver.formatHardDrive();
-              _StdOut.putText("Hard Drive has been formatted  "+_Scheduler.schType,true);
+              _StdOut.putText("Hard Drive has been formatted.",true);
            
            
         }

@@ -40,33 +40,102 @@ var TSOS;
             _HardDrive.initHardDriveTable();
         };
         DeviceDriverHardDrive.prototype.createFile = function (fileName) {
-            var hexaddress = sessionStorage.getItem("000");
-            alert("hexaddress " + hexaddress);
-            var decaddress = "";
-            var hexName = "";
-            for (var i = 0; i < hexaddress.length; i++) {
-                decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16)).substr(0, 3);
+            if (fileName.length < 60) {
+                var hexaddress = sessionStorage.getItem("000").substr(4);
+                var decaddress = "";
+                var hexName = "1000";
+                for (var i = 0; i < hexaddress.length; i += 2) {
+                    decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
+                }
+                for (var i = 0; i < fileName.length; i++) {
+                    hexName += parseInt(fileName.charAt(i), 16);
+                }
+                while (hexName.length < 124) {
+                    hexName += "0";
+                }
+                sessionStorage.setItem(decaddress.substr(0, 3), hexName);
+                var newBase = "";
+                if (decaddress.charAt(2) == "7") {
+                    if (decaddress.charAt(1) == "7") {
+                        if (decaddress.charAt(0) == "3") {
+                        }
+                        else {
+                            newBase = "" + (parseInt(decaddress.charAt(0)) + 1) + 0 + 0;
+                        }
+                    }
+                    else {
+                        newBase = "" + decaddress.charAt(0) + (parseInt(decaddress.charAt(1)) + 1) + 0;
+                    }
+                }
+                else {
+                    newBase = "" + decaddress.charAt(0) + decaddress.charAt(1) + (parseInt(decaddress.charAt(2)) + 1);
+                }
+                var finalBase = sessionStorage.getItem("000").substr(0, 4);
+                for (var i = 0; i < newBase.length; i++) {
+                    finalBase += newBase.charCodeAt(i).toString(16);
+                }
+                for (var i = 0; i < decaddress.substr(3).length; i++) {
+                    finalBase += decaddress.substr(3).charCodeAt(i).toString(16);
+                }
+                while (finalBase.length < 124) {
+                    finalBase += "0";
+                }
+                sessionStorage.setItem("000", finalBase);
+                this.updateDiskDisplay();
             }
-            for (var i = 0; i < fileName.length; i++) {
-                hexName += fileName.charCodeAt(i).toString(16);
+            else {
+                _StdOut.putText("The name that you supplied is too long.", true);
             }
-            alert(decaddress);
-            alert(decaddress.substr(0, 3));
-            sessionStorage.setItem(decaddress.substr(0, 3), hexName);
-            alert("hexname is" + hexName);
-            this.updateDiskDisplay;
         };
         DeviceDriverHardDrive.prototype.updateDiskDisplay = function () {
             var hardDriveDisplay = "";
+            var hardDriveValues = "";
+            var active = "";
+            var pointer = "";
+            var data = "";
             for (var i = 0; i <= 3; i++) {
                 for (var j = 0; j <= 7; j++) {
                     for (var k = 0; k <= 7; k++) {
-                        hardDriveDisplay += "<tr id=\"hdRow" + i + j + k + "\"><td id=\"registerNum\">" + i + ":" + j + ":" + k + "</td><td id=\"activeFlag\">0</td><td id=\"hdPointer\">000</td><td id=\"data\">" + sessionStorage.getItem("" + i + j + k) + "</td>";
+                        hardDriveValues = sessionStorage.getItem("" + i + j + k);
+                        active = hardDriveValues.substr(0, 1);
+                        pointer = hardDriveValues.substr(1, 3);
+                        data = hardDriveValues.substr(4);
+                        hardDriveDisplay += "<tr id=\"hdRow" + i + j + k + "\"><td id=\"registerNum\">" + i + ":" + j + ":" + k + "</td><td id=\"activeFlag\">" + active + "</td><td id=\"hdPointer\">" + pointer + "</td><td id=\"data\">" + data + "</td>";
                     }
                 }
             }
             document.getElementById("hardDriveTable").innerHTML = hardDriveDisplay;
             alert("wowzer");
+        };
+        DeviceDriverHardDrive.prototype.writeToDrive = function (fileName, writenData) {
+            var searchPointer = "000";
+            while (searchPointer != "100") {
+                sessionStorage.getItem(searchPointer);
+                searchPointer = this.searchPointerIncrement(searchPointer);
+            }
+        };
+        DeviceDriverHardDrive.prototype.searchPointerIncrement = function (pointer) {
+            var hexPoint = "";
+            for (var i = 0; i < pointer.length; i++) {
+                hexPoint += parseInt(fileName.charAt(i), 16);
+            }
+            var newBase = "";
+            if (pointer.charAt(2) == "7") {
+                if (pointer.charAt(1) == "7") {
+                    if (pointer.charAt(0) == "3") {
+                    }
+                    else {
+                        newBase = "" + (parseInt(pointer.charAt(0)) + 1) + 0 + 0;
+                    }
+                }
+                else {
+                    newBase = "" + pointer.charAt(0) + (parseInt(pointer.charAt(1)) + 1) + 0;
+                }
+            }
+            else {
+                newBase = "" + pointer.charAt(0) + pointer.charAt(1) + (parseInt(pointer.charAt(2)) + 1);
+            }
+            return newBase;
         };
         return DeviceDriverHardDrive;
     }(TSOS.DeviceDriver));
