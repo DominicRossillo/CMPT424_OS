@@ -769,18 +769,40 @@ module TSOS {
            
         }
          public shellRead(args) {
-           
+               
         }
          public shellWrite(args) {
+             alert(args)
+            
+             var fileName=args[0];
+             var fileData=args[1].replace(/[^a-zA-Z0-9\"]/g, "");
+             alert(fileName);
+             alert(fileData);
+             var data=""
+             for(var i=1;i<(fileData).length ;i++){
+                 var inQuote=true;
+                 if(inQuote&&fileData.charAt(i)=="\""){
+                     inQuote=false;
+                     break;
+                 }
+                 else if(inQuote){
+                    data+=fileData.charAt(i)   
+                 }
+                 
+                    
+             }
+             
+
+             _krnHardDriveDriver.writeToDrive(fileName,data);
            
         }
          public shellDelete(args) {
-             _krnHardDriveDriver.writeToDrive();
+            
         }
 
          public shellFormat(args) {
-              _krnHardDriveDriver.formatHardDrive();
-              _StdOut.putText("Hard Drive has been formatted.",true);
+            _krnHardDriveDriver.formatHardDrive();
+            _StdOut.putText("Hard Drive has been formatted.",true);
            
            
         }

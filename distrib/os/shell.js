@@ -612,9 +612,25 @@ var TSOS;
         Shell.prototype.shellRead = function (args) {
         };
         Shell.prototype.shellWrite = function (args) {
+            alert(args);
+            var fileName = args[0];
+            var fileData = args[1].replace(/[^a-zA-Z0-9\"]/g, "");
+            alert(fileName);
+            alert(fileData);
+            var data = "";
+            for (var i = 1; i < (fileData).length; i++) {
+                var inQuote = true;
+                if (inQuote && fileData.charAt(i) == "\"") {
+                    inQuote = false;
+                    break;
+                }
+                else if (inQuote) {
+                    data += fileData.charAt(i);
+                }
+            }
+            _krnHardDriveDriver.writeToDrive(fileName, data);
         };
         Shell.prototype.shellDelete = function (args) {
-            _krnHardDriveDriver.writeToDrive();
         };
         Shell.prototype.shellFormat = function (args) {
             _krnHardDriveDriver.formatHardDrive();

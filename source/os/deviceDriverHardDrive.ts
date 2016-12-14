@@ -51,10 +51,16 @@
                 var hexaddress=sessionStorage.getItem("000").substr(4);
               
                 var decaddress="";
-                var hexName="1000";    
+                var hexName="1";
+                var pointerRef=""    
                 for(var i=0;i<hexaddress.length;i+=2){
                     decaddress+=String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
                 }
+                for(var i=0;i<decaddress.substr(3,3).length;i++){
+                    hexName+=parseInt(decaddress.substr(3,3).charAt(i));
+                    pointerRef+=parseInt(decaddress.substr(3,3).charAt(i));
+                }
+                
                 for(var i=0;i<fileName.length;i++){
                     hexName+= parseInt(fileName.charAt(i),16);
                 } 
@@ -62,40 +68,33 @@
                     hexName+="0";
                 }
                 sessionStorage.setItem(decaddress.substr(0,3),hexName);
-                var newBase="";
-                if(decaddress.charAt(2)=="7"){
-                    if(decaddress.charAt(1)=="7"){
-                        if(decaddress.charAt(0)=="3"){
-
-                        }
-                        else{
-                               newBase=""+(parseInt(decaddress.charAt(0))+1)+0+0;
-                        }
-
-                    }
-                    else{
-                         newBase=""+decaddress.charAt(0)+(parseInt(decaddress.charAt(1))+1)+0
-                    }
-
+                var newBaseHead="";
+                var newBaseTail="";
+                var memoryInit="1000"
+                while(memoryInit.length<124){
+                    memoryInit+="0"
                 }
-                else{
-                     newBase=""+decaddress.charAt(0)+decaddress.charAt(1)+(parseInt(decaddress.charAt(2))+1)
-                }
+               
+                newBaseHead=this.searchPointerIncrement(decaddress.substr(0,3));
+                newBaseTail=this.searchPointerIncrement(decaddress.substr(3));
+                alert("new base head"+newBaseHead)
+               
 
                 var finalBase=sessionStorage.getItem("000").substr(0,4);
 
-                for(var i=0;i<newBase.length;i++){
-                    finalBase+=newBase.charCodeAt(i).toString(16);
+                for(var i=0;i<newBaseHead.length;i++){
+                    finalBase+=newBaseHead.charCodeAt(i).toString(16);
+                }
+                for(var i=0;i<newBaseHead.length;i++){
+                    finalBase+=newBaseTail.charCodeAt(i).toString(16);
                 }
                 
-                for(var i=0;i<decaddress.substr(3).length;i++){
-                   finalBase+=decaddress.substr(3).charCodeAt(i).toString(16);
-                }
+                
                 while(finalBase.length<124){
                     finalBase+="0"
 
                 }
-               
+                sessionStorage.setItem(pointerRef,memoryInit);
                 sessionStorage.setItem("000",finalBase);
                 this.updateDiskDisplay();
             }
@@ -137,25 +136,89 @@
 
         public writeToDrive(fileName,writenData){
             var searchPointer="000";
-            while(searchPointer!="100"){
-               
-                sessionStorage.getItem(searchPointer);
-
-                searchPointer=this.searchPointerIncrement(searchPointer);
-
+           
+            var hexName="";
+            for(var i=0;i<fileName.length-1;i++){
+                hexName+= parseInt(fileName.charAt(i),16);
             }
+            var programInput="";
+            for(var i=0;i<writenData.length;i++){
+                programInput+= writenData.charCodeAt(i).toString(16);
+            }
+            while(programInput.length<120){
+                programInput+="0"
+            }
+            var saveReg=sessionStorage.getItem("000").substr(4)
+            
+            var destReg="";
+            for(var i=0;i<saveReg.length;i++){
+                destReg+=String.fromCharCode(parseInt(saveReg.substr(i, 2), 16)).replace(/[^a-zA-Z0-9]/g, "");
+            }
+               
+                
+                alert(destReg)
+                alert(regPoint)
+
+
+
+            var ourName="";
+            for(var i=0;i<fileName.length;i++){
+                    ourName+= fileName.charCodeAt(i).toString(16);
+                    
+             } 
+
+             while(ourName.length<120){
+                    ourName+="0"
+
+             }
+
+            while(searchPointer!="100"){
+                  
+                var hexName=sessionStorage.getItem(searchPointer);
+
+                if(ourName==hexName.substr(4)){
+                    alert("found it")
+                    var regPoint=sessionStorage.getItem(searchPointer).substr(1,3);
+                    var oldData=sessionStorage.getItem(searchPointer).substr(4);
+                    sessionStorage.setItem(searchPointer,"1"+regPoint+oldData);
+                    sessionStorage.setItem(regPoint,"1000"+programInput);
+                    break;
+                }
+                else{
+                    searchPointer=this.searchPointerIncrement(searchPointer);
+                }
+            }    
+                // var startBase=sessionStorage.getItem("000")
+                // var baseTail=startBase.substr(4);
+                // var decBase=""
+                // for(var i=0;i<baseTail.length;i++){
+                //    decBase+=String.fromCharCode(parseInt(baseTail.substr(i, 2), 16))
+                // }
+                // var newFileLoc=""+parseInt(decBase.substr(3))+1;
+                // var finalBase=sessionStorage.getItem("000").substr(0,4);
+                // for(var i=0;i<newFileLoc.length;i++){
+                //    finalBase+=newFileLoc.charCodeAt(i).toString(16);
+                // }
+                // while(finalBase.length<124){
+                //     finalBase+="0"
+                // }
+                
+
+               
+                
+                
+               
+                // sessionStorage.setItem("000",finalBase);
+                this.updateDiskDisplay();
         }
 
         public searchPointerIncrement(pointer){
-            var hexPoint=""
-            for(var i=0;i<pointer.length;i++){
-                    hexPoint+= parseInt(fileName.charAt(i),16);
-             }
+            
             var newBase="";
             if(pointer.charAt(2)=="7"){
                     if(pointer.charAt(1)=="7"){
                         if(pointer.charAt(0)=="3"){
-
+                            //todo: make error statemetn
                         }
                         else{
                                newBase=""+(parseInt(pointer.charAt(0))+1)+0+0;
@@ -173,7 +236,7 @@
                 return newBase;
         }
 
-        }
+        
 
 
     }
