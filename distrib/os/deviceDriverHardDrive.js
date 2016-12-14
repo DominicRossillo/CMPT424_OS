@@ -40,50 +40,84 @@ var TSOS;
             _HardDrive.initHardDriveTable();
         };
         DeviceDriverHardDrive.prototype.createFile = function (fileName) {
-            if (fileName.length < 60) {
-                var hexaddress = sessionStorage.getItem("000").substr(4);
-                var decaddress = "";
-                var hexName = "1";
-                var pointerRef = "";
-                for (var i = 0; i < hexaddress.length; i += 2) {
-                    decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
+            var searchPointer = "000";
+            var checkName = fileName;
+            var nameAvalible = true;
+            var trueName = "";
+            while (checkName.length < 120) {
+                checkName += "0";
+            }
+            while (searchPointer != "101") {
+                var hexName = sessionStorage.getItem(searchPointer);
+                if (searchPointer == "100") {
+                    _StdOut.putText("The disk is out of space. Try formating the drive", true);
+                    return;
                 }
-                for (var i = 0; i < decaddress.substr(3, 3).length; i++) {
-                    hexName += parseInt(decaddress.substr(3, 3).charAt(i));
-                    pointerRef += parseInt(decaddress.substr(3, 3).charAt(i));
+                if (checkName == hexName.substr(4)) {
+                    nameAvalible = false;
+                    break;
                 }
-                for (var i = 0; i < fileName.length; i++) {
-                    hexName += parseInt(fileName.charAt(i), 16);
+                else {
+                    searchPointer = this.searchPointerIncrement(searchPointer);
                 }
-                while (hexName.length < 124) {
-                    hexName += "0";
+            }
+            for (var i = 0; i < fileName.length; i = i + 2) {
+                trueName += String.fromCharCode(parseInt(fileName.substr(i, 2), 16));
+            }
+            if (fileName.charAt(0) != null && nameAvalible) {
+                if (fileName.length < 60) {
+                    var hexaddress = sessionStorage.getItem("000").substr(4);
+                    var decaddress = "";
+                    var hexName = "1";
+                    var pointerRef = "";
+                    for (var i = 0; i < hexaddress.length; i += 2) {
+                        decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
+                    }
+                    for (var i = 0; i < decaddress.substr(3, 3).length; i++) {
+                        hexName += parseInt(decaddress.substr(3, 3).charAt(i));
+                        pointerRef += parseInt(decaddress.substr(3, 3).charAt(i));
+                    }
+                    for (var i = 0; i < fileName.length; i++) {
+                        hexName += fileName.charAt(i).toString(16);
+                    }
+                    while (hexName.length < 124) {
+                        hexName += "0";
+                    }
+                    sessionStorage.setItem(decaddress.substr(0, 3), hexName);
+                    var newBaseHead = "";
+                    var newBaseTail = "";
+                    var memoryInit = "1000";
+                    while (memoryInit.length < 124) {
+                        memoryInit += "0";
+                    }
+                    newBaseHead = this.searchPointerIncrement(decaddress.substr(0, 3));
+                    newBaseTail = this.searchPointerIncrement(decaddress.substr(3));
+                    var finalBase = sessionStorage.getItem("000").substr(0, 4);
+                    for (var i = 0; i < newBaseHead.length; i++) {
+                        finalBase += newBaseHead.charCodeAt(i).toString(16);
+                    }
+                    for (var i = 0; i < newBaseHead.length; i++) {
+                        finalBase += newBaseTail.charCodeAt(i).toString(16);
+                    }
+                    while (finalBase.length < 124) {
+                        finalBase += "0";
+                    }
+                    sessionStorage.setItem(pointerRef, memoryInit);
+                    sessionStorage.setItem("000", finalBase);
+                    _StdOut.putText("File Create: " + trueName, true);
+                    this.updateDiskDisplay();
                 }
-                sessionStorage.setItem(decaddress.substr(0, 3), hexName);
-                var newBaseHead = "";
-                var newBaseTail = "";
-                var memoryInit = "1000";
-                while (memoryInit.length < 124) {
-                    memoryInit += "0";
+                else {
+                    _StdOut.putText("The name that you supplied is too long.", true);
                 }
-                newBaseHead = this.searchPointerIncrement(decaddress.substr(0, 3));
-                newBaseTail = this.searchPointerIncrement(decaddress.substr(3));
-                alert("new base head" + newBaseHead);
-                var finalBase = sessionStorage.getItem("000").substr(0, 4);
-                for (var i = 0; i < newBaseHead.length; i++) {
-                    finalBase += newBaseHead.charCodeAt(i).toString(16);
-                }
-                for (var i = 0; i < newBaseHead.length; i++) {
-                    finalBase += newBaseTail.charCodeAt(i).toString(16);
-                }
-                while (finalBase.length < 124) {
-                    finalBase += "0";
-                }
-                sessionStorage.setItem(pointerRef, memoryInit);
-                sessionStorage.setItem("000", finalBase);
-                this.updateDiskDisplay();
             }
             else {
-                _StdOut.putText("The name that you supplied is too long.", true);
+                if (!nameAvalible) {
+                    _StdOut.putText("The name that you supplied is already being used.", true);
+                }
+                else {
+                    _StdOut.putText("You must supply a file name.", true);
+                }
             }
         };
         DeviceDriverHardDrive.prototype.updateDiskDisplay = function () {
@@ -104,7 +138,6 @@ var TSOS;
                 }
             }
             document.getElementById("hardDriveTable").innerHTML = hardDriveDisplay;
-            alert("wowzer");
         };
         DeviceDriverHardDrive.prototype.writeToDrive = function (fileName, writenData) {
             var searchPointer = "000";
@@ -124,8 +157,6 @@ var TSOS;
             for (var i = 0; i < saveReg.length; i++) {
                 destReg += String.fromCharCode(parseInt(saveReg.substr(i, 2), 16)).replace(/[^a-zA-Z0-9]/g, "");
             }
-            alert(destReg);
-            alert(regPoint);
             var ourName = "";
             for (var i = 0; i < fileName.length; i++) {
                 ourName += fileName.charCodeAt(i).toString(16);
@@ -133,35 +164,23 @@ var TSOS;
             while (ourName.length < 120) {
                 ourName += "0";
             }
-            while (searchPointer != "100") {
+            while (searchPointer != "101") {
                 var hexName = sessionStorage.getItem(searchPointer);
+                if (searchPointer == "100") {
+                    _StdOut.putText("File with that name does not exist.", true);
+                }
                 if (ourName == hexName.substr(4)) {
-                    alert("found it");
                     var regPoint = sessionStorage.getItem(searchPointer).substr(1, 3);
                     var oldData = sessionStorage.getItem(searchPointer).substr(4);
                     sessionStorage.setItem(searchPointer, "1" + regPoint + oldData);
                     sessionStorage.setItem(regPoint, "1000" + programInput);
+                    _StdOut.putText("File: " + fileName + " has been written to.", true);
                     break;
                 }
                 else {
                     searchPointer = this.searchPointerIncrement(searchPointer);
                 }
             }
-            // var startBase=sessionStorage.getItem("000")
-            // var baseTail=startBase.substr(4);
-            // var decBase=""
-            // for(var i=0;i<baseTail.length;i++){
-            //    decBase+=String.fromCharCode(parseInt(baseTail.substr(i, 2), 16))
-            // }
-            // var newFileLoc=""+parseInt(decBase.substr(3))+1;
-            // var finalBase=sessionStorage.getItem("000").substr(0,4);
-            // for(var i=0;i<newFileLoc.length;i++){
-            //    finalBase+=newFileLoc.charCodeAt(i).toString(16);
-            // }
-            // while(finalBase.length<124){
-            //     finalBase+="0"
-            // }
-            // sessionStorage.setItem("000",finalBase);
             this.updateDiskDisplay();
         };
         DeviceDriverHardDrive.prototype.searchPointerIncrement = function (pointer) {
@@ -182,6 +201,94 @@ var TSOS;
                 newBase = "" + pointer.charAt(0) + pointer.charAt(1) + (parseInt(pointer.charAt(2)) + 1);
             }
             return newBase;
+        };
+        DeviceDriverHardDrive.prototype.hardDriveLs = function () {
+            var searchPointer = "001";
+            var nullresult = "";
+            while (nullresult.length < 120) {
+                nullresult += "0";
+            }
+            while (searchPointer != "100") {
+                var fileName = "";
+                var hexName = sessionStorage.getItem(searchPointer).substr(4);
+                if (hexName != nullresult) {
+                    for (var i = 0; i < hexName.length; i = i + 2) {
+                        fileName += String.fromCharCode(parseInt(hexName.substr(i, 2), 16));
+                    }
+                    alert(fileName.length);
+                    if (true) {
+                        _StdOut.putText("Ls: " + fileName, true);
+                        _StdOut.advanceLine();
+                    }
+                }
+                searchPointer = this.searchPointerIncrement(searchPointer);
+            }
+        };
+        DeviceDriverHardDrive.prototype.readFile = function (fileName) {
+            var searchPointer = "000";
+            var checkName = fileName;
+            var nameAvalible = true;
+            var trueName = "";
+            for (var i = 0; i < fileName.length; i = i + 2) {
+                trueName += String.fromCharCode(parseInt(fileName.substr(i, 2), 16));
+            }
+            while (checkName.length < 120) {
+                checkName += "0";
+            }
+            while (searchPointer != "101") {
+                var hexName = sessionStorage.getItem(searchPointer);
+                if (searchPointer == "100") {
+                    _StdOut.putText("No file with that name exists", true);
+                    break;
+                }
+                if (checkName == hexName.substr(4)) {
+                    var hexData = sessionStorage.getItem(hexName.substr(1, 3)).substr(4);
+                    var translatedData = "";
+                    for (var i = 0; i < hexData.length; i = i + 2) {
+                        translatedData += String.fromCharCode(parseInt(hexData.substr(i, 2), 16));
+                    }
+                    _StdOut.putText(trueName + ": " + translatedData, true);
+                    break;
+                }
+                else {
+                    searchPointer = this.searchPointerIncrement(searchPointer);
+                }
+            }
+        };
+        DeviceDriverHardDrive.prototype.deleteFile = function (fileName) {
+            var searchPointer = "000";
+            var checkName = fileName;
+            var nameAvalible = true;
+            var trueName = "";
+            for (var i = 0; i < fileName.length; i = i + 2) {
+                trueName += String.fromCharCode(parseInt(fileName.substr(i, 2), 16));
+            }
+            while (checkName.length < 120) {
+                checkName += "0";
+            }
+            while (searchPointer != "101") {
+                var hexName = sessionStorage.getItem(searchPointer);
+                if (searchPointer == "100") {
+                    _StdOut.putText("No file with that name exists", true);
+                    break;
+                }
+                if (checkName == hexName.substr(4)) {
+                    var clearLoc = hexName.substr(1, 3);
+                    alert(clearLoc);
+                    var newReg = "";
+                    while (newReg.length < 124) {
+                        newReg += "0";
+                    }
+                    sessionStorage.setItem(clearLoc, newReg);
+                    sessionStorage.setItem(searchPointer, newReg);
+                    _StdOut.putText(trueName + " has been deleted.", true);
+                    break;
+                }
+                else {
+                    searchPointer = this.searchPointerIncrement(searchPointer);
+                }
+            }
+            this.updateDiskDisplay();
         };
         return DeviceDriverHardDrive;
     }(TSOS.DeviceDriver));

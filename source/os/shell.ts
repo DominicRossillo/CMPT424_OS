@@ -750,6 +750,7 @@ module TSOS {
 
          public shellCreate(args) {
              if(args.length>0){
+
                  var fileName= ""+args;
                  var hex="";
                  var result = "";
@@ -759,6 +760,7 @@ module TSOS {
                     result += (hex)
                  }
                  _krnHardDriveDriver.createFile(result);
+                
                  //return result
                 
              }
@@ -769,34 +771,80 @@ module TSOS {
            
         }
          public shellRead(args) {
-               
+            var fileName=""+args
+            var hex="";
+            var result = "";
+            if(fileName!=""){
+                for (var i=0; i<fileName.length; i++) {
+                        hex = fileName.charCodeAt(i).toString(16);
+                        
+                        result += (hex)
+                }
+                _krnHardDriveDriver.readFile(result);
+            }
+            else{
+                _StdOut.putText("Usage: read <filename> Please Suppy a file name.",true)
+            }
         }
          public shellWrite(args) {
-             alert(args)
+             
             
              var fileName=args[0];
-             var fileData=args[1].replace(/[^a-zA-Z0-9\"]/g, "");
-             alert(fileName);
-             alert(fileData);
-             var data=""
-             for(var i=1;i<(fileData).length ;i++){
-                 var inQuote=true;
-                 if(inQuote&&fileData.charAt(i)=="\""){
-                     inQuote=false;
-                     break;
-                 }
-                 else if(inQuote){
-                    data+=fileData.charAt(i)   
+
+             if (fileName!=null && args[1]!=null){
+                 var fileData=args[1].replace(/[^a-zA-Z0-9\"]/g, "");
+                 for(var i=2;i<args.length;i++){
+                     fileData+=" "+args[i].replace(/[^a-zA-Z0-9\"]/g, "");
                  }
                  
-                    
-             }
-             
+               
+                    if(fileData.charAt(0)=="\""){
+                         var data=""
+                         for(var i=1;i<(fileData).length ;i++){
+                             var inQuote=true;
+                             if(inQuote&&fileData.charAt(i)=="\""){
+                                 inQuote=false;
+                                 break;
+                             }
+                             else if(inQuote){
+                                data+=fileData.charAt(i)   
+                             }
 
-             _krnHardDriveDriver.writeToDrive(fileName,data);
+                                
+                         }
+                         
+
+                         _krnHardDriveDriver.writeToDrive(fileName,data);
+
+                    }
+                    else{
+                        _StdOut.putText("Usage: write <filename> \"data\" Please Suppy data in quotes.",true);   
+                        _StdOut.advanceLine();
+                    }
+                   
+                 }
+                 else{
+                    _StdOut.putText("Usage: write <filename> \"data\" Please Suppy data in quotes.",true);   
+                     _StdOut.advanceLine();
+                 }
+            
            
         }
          public shellDelete(args) {
+            var fileName=""+args
+            var hex="";
+            var result = "";
+            if(fileName!=""){
+                for (var i=0; i<fileName.length; i++) {
+                        hex = fileName.charCodeAt(i).toString(16);
+                        
+                        result += (hex)
+                }
+                _krnHardDriveDriver.deleteFile(result);
+            }
+            else{
+                _StdOut.putText("Usage: delete <filename> Please Suppy a file name.",true)
+            }
             
         }
 
@@ -807,7 +855,7 @@ module TSOS {
            
         }
          public shellLs(args) {
-           
+           _krnHardDriveDriver.hardDriveLs()
         }
          public shellGetSchedule(args){
             _StdOut.putText("Current schedule algorithm: "+_Scheduler.schType,true);
