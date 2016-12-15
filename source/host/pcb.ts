@@ -14,7 +14,8 @@ export class Pcb {
     public limitRegister: number = -1,
     public waitTime: number = 0,
     public turnAroundTime: number = 0,
-    public priority: number = 0) {
+    public priority: number = 0,
+    public onDisk: boolean = false) {
 
   }
         //funciton to update your current pcb with new values taken from the cpu

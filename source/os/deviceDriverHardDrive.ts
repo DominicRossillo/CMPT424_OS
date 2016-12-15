@@ -205,9 +205,9 @@
                 
                 var ourName="";
                 for(var i=0;i<fileName.length;i++){
-                        ourName+= fileName.charCodeAt(i).toString(16);
+                    ourName+= fileName.charCodeAt(i).toString(16);
                         
-                 } 
+                } 
 
                  while(ourName.length<120){
                         ourName+="0"
@@ -219,7 +219,7 @@
                     var hexName=sessionStorage.getItem(searchPointer);
 
                     if(searchPointer=="100"){
-                         _StdOut.putText("File with that name does not exist.",true);
+                        _StdOut.putText("File with that name does not exist.",true);
                     }
                     if(ourName==hexName.substr(4)){
                          
@@ -234,6 +234,28 @@
                       
                             initPoint="1"+baseAddress.substr(3)
                             this.bigWriteToDrive(initPoint.substr(1,3),programInput.substr(120))
+                            var hexaddress= sessionStorage.getItem("000").substr(4)
+                            var finalBase=sessionStorage.getItem("000").substr(0,4);
+                            var destReg="1000"
+                            var decaddress=""
+                             for(var i=0;i<hexaddress.length;i+=2){
+                                decaddress+=String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
+                            }
+                            var newBaseHead=decaddress.substr(0,3)
+                            var newBaseTail=this.searchPointerIncrement(decaddress.substr(3));
+
+                            for(var i=0;i<newBaseHead.length;i++){
+                                finalBase+=newBaseHead.charCodeAt(i).toString(16);
+                            }
+                            for(var i=0;i<newBaseHead.length;i++){
+                                finalBase+=newBaseTail.charCodeAt(i).toString(16);
+                            }               
+                    
+                            while(finalBase.length<124){
+                                finalBase+="0"
+
+                            }
+                             sessionStorage.setItem("000",finalBase);
 
                         }
                         var oldData=sessionStorage.getItem(searchPointer).substr(4);
@@ -332,7 +354,7 @@
                         for(var i=0;i<hexName.length;i=i+2){
                             fileName+=String.fromCharCode(parseInt(hexName.substr(i, 2), 16))
                         }
-                        alert(fileName.length)
+                        
                         if(true){
                             _StdOut.putText("Ls: "+fileName,true);
                             _StdOut.advanceLine();
@@ -370,12 +392,16 @@
               
                 if(checkName==hexName.substr(4)){
                     var hexData= sessionStorage.getItem(hexName.substr(1,3)).substr(4);
+                    var hexPoint=hexName.substr(1,3);
                     var translatedData=""
-                    for(var i=0;i<hexData.length;i=i+2){
-                        translatedData+=String.fromCharCode(parseInt(hexData.substr(i, 2), 16))
+                    while(hexPoint!="000"){
+                        
+                        for(var i=0;i<hexData.length;i=i+2){
+                            translatedData+=String.fromCharCode(parseInt(hexData.substr(i, 2), 16))
+                        }
+                        hexPoint=sessionStorage.getItem(hexPoint).substr(1,3)
                     }
                     _StdOut.putText(trueName+": "+translatedData,true);
-                    
                     break
                 }
                 else{
@@ -392,11 +418,11 @@
             var trueName=""
            
             for(var i=0;i<fileName.length;i=i+2){
-                            trueName+=String.fromCharCode(parseInt(fileName.substr(i, 2), 16))
+                trueName+=String.fromCharCode(parseInt(fileName.substr(i, 2), 16))
             }
 
             while(checkName.length<120){
-                    checkName+="0"
+                checkName+="0"
 
             }
             while(searchPointer!="101"){
@@ -405,27 +431,78 @@
                 if(searchPointer=="100"){
                      _StdOut.putText("No file with that name exists",true);
                     
-                    break
+                    break;
                 }
               
                 if(checkName==hexName.substr(4)){
+                    var savePointer=searchPointer;
+                    if(sessionStorage.getItem(searchPointer).charAt(0)=="1"){
+                        this.deletePointer((sessionStorage.getItem(searchPointer)).substr(1,3));
+                        searchPointer=sessionStorage.getItem(searchPointer).substr(1,3)
+
+                    }
                     var clearLoc= hexName.substr(1,3)
-                    alert(clearLoc)
+                    
                     var newReg="";
                     while(newReg.length<124){
                         newReg+="0"
                     }
                     sessionStorage.setItem(clearLoc,newReg)
-                    sessionStorage.setItem(searchPointer,newReg)
+                    sessionStorage.setItem(savePointer,newReg)
                     _StdOut.putText(trueName+" has been deleted.",true);
                     
-                    break
+                    break;
                 }
                 else{
                     searchPointer=this.searchPointerIncrement(searchPointer);
                 }
             }
             this.updateDiskDisplay();
+        }
+
+        public deletePointer(pointer){
+            var clearLoc= pointer
+            while(clearLoc!="000"){
+                var nextLoc=(sessionStorage.getItem(clearLoc).substr(1,3))
+                    
+                var newReg="";
+                while(newReg.length<124){
+                    newReg+="0"
+                }
+                sessionStorage.setItem(clearLoc,newReg)
+                clearLoc=nextLoc
+            }
+        }
+
+        public swapMem(fileRegister,base,limit){
+            var memoryInput=""
+            var filePoint=fileRegister
+            
+            while(filePoint!="000"){
+                var memoryTranslate=""
+                var hexMemory=sessionStorage.getItem(filePoint)
+                for(var i=0; hexMemory.substr(4);i++){
+                    memoryTranslate+=String.fromCharCode(parseInt(hexMemory.substr(4).substr(i, 2), 16))
+
+                }
+                memoryInput+=memoryTranslate;
+                filePoint=sessionStorage.getItem(fileRegister).substr(1,3);
+                
+            }
+            var j=0;
+            for(var i =parseInt(base);i<=parseInt(limit);i++,j++){
+                document.getElementById("cell"+i).innerText=memoryInput.charAt(j)
+            }
+
+
+
+
+
+
+
+
+
+
         }
 
         

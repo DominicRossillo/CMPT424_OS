@@ -61,6 +61,7 @@ module TSOS {
     	}
     	// context switch
     	public contextSwitch(){
+    		
     		 	if(this.schType!="priority"){
 	    		    document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="false"
 	    			// console.log("contextSwitch")
@@ -78,6 +79,13 @@ module TSOS {
 	    			var newPCB= _ProcessManager.readyQueue.dequeue();
 	    			console.log(newPCB);
 	    			//enqueue head of ready onto running
+	    			if(newPCB.onDisk){
+	    				for(var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+	                        var memToSwapOut=_ProcessManager.readyQueue.dequeue()
+	                        _ProcessManager.readyQueue.enqueue(memToSwapOut)
+                    	}
+	    				_ProcessManager.translateMemToDisk(memToSwapOut.Pid)
+	    			}
 	    			_ProcessManager.runningQueue.enqueue(newPCB)
 	    			_CPU.loadFromPcb(_ProcessManager.runningQueue.q[0])
 	    		}
@@ -99,6 +107,13 @@ module TSOS {
 	    					_ProcessManager.readyQueue.enqueue(curCheckPcb);
 	    					
 	    				}
+	    			}
+	    			if(lowestPriority.onDisk){
+	    				for(var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+	                        var memToSwapOut=_ProcessManager.readyQueue.dequeue()
+	                        _ProcessManager.readyQueue.enqueue(memToSwapOut)
+                    	}
+	    				_ProcessManager.translateMemToDisk(memToSwapOut.Pid)
 	    			}
 	    			_ProcessManager.runningQueue.enqueue(lowestPriority);
 	    		}

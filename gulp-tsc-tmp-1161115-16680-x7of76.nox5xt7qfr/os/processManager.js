@@ -72,9 +72,6 @@ var TSOS;
                     alert("alert found");
                     found = true;
                     swapedprocess.onDisk = true;
-                    swapedprocess.baseRegister = -1;
-                    swapedprocess.limitRegister = -1;
-                    this.residentList[i] = swapedprocess;
                 }
                 else {
                     i++;
@@ -103,10 +100,10 @@ var TSOS;
         };
         //run a program by putting it into the readque and telling the cpu to run by setting it to executing
         ProcessManager.prototype.runPid = function (pid) {
+            var pcb = null;
             for (var i = 0; i < this.residentList.length; i++) {
                 if (this.residentList[i].Pid == pid) {
-                    var pcb = this.residentList[i];
-                    alert("found in run");
+                    pcb = this.residentList[i];
                     break;
                 }
             }
@@ -114,32 +111,20 @@ var TSOS;
             //  console.log("resident list before" +this.residentList.length)
             //  alert("the pcb "+pcb);
             // alert("before ready queue "+this.readyQueue[0]);
-            if (!pcb.onDisk) {
-                for (var i = 0; i < this.residentList.length; i++) {
-                    if (this.residentList[i].Pid == pid) {
-                        console.log("splice");
-                        this.residentList.splice(i, 1);
-                        break;
-                    }
+            for (var i = 0; i < this.residentList.length; i++) {
+                if (this.residentList[i].Pid == pid) {
+                    console.log("splice");
+                    this.residentList.splice(i, 1);
+                    break;
                 }
-                this.readyQueue.enqueue(pcb);
             }
-            else {
-                this.translateMemToDisk(0);
-                _MemoryManager.allocateMem(pid);
-                for (var i = 0; i < this.residentList.length; i++) {
-                    if (this.residentList[i].Pid == pid) {
-                        console.log("splice");
-                        this.residentList.splice(i, 1);
-                        break;
-                    }
-                }
-                this.readyQueue.enqueue(pcb);
-            }
+            this.readyQueue.enqueue(pcb);
             document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
             if (this.runningQueue.isEmpty()) {
                 var inToRunning = this.readyQueue.dequeue();
                 if (inToRunning.onDisk) {
+                    this.translateMemToDisk(0);
+                    _MemoryManager.allocateMem(inToRunning.Pid);
                     this.runFromDisk(inToRunning);
                 }
                 this.runningQueue.enqueue(inToRunning);

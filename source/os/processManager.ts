@@ -62,6 +62,8 @@ module TSOS {
             var hexCode=(<HTMLTextAreaElement>document.getElementById("taProgramInput")).value;
             var pcb = new Pcb();             
             pcb.Pid= allPcb.length;
+            pcb.priority=priority;
+            pcb.onDisk=true;
             this.residentList.push(pcb);
             var fileName=priority+"pcb"+pcb.Pid;
             var hex="";
@@ -71,12 +73,14 @@ module TSOS {
                     
                 result += (hex)
             }
-            
+
             _krnHardDriveDriver.createFile(result);
             _StdOut.advanceLine();
             allPcb.push(pcb);
             _krnHardDriveDriver.writeToDrive(fileName,hexCode);
-          
+            _StdOut.advanceLine();
+            _StdOut.putText("The Program has been loaded with PID: "+ pcb.Pid,true);
+
            
            // _krnHardDriveDriver.writeToDrive()
 
@@ -85,47 +89,114 @@ module TSOS {
         }
 
 
+        public translateMemToDisk(pid){
+            var finalData=""              
+                var found=false;
+                while(!found){
+                    var i=0
+                    var swapedprocess=this.residentList[i]
+                    
+                        if(swapedprocess.Pid==pid){
+                            alert("alert found")
+                            found=true;
+                            swapedprocess.onDisk=true;
+                             swapedprocess.baseRegister=-1;
+                              swapedprocess.limitRegister=-1;
+                            this.residentList[i]=swapedprocess
+                        }
+                        else{
+                            i++
+                        }
+                    
+                }
+                var memoryScan=swapedprocess.baseRegister
+                while(memoryScan<=swapedprocess.limitRegister){
+                   finalData+=document.getElementById("cell"+memoryScan)
+                   memoryScan++
+                }
+                var fileName=swapedprocess.priority+"pcb"+swapedprocess.Pid;
+                alert(fileName)
+               _Memory.clearMemSeg(swapedprocess);
+
+               var hexName=""
+               for(var i=0;i<fileName.length;i++){
+                   hexName+=fileName.charCodeAt(i).toString(16)
+               }
+               var inputData=""
+               for(var i=0;i<finalData.length;i++){
+                   inputData+=finalData.charCodeAt(i).toString(16)
+               }
+               _krnHardDriveDriver.createFile(hexName);
+               _StdOut.advanceLine();
+               
+               
+               _krnHardDriveDriver.writeToDrive(fileName,inputData);
+
+
+
+            // }
+        }
+
+
     	//run a program by putting it into the readque and telling the cpu to run by setting it to executing
     	public runPid(pid){
-
+            
             for(var i=0; i<this.residentList.length; i++){
                 if(this.residentList[i].Pid==pid){    
                     
-                    var pcb= this.residentList[i];  
+                    var pcb= this.residentList[i];
+                    alert("found in run")
                     break;
                 }
                 
+                
             }
+            
+            
     		// alert("before length"+this.residentList.length);
           //  console.log("resident list before" +this.residentList.length)
           //  alert("the pcb "+pcb);
             // alert("before ready queue "+this.readyQueue[0]);
-            for(var i=0; i<this.residentList.length; i++){
-                if(this.residentList[i].Pid==pid){
-                   console.log("splice")
-                    this.residentList.splice(i,1);  
-                    break;
+            if(!pcb.onDisk){
+                for(var i=0; i<this.residentList.length; i++){
+                    if(this.residentList[i].Pid==pid){
+                       console.log("splice")
+                        this.residentList.splice(i,1);  
+                        break;
+                    }
+                    
                 }
-                
+           
+                this.readyQueue.enqueue(pcb);
             }
-            this.readyQueue.enqueue(pcb);
-             
-             document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
+            else{
+                 this.translateMemToDisk(0);
+                    _MemoryManager.allocateMem(pid);
+                    for(var i=0; i<this.residentList.length; i++){
+                        if(this.residentList[i].Pid==pid){
+                           console.log("splice")
+                            this.residentList.splice(i,1);  
+                            break;
+                        }
+                    }    
+                    this.readyQueue.enqueue(pcb);
+            }
+            document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
                   
-            
-          //  console.log("resident list After everything" +this.residentList.length)
-            // alert("after length"+this.residentList.length);
-    		
-            // alert("ready queue "+this.readyQueue[0]);
-            //var frontQueue=this.readyQueue.dequeue();
-          if(this.runningQueue.isEmpty()){
-            
-            this.runningQueue.enqueue(this.readyQueue.dequeue());
-            
-            // alert(this.runningQueue[0]);
-    		_CPU.loadFromPcb(this.runningQueue.q[0]);	
-            // console.log("resident list After Running" +this.residentList.length);
-    		document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="true";
+            if(this.runningQueue.isEmpty()){
+                var inToRunning=this.readyQueue.dequeue()
+                if(inToRunning.onDisk){
+                    
+                    
+                    this.runFromDisk(inToRunning);
+
+                }
+                this.runningQueue.enqueue(inToRunning);
+                
+                // alert(this.runningQueue[0]);
+        		_CPU.loadFromPcb(this.runningQueue.q[0]);	
+                // console.log("resident list After Running" +this.residentList.length);
+        		document.getElementById('pcbs_Status'+_CPU.curPCB.Pid).innerText="true";
 
             }
             
@@ -185,7 +256,7 @@ module TSOS {
 
 
         public killReadyProcess(pid){
-           // document.getElementById('pcbTable').innerHTML=""
+           
             var rempcb;
                 //if whats in the running queue is the pid we want to kill we dequeue it
               
@@ -200,7 +271,7 @@ module TSOS {
                    rempcb=this.readyQueue.dequeue();
                }
 
-           }
+            }
                
                //update the process table to reflect our changes
                 this.updateProcessTable()
@@ -223,13 +294,13 @@ module TSOS {
                 
         }
         public killRunningProcess(pid){
-                if(this.runningQueue.q[0].Pid==pid){
-                  var rempcb= this.runningQueue.dequeue()
-               }
+            if(this.runningQueue.q[0].Pid==pid){
+                var rempcb= this.runningQueue.dequeue()
+            }
                //add to our finished queue
-                 this.terminateProcess()
+            this.terminateProcess()
 
-           }     
+        }     
 
 
         public updateProcessTable(){
@@ -268,5 +339,32 @@ module TSOS {
                     _ProcessManager.runningQueue.enqueue(lowestPriority);
         }
 
+        public runFromDisk(pcb){
+            var searchPointer="000"
+            var searchName="pid"+pcb.pid;
+            while(searchPointer!="101"){
+                      
+                var hexName=sessionStorage.getItem(searchPointer);
+                if(searchPointer=="100"){
+                     _StdOut.putText(pcb.pid+" cannot be found in local or disk memory.", true)
+                    
+                    break
+                }
+              
+                if(searchName==hexName.substr(5)){
+                    alert("matchs")
+                   
+                    _krnHardDriveDriver.swapMem(searchPointer,pcb.baseRegister,pcb.limitRegister);
+
+                }
+                else{
+                    searchPointer=_krnHardDriveDriver.searchPointerIncrement(searchPointer);
+                }
+            }
+
+
+
+        }
+
     }
-    }	
+}

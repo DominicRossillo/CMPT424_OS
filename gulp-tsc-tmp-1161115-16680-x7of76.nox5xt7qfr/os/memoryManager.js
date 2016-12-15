@@ -12,11 +12,9 @@ var TSOS;
             console.log("resident list length At start of allocate " + _ProcessManager.residentList.length);
             for (var i = 0; i < _ProcessManager.residentList.length; i++) {
                 if (_ProcessManager.residentList[i].Pid == pid) {
-                    alert("found");
                     var pcb = _ProcessManager.residentList[i];
                     break;
                 }
-                alert("inFor");
             }
             // console.log(this.findFreeMem())
             var freeMem = this.findFreeMem();
@@ -50,6 +48,7 @@ var TSOS;
                     break;
                 }
             }
+            alert("dealocated");
         };
         //function to find where and memory we have open space
         MemoryManager.prototype.findFreeMem = function () {
@@ -58,14 +57,10 @@ var TSOS;
             var allfound = [];
             //these for loops allow us to add all the elements in the resident queue and ready queue and the running queue and add it to a list
             for (var i = 0; i < _ProcessManager.residentList.length && _ProcessManager.residentList.length > 0; i++) {
-                if (!_ProcessManager.residentList[i].onDisk) {
-                    usedSegments.push(_ProcessManager.residentList[i].baseRegister);
-                }
+                usedSegments.push(_ProcessManager.residentList[i].baseRegister);
             }
             for (var i = 0; i < _ProcessManager.readyQueue.getSize() && !_ProcessManager.readyQueue.isEmpty(); i++) {
-                if (!_ProcessManager.readyQueue.q[i].onDisk) {
-                    usedSegments.push(_ProcessManager.readyQueue.q[i].baseRegister);
-                }
+                usedSegments.push(_ProcessManager.readyQueue.q[i].baseRegister);
             }
             if (_ProcessManager.runningQueue.getSize() > 0) {
                 usedSegments.push(_ProcessManager.runningQueue.q[0].baseRegister);

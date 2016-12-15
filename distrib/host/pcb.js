@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     //pcb object
     var Pcb = (function () {
-        function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting, baseRegister, limitRegister, waitTime, turnAroundTime, priority) {
+        function Pcb(Pid, PC, Acc, Xreg, Yreg, Zflag, isExecuting, baseRegister, limitRegister, waitTime, turnAroundTime, priority, onDisk) {
             if (Pid === void 0) { Pid = 0; }
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
@@ -15,6 +15,7 @@ var TSOS;
             if (waitTime === void 0) { waitTime = 0; }
             if (turnAroundTime === void 0) { turnAroundTime = 0; }
             if (priority === void 0) { priority = 0; }
+            if (onDisk === void 0) { onDisk = false; }
             this.Pid = Pid;
             this.PC = PC;
             this.Acc = Acc;
@@ -27,6 +28,7 @@ var TSOS;
             this.waitTime = waitTime;
             this.turnAroundTime = turnAroundTime;
             this.priority = priority;
+            this.onDisk = onDisk;
         }
         //funciton to update your current pcb with new values taken from the cpu
         Pcb.prototype.updatePcb = function (newPC, newAcc, newXreg, newYreg, newZflag) {

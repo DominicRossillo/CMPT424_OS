@@ -16,15 +16,20 @@ module TSOS {
         }
 
         public  allocateMem(pid){
+           
             console.log("allocateMem run")
             console.log("resident list length At start of allocate "+_ProcessManager.residentList.length)
             for(var i=0; i<_ProcessManager.residentList.length; i++){
                 if(_ProcessManager.residentList[i].Pid==pid){
+                  alert("found")
                     var pcb= _ProcessManager.residentList[i]
+
                     break;
                 }
+                alert("inFor")
                 
             }
+            
            // console.log(this.findFreeMem())
             var freeMem=this.findFreeMem();
             //alert(freeMem)
@@ -32,10 +37,7 @@ module TSOS {
            // console.log("find fre mem length "+this.findFreeMem.length)
             if (freeMem.length>0){
                 var freebase =parseInt(freeMem[0]);
-              //  alert("free base "+freebase);
                 var freelimit= freebase+255
-             //   alert("free limit "+freelimit);
-          //      console.log("free base is" +freebase)
                 pcb.baseRegister=freebase
                 pcb.limitRegister=freelimit
           //      console.log("allocate baseReg is "+pcb.baseRegister)
@@ -47,7 +49,8 @@ module TSOS {
                 
             }
                 
-                this.allocated.push(pcb) 
+                this.allocated.push(pcb)
+                alert("alocated") 
 
             }         
                          //      console.log("resident list After allocate mem everything" +this.residentList.length)
@@ -55,24 +58,18 @@ module TSOS {
         }
         //deallocate memory that is assigned to a pid
         public deAllocateMem(pid){
+       
             // console.log("deAllocate start length"+this.allocated.length)
             for (var i=0; i <this.allocated.length;i++){
-               var curSeg= this.allocated[i]
-              // console.log(" curSeg = "+curSeg)
-              // console.log(" pid = "+pid)
+               var curSeg= this.allocated[i];
+             
                 if(curSeg.Pid==pid){
-                    //console.log("deAlocated "+curSeg.baseRegister)
-                   // console.log("dealocate index "+i)
-                   //remove the pid from the allocated array which we use to keep track of what sectors we can use on load
                     this.allocated.splice(i,1);
-                     // console.log("deallocateMem run")
-                     //  console.log("deAllocate end length"+this.allocated.length)
                     break;
                 }
                 
 
             }
-           
 
         }
         //function to find where and memory we have open space
@@ -82,14 +79,14 @@ module TSOS {
            var allfound=[];
            //these for loops allow us to add all the elements in the resident queue and ready queue and the running queue and add it to a list
            for (var i=0; i<_ProcessManager.residentList.length && _ProcessManager.residentList.length>0;i++){
-//alert("residentList is this big:"+_ProcessManager.residentList.length)
+             if(!_ProcessManager.residentList[i].onDisk){
                usedSegments.push(_ProcessManager.residentList[i].baseRegister);
-//alert("usedSegments has " +usedSegments)
+             }
            }
            for (var i=0; i<_ProcessManager.readyQueue.getSize() && !_ProcessManager.readyQueue.isEmpty();i++){
-             //  alert("ready queue is this big:"+_ProcessManager.readyQueue.getSize())
-               usedSegments.push(_ProcessManager.readyQueue.q[i].baseRegister);
-//alert("usedSegments has " +usedSegments)
+               if(!_ProcessManager.readyQueue.q[i].onDisk){
+                 usedSegments.push(_ProcessManager.readyQueue.q[i].baseRegister);
+               }
            }
            if(_ProcessManager.runningQueue.getSize()>0){
                usedSegments.push(_ProcessManager.runningQueue.q[0].baseRegister);
@@ -101,7 +98,6 @@ module TSOS {
                for(var j=0; j<usedSegments.length;j++){
                        if(usedSegments[j]==allSegments[i]){
                            missingSeg= false;
-                         //  alert("found " +allSegments[i])
                            break;
                        }
                        
@@ -111,11 +107,9 @@ module TSOS {
                if(missingSeg==true){
 
                    allfound.push(allSegments[i]);
-                 //alert("all missing segments"+ allSegments[i])
                }
                
             }
-            //   alert("all found is "+allfound)
             //return the free sector to be used as a base register for a loaded PCB
                return allfound;
                

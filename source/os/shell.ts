@@ -406,42 +406,37 @@ module TSOS {
                             for(var i=0; i<Math.ceil((hexin.length/8)); i++){
                                 
                                 for(var j=1; (j<=hexin.length && j<9 && curcode<hexin.length); j++){
-                                                //memtable.rows[i].cells[j].innerHTML=hexin[curcode];
-                                               // newPC:number,newAcc:number,newXreg:number,newYreg:number,newZflag:number,newExecuting:boolean
-                                                //var newPcb = new Pcb(1,2,3,4,5,true);
-                                            //    console.log("mempoint is "+_Memory.memPoint);
+                                            
                                                
                                                _Memory.memoryUpdate(hexin[curcode],_Memory.memPoint);
 
-                                              //  memtable.innerHTML=hexin[curcode];
-                                                //alert(hexin[curcode]);
+                                              
 
                                                 curcode++;
                                                 
-                                            }
+                                }
 
-                                        }
-                                        _StdOut.putText("This is valid hexcode",true);
-                                        _StdOut.advanceLine();
-                                        _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
-                                            _StdOut.advanceLine();
-                                            allPcb.push(newPCB);
-                                  // alert(_Memory.memory);
                             }
-                            else{
-                                 _StdOut.putText("This program is too large.",true);
-                            }
-                     }
-                     else{
-                         _ProcessManager.loadToDisk(args);
+                        _StdOut.putText("This is valid hexcode",true);
+                        _StdOut.advanceLine();
+                        _StdOut.putText("The Program has been loaded with PID: "+ newPCB.Pid,true);
+                        _StdOut.advanceLine();
+                        allPcb.push(newPCB);
+                    }
+                    else{
+                        _StdOut.putText("This program is too large.",true);
+                         }
+                }
+                else{
+                    _ProcessManager.loadToDisk(args);
                           
-                     } 
-                  }
-                  else{
-                      _StdOut.putText("This is not valid hexcode",true);
+                } 
+            }
+            else{
+                _StdOut.putText("This is not valid hexcode",true);
                       
-                  }        
-              }
+            }        
+        }
 
         public shellStatus(args) {
             //command to update status title outside of the cli
