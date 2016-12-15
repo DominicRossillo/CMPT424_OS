@@ -433,7 +433,8 @@ module TSOS {
                             }
                      }
                      else{
-                          _StdOut.putText("Memory is already full.",true);
+                         _ProcessManager.loadToDisk(args);
+                          
                      } 
                   }
                   else{
@@ -442,7 +443,7 @@ module TSOS {
                   }        
               }
 
-              public shellStatus(args) {
+        public shellStatus(args) {
             //command to update status title outside of the cli
             if(args.length>0){
                 var status = "";
@@ -656,11 +657,12 @@ module TSOS {
         }
 
        
-         public shellClearmem(args){
+        public shellClearmem(args){
             _Memory.clearAllMemory();
 
-         }
-          public shellPs(args){
+        }
+
+        public shellPs(args){
               _StdOut.putText("Current running programs:",true);
               _StdOut.advanceLine();
               var currentPros="";
@@ -674,7 +676,7 @@ module TSOS {
 
          }
 
-         public shellRunAll(args){
+        public shellRunAll(args){
              if(_ProcessManager.residentList.length>0){
                  
                     
@@ -689,7 +691,7 @@ module TSOS {
                             
                     }
                     _ProcessManager.residentList=[];
-                    if(_Scheduler.schType="priority"){
+                    if(_Scheduler.schType=="priority"){
                         var lowestPriority=_ProcessManager.readyQueue.dequeue();
                         var curCheckPcb;
                         for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
@@ -727,7 +729,7 @@ module TSOS {
              }
 
          }
-         public shellQuantum(args) {
+        public shellQuantum(args) {
             //command to update status title outside of the cli
             if(args.length>0){
                 var newquantum = null;
@@ -748,7 +750,7 @@ module TSOS {
             }
         }
 
-         public shellCreate(args) {
+        public shellCreate(args) {
              if(args.length>0){
 
                  var fileName= ""+args;
@@ -786,7 +788,8 @@ module TSOS {
                 _StdOut.putText("Usage: read <filename> Please Suppy a file name.",true)
             }
         }
-         public shellWrite(args) {
+
+        public shellWrite(args) {
              
             
              var fileName=args[0];

@@ -47,12 +47,8 @@ var TSOS;
             while (checkName.length < 120) {
                 checkName += "0";
             }
-            while (searchPointer != "101") {
+            while (searchPointer != "100") {
                 var hexName = sessionStorage.getItem(searchPointer);
-                if (searchPointer == "100") {
-                    _StdOut.putText("The disk is out of space. Try formating the drive", true);
-                    return;
-                }
                 if (checkName == hexName.substr(4)) {
                     nameAvalible = false;
                     break;
@@ -171,9 +167,19 @@ var TSOS;
                 }
                 if (ourName == hexName.substr(4)) {
                     var regPoint = sessionStorage.getItem(searchPointer).substr(1, 3);
+                    var initPoint = "1000";
+                    if (programInput.length > 120) {
+                        var baseAddress = "";
+                        var hexAddress = sessionStorage.getItem("000").substr(4);
+                        for (var i = 0; i < hexAddress.length; i += 2) {
+                            baseAddress += String.fromCharCode(parseInt(hexAddress.substr(i, 2), 16));
+                        }
+                        initPoint = "1" + baseAddress.substr(3);
+                        this.bigWriteToDrive(initPoint.substr(1, 3), programInput.substr(120));
+                    }
                     var oldData = sessionStorage.getItem(searchPointer).substr(4);
                     sessionStorage.setItem(searchPointer, "1" + regPoint + oldData);
-                    sessionStorage.setItem(regPoint, "1000" + programInput);
+                    sessionStorage.setItem(regPoint, initPoint + programInput.substr(0, 120));
                     _StdOut.putText("File: " + fileName + " has been written to.", true);
                     break;
                 }
@@ -181,6 +187,39 @@ var TSOS;
                     searchPointer = this.searchPointerIncrement(searchPointer);
                 }
             }
+            this.updateDiskDisplay();
+        };
+        DeviceDriverHardDrive.prototype.bigWriteToDrive = function (pointer, data) {
+            var hexaddress = sessionStorage.getItem("000").substr(4);
+            var finalBase = sessionStorage.getItem("000").substr(0, 4);
+            var destReg = "1000";
+            var decaddress = "";
+            for (var i = 0; i < hexaddress.length; i += 2) {
+                decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
+            }
+            var newBaseHead = decaddress.substr(0, 3);
+            var newBaseTail = this.searchPointerIncrement(decaddress.substr(3));
+            for (var i = 0; i < newBaseHead.length; i++) {
+                finalBase += newBaseHead.charCodeAt(i).toString(16);
+            }
+            for (var i = 0; i < newBaseHead.length; i++) {
+                finalBase += newBaseTail.charCodeAt(i).toString(16);
+            }
+            while (finalBase.length < 124) {
+                finalBase += "0";
+            }
+            if (data.length > 120) {
+                destReg = "1";
+                destReg += newBaseTail;
+                this.bigWriteToDrive(newBaseTail, data.substr(120));
+            }
+            else if (data.length < 120) {
+                while (data.length < 120) {
+                    data += "0";
+                }
+            }
+            sessionStorage.setItem("000", finalBase);
+            sessionStorage.setItem(pointer, destReg + data.substr(0, 120));
             this.updateDiskDisplay();
         };
         DeviceDriverHardDrive.prototype.searchPointerIncrement = function (pointer) {

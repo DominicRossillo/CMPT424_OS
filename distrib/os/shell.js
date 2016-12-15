@@ -320,7 +320,7 @@ var TSOS;
                     }
                 }
                 else {
-                    _StdOut.putText("Memory is already full.", true);
+                    _ProcessManager.loadToDisk(args);
                 }
             }
             else {
@@ -549,7 +549,7 @@ var TSOS;
                     document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
                 }
                 _ProcessManager.residentList = [];
-                if (_Scheduler.schType = "priority") {
+                if (_Scheduler.schType == "priority") {
                     var lowestPriority = _ProcessManager.readyQueue.dequeue();
                     var curCheckPcb;
                     for (var i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {

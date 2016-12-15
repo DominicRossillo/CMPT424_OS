@@ -19,7 +19,6 @@ var TSOS;
                 var pcb = new TSOS.Pcb();
                 pcb.Pid = allPcb.length;
                 pcb.priority = priority;
-                alert(pcb.priority);
                 this.residentList.push(pcb);
                 for (var i = 0; i < this.residentList.length; i++) {
                     if (this.residentList[i].Pid == pcb.Pid) {
@@ -35,6 +34,29 @@ var TSOS;
                 _StdOut.putText("Memory is already full.", true);
                 return null;
             }
+        };
+        //loadtodisc
+        ProcessManager.prototype.loadToDisk = function (priority) {
+            //alert(_MemoryManager.allocated.length)
+            if (priority.length == 0) {
+                priority = 5;
+            }
+            var hexCode = document.getElementById("taProgramInput").value;
+            var pcb = new TSOS.Pcb();
+            pcb.Pid = allPcb.length;
+            this.residentList.push(pcb);
+            var fileName = priority + "pcb" + pcb.Pid;
+            var hex = "";
+            var result = "";
+            for (var i = 0; i < fileName.length; i++) {
+                hex = fileName.charCodeAt(i).toString(16);
+                result += (hex);
+            }
+            _krnHardDriveDriver.createFile(result);
+            _StdOut.advanceLine();
+            allPcb.push(pcb);
+            _krnHardDriveDriver.writeToDrive(fileName, hexCode);
+            // _krnHardDriveDriver.writeToDrive()
         };
         //run a program by putting it into the readque and telling the cpu to run by setting it to executing
         ProcessManager.prototype.runPid = function (pid) {
