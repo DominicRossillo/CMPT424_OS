@@ -36,7 +36,6 @@ var TSOS;
         };
         //take a pcb anc clear the places in memory it is
         Memory.prototype.clearMemSeg = function (pcb) {
-            alert("start clear");
             _MemoryManager.deAllocateMem(pcb.Pid);
             var clearStart = pcb.baseRegister;
             //loop through table and update values

@@ -50,7 +50,7 @@ module TSOS {
          }
          //take a pcb anc clear the places in memory it is
          public clearMemSeg(pcb){
-             alert("start clear")
+            
              _MemoryManager.deAllocateMem(pcb.Pid);
              var clearStart= pcb.baseRegister;
              //loop through table and update values

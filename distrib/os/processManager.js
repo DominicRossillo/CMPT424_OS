@@ -60,13 +60,13 @@ var TSOS;
             _krnHardDriveDriver.writeToDrive(fileName, hexCode);
             _StdOut.advanceLine();
             _StdOut.putText("The Program has been loaded with PID: " + pcb.Pid, true);
-            // _krnHardDriveDriver.writeToDrive()
         };
+        //function to translate memory from main memory to disk
         ProcessManager.prototype.translateMemToDisk = function (pid) {
             var finalData = "";
             var found = false;
-            while (!found) {
-                var i = 0;
+            //assign the ondisk flag for process to true
+            for (var i = 0; i < this.residentList.length; i++) {
                 var swapedprocess = this.residentList[i];
                 if (swapedprocess.Pid == pid) {
                     found = true;
@@ -75,17 +75,36 @@ var TSOS;
                     swapedprocess.limitRegister = -1;
                     this.residentList[i] = swapedprocess;
                 }
-                else {
-                    i++;
+            }
+            //if we dont find it in the resident list that means
+            //it was a  file that used to be in memory but was swaped before
+            if (found == false) {
+                for (var i = 0; i < this.readyQueue.getSize() - 1; i++) {
+                    this.readyQueue.enqueue(this.readyQueue.dequeue());
+                }
+                //start swapping process 
+                swapedprocess = this.readyQueue.dequeue();
+                //keep track of base and limit for our memory writing later
+                var basehold = swapedprocess.baseRegister;
+                var limithold = swapedprocess.limitRegister;
+                swapedprocess.onDisk = true;
+                swapedprocess.baseRegister = -1;
+                swapedprocess.limitRegister = -1;
+                this.readyQueue.enqueue(swapedprocess);
+                //writing the memory data from main memory into finalData for disk
+                while (basehold <= limithold) {
+                    finalData += document.getElementById("cell" + basehold).innerText;
+                    basehold++;
                 }
             }
-            var memoryScan = swapedprocess.baseRegister;
-            while (memoryScan <= swapedprocess.limitRegister) {
-                finalData += document.getElementById("cell" + memoryScan);
-                memoryScan++;
+            else {
+                var memoryScan = swapedprocess.baseRegister;
+                while (memoryScan <= swapedprocess.limitRegister) {
+                    finalData += document.getElementById("cell" + memoryScan).innerText;
+                    memoryScan++;
+                }
             }
             var fileName = swapedprocess.priority + "pcb" + swapedprocess.Pid;
-            alert(fileName);
             _Memory.clearMemSeg(swapedprocess);
             var hexName = "";
             for (var i = 0; i < fileName.length; i++) {
@@ -93,19 +112,18 @@ var TSOS;
             }
             var inputData = "";
             for (var i = 0; i < finalData.length; i++) {
-                inputData += finalData.charCodeAt(i).toString(16);
+                inputData += finalData.charAt(i);
             }
             _krnHardDriveDriver.createFile(hexName, true);
             _StdOut.advanceLine();
             _krnHardDriveDriver.writeToDrive(fileName, inputData);
-            // }
         };
         //run a program by putting it into the readque and telling the cpu to run by setting it to executing
         ProcessManager.prototype.runPid = function (pid) {
+            var inReady = false;
             for (var i = 0; i < this.residentList.length; i++) {
                 if (this.residentList[i].Pid == pid) {
                     var pcb = this.residentList[i];
-                    alert("found in run");
                     break;
                 }
             }
@@ -127,12 +145,23 @@ var TSOS;
                 _MemoryManager.allocateMem(pid);
                 for (var i = 0; i < this.residentList.length; i++) {
                     if (this.residentList[i].Pid == pid) {
+                        pcb = this.residentList[i];
                         console.log("splice");
                         this.residentList.splice(i, 1);
                         break;
                     }
                 }
-                this.readyQueue.enqueue(pcb);
+                for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                    var curReady = this.readyQueue.dequeue();
+                    if (curReady.Pid == pid) {
+                        pcb = curReady;
+                        inReady = true;
+                    }
+                    this.readyQueue.enqueue(curReady);
+                }
+                if (!inReady) {
+                    this.readyQueue.enqueue(pcb);
+                }
             }
             document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
             if (this.runningQueue.isEmpty()) {
@@ -246,6 +275,7 @@ var TSOS;
             }
             _ProcessManager.runningQueue.enqueue(lowestPriority);
         };
+        //used to run process from disk
         ProcessManager.prototype.runFromDisk = function (pcb) {
             var searchPointer = "000";
             var searchName = "pcb" + pcb.Pid;
@@ -256,11 +286,10 @@ var TSOS;
                     transName += String.fromCharCode(parseInt(hexName.substr(i, 2), 16)).replace(/[^a-zA-Z0-9]/g, "");
                 }
                 if (searchPointer == "100") {
-                    _StdOut.putText(pcb.pid + " cannot be found in local or disk memory.", true);
+                    _StdOut.putText(pcb.Pid + " cannot be found in local or disk memory.", true);
                     break;
                 }
                 if (searchName == transName.substr(1)) {
-                    alert("matchs");
                     _krnHardDriveDriver.swapMem(searchPointer, pcb.baseRegister, pcb.limitRegister);
                     _krnHardDriveDriver.deleteFile(hexName.substr(4));
                     break;
@@ -270,6 +299,7 @@ var TSOS;
                 }
             }
         };
+        //decides which program we are removing from main memory to make room for another runnning process
         ProcessManager.prototype.removePicker = function () {
             if (_MemoryManager.allocated.length >= 3) {
                 if (this.residentList.length > 0) {
@@ -283,6 +313,7 @@ var TSOS;
                     return curPCB.Pid;
                 }
             }
+            return null;
         };
         return ProcessManager;
     }());

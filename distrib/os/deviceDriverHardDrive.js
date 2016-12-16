@@ -32,23 +32,28 @@ var TSOS;
         };
         DeviceDriverHardDrive.prototype.initHardDrive = function () {
             // Initialization routine for this, the kernel-mode Keyboard Device Driver.
-            // alert("in init hd table")
             _HardDrive.initHardDriveTable();
             // More?
         };
+        //used by format command. simply reinitializes the hard drive
         DeviceDriverHardDrive.prototype.formatHardDrive = function () {
             _HardDrive.initHardDriveTable();
         };
+        //create file takes in a file name given by user and a bool. bool is used as a flag for knowing when users
+        //are creating a file that is going to be used for cpu calcumations and stuff
         DeviceDriverHardDrive.prototype.createFile = function (fileName, bool) {
             var searchPointer = "000";
             var checkName = fileName;
             var nameAvalible = true;
             var trueName = "";
+            //makes sure name is 120 chars long to check if it already exist on hard drive
             while (checkName.length < 120) {
                 checkName += "0";
             }
+            //searching if name exist already
             while (searchPointer != "100") {
                 var hexName = sessionStorage.getItem(searchPointer);
+                //if its found we return an error
                 if (checkName == hexName.substr(4)) {
                     nameAvalible = false;
                     break;
@@ -57,15 +62,20 @@ var TSOS;
                     searchPointer = this.searchPointerIncrement(searchPointer);
                 }
             }
+            //ut the inputed name into hex
             for (var i = 0; i < fileName.length; i = i + 2) {
                 trueName += String.fromCharCode(parseInt(fileName.substr(i, 2), 16));
             }
             if (fileName.charAt(0) != null && (nameAvalible || bool)) {
+                //if the file name is too long you get an error
                 if (fileName.length < 60) {
+                    //taking sub string of hex addres in our bsae register 
+                    //sub string leaves out the active and pointer fields taht are not needed
                     var hexaddress = sessionStorage.getItem("000").substr(4);
                     var decaddress = "";
                     var hexName = "1";
                     var pointerRef = "";
+                    //turning the hexaddress into hex characters to store in the file name registers   
                     for (var i = 0; i < hexaddress.length; i += 2) {
                         decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
                     }
@@ -79,10 +89,12 @@ var TSOS;
                     while (hexName.length < 124) {
                         hexName += "0";
                     }
+                    //assign the name and pointer values to the designated file location
                     sessionStorage.setItem(decaddress.substr(0, 3), hexName);
                     var newBaseHead = "";
                     var newBaseTail = "";
                     var memoryInit = "1000";
+                    //all below is used to increment base register
                     while (memoryInit.length < 124) {
                         memoryInit += "0";
                     }
@@ -100,7 +112,7 @@ var TSOS;
                     }
                     sessionStorage.setItem(pointerRef, memoryInit);
                     sessionStorage.setItem("000", finalBase);
-                    _StdOut.putText("File Create: " + trueName, true);
+                    _StdOut.putText("File Create: " + trueName);
                     this.updateDiskDisplay();
                 }
                 else {
@@ -135,9 +147,11 @@ var TSOS;
             }
             document.getElementById("hardDriveTable").innerHTML = hardDriveDisplay;
         };
+        //writes files to drive using a file name from user and data from user.
         DeviceDriverHardDrive.prototype.writeToDrive = function (fileName, writenData) {
             var searchPointer = "000";
             var hexName = "";
+            //search for the file name and then take its 1-3 substring which is its pointer to where data goes
             for (var i = 0; i < fileName.length - 1; i++) {
                 hexName += parseInt(fileName.charAt(i), 16);
             }
@@ -151,8 +165,10 @@ var TSOS;
             var saveReg = sessionStorage.getItem("000").substr(4);
             var destReg = "";
             for (var i = 0; i < saveReg.length; i++) {
-                destReg += String.fromCharCode(parseInt(saveReg.substr(i, 2), 16)).replace(/[^a-zA-Z0-9]/g, "");
+                destReg += String.fromCharCode(parseInt(saveReg.substr(i, 2), 16));
             }
+            //.replace(/[^a-zA-Z0-9]/g, "");
+            //our name of the file that we use to check if it exists
             var ourName = "";
             for (var i = 0; i < fileName.length; i++) {
                 ourName += fileName.charCodeAt(i).toString(16);
@@ -160,25 +176,31 @@ var TSOS;
             while (ourName.length < 120) {
                 ourName += "0";
             }
+            //does it exist
             while (searchPointer != "101") {
                 var hexName = sessionStorage.getItem(searchPointer);
                 if (searchPointer == "100") {
                     _StdOut.putText("File with that name does not exist.", true);
                 }
+                //if we find the name
                 if (ourName == hexName.substr(4)) {
+                    //asing the pointer to a future register to regpoit. this is only used if the code we put in is >120
                     var regPoint = sessionStorage.getItem(searchPointer).substr(1, 3);
                     var initPoint = "1000";
                     if (programInput.length > 120) {
+                        //if the data we put in is >120
                         var baseAddress = "";
                         var hexAddress = sessionStorage.getItem("000").substr(4);
                         for (var i = 0; i < hexAddress.length; i += 2) {
                             baseAddress += String.fromCharCode(parseInt(hexAddress.substr(i, 2), 16));
                         }
+                        //we set the initPoint to the next file space
                         initPoint = "1" + baseAddress.substr(3);
                         this.bigWriteToDrive(initPoint.substr(1, 3), programInput.substr(120));
                         var hexaddress = sessionStorage.getItem("000").substr(4);
                         var finalBase = sessionStorage.getItem("000").substr(0, 4);
                         var destReg = "1000";
+                        //start to increment our base register values
                         var decaddress = "";
                         for (var i = 0; i < hexaddress.length; i += 2) {
                             decaddress += String.fromCharCode(parseInt(hexaddress.substr(i, 2), 16));
@@ -199,7 +221,7 @@ var TSOS;
                     var oldData = sessionStorage.getItem(searchPointer).substr(4);
                     sessionStorage.setItem(searchPointer, "1" + regPoint + oldData);
                     sessionStorage.setItem(regPoint, initPoint + programInput.substr(0, 120));
-                    _StdOut.putText("File: " + fileName + " has been written to.", true);
+                    _StdOut.putText("File: " + fileName + " has been written to.");
                     _StdOut.advanceLine();
                     break;
                 }
@@ -209,6 +231,7 @@ var TSOS;
             }
             this.updateDiskDisplay();
         };
+        //if we write a file that is greate than 120
         DeviceDriverHardDrive.prototype.bigWriteToDrive = function (pointer, data) {
             var hexaddress = sessionStorage.getItem("000").substr(4);
             var finalBase = sessionStorage.getItem("000").substr(0, 4);
@@ -228,9 +251,11 @@ var TSOS;
             while (finalBase.length < 124) {
                 finalBase += "0";
             }
+            sessionStorage.setItem("000", finalBase);
             if (data.length > 120) {
                 destReg = "1";
                 destReg += newBaseTail;
+                //recursive call for larger files
                 this.bigWriteToDrive(newBaseTail, data.substr(120));
             }
             else if (data.length < 120) {
@@ -238,22 +263,23 @@ var TSOS;
                     data += "0";
                 }
             }
-            sessionStorage.setItem("000", finalBase);
             sessionStorage.setItem(pointer, destReg + data.substr(0, 120));
             this.updateDiskDisplay();
         };
+        //util to increment my base and search pointers 
         DeviceDriverHardDrive.prototype.searchPointerIncrement = function (pointer) {
             var newBase = "";
             if (pointer.charAt(2) == "7") {
                 if (pointer.charAt(1) == "7") {
                     if (pointer.charAt(0) == "3") {
+                        _StdOut.putText("Out of memory.");
                     }
                     else {
-                        newBase = "" + (parseInt(pointer.charAt(0)) + 1) + 0 + 0;
+                        newBase = "" + (parseInt(pointer.charAt(0)) + 1) + "" + 0 + "" + 0;
                     }
                 }
                 else {
-                    newBase = "" + pointer.charAt(0) + (parseInt(pointer.charAt(1)) + 1) + 0;
+                    newBase = "" + pointer.charAt(0) + "" + (parseInt(pointer.charAt(1)) + 1) + "" + 0;
                 }
             }
             else {
@@ -261,15 +287,18 @@ var TSOS;
             }
             return newBase;
         };
+        //ls function 
         DeviceDriverHardDrive.prototype.hardDriveLs = function () {
             var searchPointer = "001";
             var nullresult = "";
+            //create nullresult string of 120 0 to make sure to not include them when user calls ls
             while (nullresult.length < 120) {
                 nullresult += "0";
             }
             while (searchPointer != "100") {
                 var fileName = "";
                 var hexName = sessionStorage.getItem(searchPointer).substr(4);
+                //if we find an item that is not nullresult we will translate it and print it oout for the user
                 if (hexName != nullresult) {
                     for (var i = 0; i < hexName.length; i = i + 2) {
                         fileName += String.fromCharCode(parseInt(hexName.substr(i, 2), 16));
@@ -282,11 +311,13 @@ var TSOS;
                 searchPointer = this.searchPointerIncrement(searchPointer);
             }
         };
+        //read file
         DeviceDriverHardDrive.prototype.readFile = function (fileName) {
             var searchPointer = "000";
             var checkName = fileName;
             var nameAvalible = true;
             var trueName = "";
+            //check if file exists
             for (var i = 0; i < fileName.length; i = i + 2) {
                 trueName += String.fromCharCode(parseInt(fileName.substr(i, 2), 16));
             }
@@ -300,9 +331,11 @@ var TSOS;
                     break;
                 }
                 if (checkName == hexName.substr(4)) {
+                    //if we find the file we want to 
                     var hexData = sessionStorage.getItem(hexName.substr(1, 3)).substr(4);
                     var hexPoint = hexName.substr(1, 3);
                     var translatedData = "";
+                    //while loop to reference any pointers that the file leads to. once we find 000 we know we are done looping
                     while (hexPoint != "000") {
                         for (var i = 0; i < hexData.length; i = i + 2) {
                             translatedData += String.fromCharCode(parseInt(hexData.substr(i, 2), 16));
@@ -317,6 +350,7 @@ var TSOS;
                 }
             }
         };
+        //delete file function
         DeviceDriverHardDrive.prototype.deleteFile = function (fileName) {
             var searchPointer = "000";
             var checkName = fileName;
@@ -328,16 +362,19 @@ var TSOS;
             while (checkName.length < 120) {
                 checkName += "0";
             }
+            //search if exists
             while (searchPointer != "101") {
                 var hexName = sessionStorage.getItem(searchPointer);
                 if (searchPointer == "100") {
                     _StdOut.putText("No file with that name exists", true);
                     break;
                 }
+                //when we find it we start to set all values tied to the original file name to 0
                 if (checkName == hexName.substr(4)) {
                     var savePointer = searchPointer;
                     if (sessionStorage.getItem(searchPointer).charAt(0) == "1") {
                         this.deletePointer((sessionStorage.getItem(searchPointer)).substr(1, 3));
+                        //reset the pointer so we can continue to delete things pointed to
                         searchPointer = sessionStorage.getItem(searchPointer).substr(1, 3);
                     }
                     var clearLoc = hexName.substr(1, 3);
@@ -356,6 +393,7 @@ var TSOS;
             }
             this.updateDiskDisplay();
         };
+        //function to keep track of linked locations to delete
         DeviceDriverHardDrive.prototype.deletePointer = function (pointer) {
             var clearLoc = pointer;
             while (clearLoc != "000") {
@@ -368,9 +406,11 @@ var TSOS;
                 clearLoc = nextLoc;
             }
         };
+        //function used to swap memory from disk to main memory
         DeviceDriverHardDrive.prototype.swapMem = function (fileRegister, base, limit) {
             var memoryInput = "";
             var filePoint = fileRegister;
+            //while loop to read all original code from disk to make into our memory translate
             while (filePoint != "000") {
                 var memoryTranslate = "";
                 var hexMemory = sessionStorage.getItem(filePoint);
@@ -380,13 +420,14 @@ var TSOS;
                 memoryInput += (memoryTranslate.replace(/[^a-zA-Z0-9]/g, ""));
                 filePoint = sessionStorage.getItem(filePoint).substr(1, 3);
             }
+            //get rid of starting 5 chars to get rid of the file name
             var memoryInput = memoryInput.substr(5);
             var memArr = [];
             for (i = 0; i < memoryInput.length; i = i + 2) {
                 memArr.push("" + memoryInput.substr(i, 2));
             }
-            alert("got out " + memArr.length);
             var j = 0;
+            //start loading the data in to main memory. if theere is room left for data we fill it with 0s
             for (var i = parseInt(base); i < parseInt(limit); i++, j++) {
                 if (j >= memArr.length) {
                     _Memory.memoryUpdate("00", i);
@@ -406,3 +447,4 @@ var TSOS;
     }(TSOS.DeviceDriver));
     TSOS.DeviceDriverHardDrive = DeviceDriverHardDrive;
 })(TSOS || (TSOS = {}));
+//dad? 

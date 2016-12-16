@@ -16,35 +16,48 @@ module TSOS {
         }
 
         public  allocateMem(pid){
-           
+             
             console.log("allocateMem run")
             console.log("resident list length At start of allocate "+_ProcessManager.residentList.length)
+            var pcb=null
             for(var i=0; i<_ProcessManager.residentList.length; i++){
                 if(_ProcessManager.residentList[i].Pid==pid){
-                  alert("found")
-                    var pcb= _ProcessManager.residentList[i]
+                
+                    pcb= _ProcessManager.residentList[i]
 
                     break;
                 }
 
                 
             }
+
             
-           // console.log(this.findFreeMem())
+            
+              for(var i=0; i<_ProcessManager.readyQueue.getSize();i++){
+                  var curentReady=_ProcessManager.readyQueue.dequeue();
+                  if(curentReady.Pid==pid){
+                   
+                    curentReady.onDisk=false
+                    pcb=curentReady
+                  }
+                  _ProcessManager.readyQueue.enqueue(curentReady);
+
+              }
+             
+            
+           
             var freeMem=this.findFreeMem();
-            //alert(freeMem)
-            //alert("allocate length is "+this.allocated.length)
-           // console.log("find fre mem length "+this.findFreeMem.length)
+           
+          
             if (freeMem.length>0){
                 var freebase =parseInt(freeMem[0]);
                 var freelimit= freebase+255
                 pcb.baseRegister=freebase
                 pcb.limitRegister=freelimit
-          //      console.log("allocate baseReg is "+pcb.baseRegister)
-            for(var i=0; i<_ProcessManager.residentList.length; i++){
-                if(_ProcessManager.residentList[i].Pid==pid){
-                   _ProcessManager.residentList[i]=pcb;
-                   break;
+                for(var i=0; i<_ProcessManager.residentList.length; i++){
+                  if(_ProcessManager.residentList[i].Pid==pid){
+                  _ProcessManager.residentList[i]=pcb;
+                  break;
                 }
                 
             }

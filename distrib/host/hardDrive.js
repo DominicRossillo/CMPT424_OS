@@ -4,9 +4,12 @@ var TSOS;
     var HardDrive = (function () {
         function HardDrive() {
         }
+        //initializing base hard drive values
         HardDrive.prototype.initHardDriveTable = function () {
             var hardDriveDisplay = "";
+            //clear session storage in case aything is left over
             sessionStorage.clear();
+            //loops for the lize of our hard drive
             for (var i = 0; i <= 3; i++) {
                 for (var j = 0; j <= 7; j++) {
                     for (var k = 0; k <= 7; k++) {

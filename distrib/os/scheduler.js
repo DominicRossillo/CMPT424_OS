@@ -50,6 +50,8 @@ var TSOS;
         };
         // context switch
         Scheduler.prototype.contextSwitch = function () {
+            this.curQuan = 0;
+            //	alert(_ProcessManager.readyQueue)
             if (this.schType != "priority") {
                 document.getElementById('pcbs_Status' + _CPU.curPCB.Pid).innerText = "false";
                 // console.log("contextSwitch")
@@ -59,19 +61,25 @@ var TSOS;
                 var PCB = _ProcessManager.runningQueue.dequeue();
                 // console.log(PCB)
                 //enque the pcb we just removed from running onto ready
-                _ProcessManager.readyQueue.enqueue(PCB);
-                // console.log("running queue context switch"+_ProcessManager.runningQueue.getSize()+"readyqueue size is  "+_ProcessManager.readyQueue.getSize())
-                // console.log("newPCB being enqueued")
                 //remove head of ready 
                 var newPCB = _ProcessManager.readyQueue.dequeue();
                 console.log(newPCB);
                 //enqueue head of ready onto running
                 if (newPCB.onDisk) {
-                    for (var i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
-                        var memToSwapOut = _ProcessManager.readyQueue.dequeue();
-                        _ProcessManager.readyQueue.enqueue(memToSwapOut);
+                    _ProcessManager.readyQueue.enqueue(newPCB);
+                    _ProcessManager.readyQueue.enqueue(PCB);
+                    for (var i = 0; i < _ProcessManager.readyQueue.getSize() - 2; i++) {
+                        _ProcessManager.readyQueue.enqueue(_ProcessManager.readyQueue.dequeue());
                     }
-                    _ProcessManager.translateMemToDisk(memToSwapOut.Pid);
+                    _ProcessManager.translateMemToDisk(PCB.Pid);
+                    _MemoryManager.allocateMem(newPCB.Pid);
+                    newPCB = _ProcessManager.readyQueue.dequeue();
+                    _ProcessManager.readyQueue.dequeue();
+                    _ProcessManager.runFromDisk(newPCB);
+                    _ProcessManager.readyQueue.enqueue(PCB);
+                }
+                else {
+                    _ProcessManager.readyQueue.enqueue(PCB);
                 }
                 _ProcessManager.runningQueue.enqueue(newPCB);
                 _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
