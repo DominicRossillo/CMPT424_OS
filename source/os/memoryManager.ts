@@ -26,7 +26,7 @@ module TSOS {
 
                     break;
                 }
-                alert("inFor")
+
                 
             }
             
@@ -50,7 +50,7 @@ module TSOS {
             }
                 
                 this.allocated.push(pcb)
-                alert("alocated") 
+               
 
             }         
                          //      console.log("resident list After allocate mem everything" +this.residentList.length)

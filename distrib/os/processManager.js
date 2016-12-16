@@ -54,7 +54,7 @@ var TSOS;
                 hex = fileName.charCodeAt(i).toString(16);
                 result += (hex);
             }
-            _krnHardDriveDriver.createFile(result);
+            _krnHardDriveDriver.createFile(result, false);
             _StdOut.advanceLine();
             allPcb.push(pcb);
             _krnHardDriveDriver.writeToDrive(fileName, hexCode);
@@ -69,7 +69,6 @@ var TSOS;
                 var i = 0;
                 var swapedprocess = this.residentList[i];
                 if (swapedprocess.Pid == pid) {
-                    alert("alert found");
                     found = true;
                     swapedprocess.onDisk = true;
                     swapedprocess.baseRegister = -1;
@@ -96,7 +95,7 @@ var TSOS;
             for (var i = 0; i < finalData.length; i++) {
                 inputData += finalData.charCodeAt(i).toString(16);
             }
-            _krnHardDriveDriver.createFile(hexName);
+            _krnHardDriveDriver.createFile(hexName, true);
             _StdOut.advanceLine();
             _krnHardDriveDriver.writeToDrive(fileName, inputData);
             // }
@@ -110,10 +109,6 @@ var TSOS;
                     break;
                 }
             }
-            // alert("before length"+this.residentList.length);
-            //  console.log("resident list before" +this.residentList.length)
-            //  alert("the pcb "+pcb);
-            // alert("before ready queue "+this.readyQueue[0]);
             if (!pcb.onDisk) {
                 for (var i = 0; i < this.residentList.length; i++) {
                     if (this.residentList[i].Pid == pid) {
@@ -125,7 +120,10 @@ var TSOS;
                 this.readyQueue.enqueue(pcb);
             }
             else {
-                this.translateMemToDisk(0);
+                var toRemove = this.removePicker();
+                if (toRemove != null) {
+                    this.translateMemToDisk(toRemove);
+                }
                 _MemoryManager.allocateMem(pid);
                 for (var i = 0; i < this.residentList.length; i++) {
                     if (this.residentList[i].Pid == pid) {
@@ -250,19 +248,39 @@ var TSOS;
         };
         ProcessManager.prototype.runFromDisk = function (pcb) {
             var searchPointer = "000";
-            var searchName = "pid" + pcb.pid;
+            var searchName = "pcb" + pcb.Pid;
             while (searchPointer != "101") {
                 var hexName = sessionStorage.getItem(searchPointer);
+                var transName = "";
+                for (var i = 0; i < hexName.length; i = i + 2) {
+                    transName += String.fromCharCode(parseInt(hexName.substr(i, 2), 16)).replace(/[^a-zA-Z0-9]/g, "");
+                }
                 if (searchPointer == "100") {
                     _StdOut.putText(pcb.pid + " cannot be found in local or disk memory.", true);
                     break;
                 }
-                if (searchName == hexName.substr(5)) {
+                if (searchName == transName.substr(1)) {
                     alert("matchs");
                     _krnHardDriveDriver.swapMem(searchPointer, pcb.baseRegister, pcb.limitRegister);
+                    _krnHardDriveDriver.deleteFile(hexName.substr(4));
+                    break;
                 }
                 else {
                     searchPointer = _krnHardDriveDriver.searchPointerIncrement(searchPointer);
+                }
+            }
+        };
+        ProcessManager.prototype.removePicker = function () {
+            if (_MemoryManager.allocated.length >= 3) {
+                if (this.residentList.length > 0) {
+                    return this.residentList[0].Pid;
+                }
+                else {
+                    for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                        var curPCB = this.readyQueue.dequeue();
+                        this.readyQueue.enqueue(curPCB);
+                    }
+                    return curPCB.Pid;
                 }
             }
         };

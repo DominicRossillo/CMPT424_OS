@@ -539,7 +539,6 @@ var TSOS;
                     var pcb = _ProcessManager.residentList[i];
                     console.log("runall loop");
                     _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
-                    //    _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
                     document.getElementById('processTable').innerHTML += "<tr id=pidrow" + pcb.Pid + "> <td id='pcbs_PID" + pcb.Pid + "'>" + pcb.Pid + "</td> <td id='pcbs_Status" + pcb.Pid + "'>" + pcb.isExecuting + "</td> <td id='pcbs_PC" + pcb.Pid + "'>0</td></tr>";
                 }
                 _ProcessManager.residentList = [];
@@ -565,7 +564,6 @@ var TSOS;
                 else {
                     _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
                 }
-                // alert(this.runningQueue[0]);
                 _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
             }
             else {
@@ -597,7 +595,7 @@ var TSOS;
                     hex = fileName.charCodeAt(i).toString(16);
                     result += (hex);
                 }
-                _krnHardDriveDriver.createFile(result);
+                _krnHardDriveDriver.createFile(result, false);
             }
             else {
                 _StdOut.putText("Usage: create <filename> Please Suppy a file name.", true);

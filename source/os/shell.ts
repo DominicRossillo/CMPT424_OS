@@ -675,53 +675,51 @@ module TSOS {
              if(_ProcessManager.residentList.length>0){
                  
                     
-                        for (var i=0;i<_ProcessManager.residentList.length;i++){
-                                var pcb= _ProcessManager.residentList[i]
-                                console.log("runall loop")
-                                _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i])
-                            //    _ProcessManager.runPid(_ProcessManager.residentList[0].Pid);
-                                 document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
+                for (var i=0;i<_ProcessManager.residentList.length;i++){
+                    var pcb= _ProcessManager.residentList[i]
+                        console.log("runall loop")
+                        _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i])
+                        document.getElementById('processTable').innerHTML+="<tr id=pidrow"+pcb.Pid+"> <td id='pcbs_PID"+pcb.Pid+"'>"+pcb.Pid+"</td> <td id='pcbs_Status"+pcb.Pid+"'>"+pcb.isExecuting+"</td> <td id='pcbs_PC"+pcb.Pid+"'>0</td></tr>";
                  
                             
                             
-                    }
+                }
                     _ProcessManager.residentList=[];
-                    if(_Scheduler.schType=="priority"){
-                        var lowestPriority=_ProcessManager.readyQueue.dequeue();
-                        var curCheckPcb;
-                        for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
-                            curCheckPcb=_ProcessManager.readyQueue.dequeue();
-                            if(lowestPriority.priority>curCheckPcb.priority){
-                                _ProcessManager.readyQueue.enqueue(lowestPriority);
-                                lowestPriority=curCheckPcb;
+            if(_Scheduler.schType=="priority"){
+                var lowestPriority=_ProcessManager.readyQueue.dequeue();
+                var curCheckPcb;
+                for(var i=0;i<_ProcessManager.readyQueue.getSize();i++){
+                    curCheckPcb=_ProcessManager.readyQueue.dequeue();
+                    if(lowestPriority.priority>curCheckPcb.priority){
+                        _ProcessManager.readyQueue.enqueue(lowestPriority);
+                        lowestPriority=curCheckPcb;
 
-                            }
-                            else if(lowestPriority.priority=curCheckPcb.priority&& lowestPriority.waitTime<curCheckPcb.waitTime){
-                                _ProcessManager.readyQueue.enqueue(lowestPriority);
-                                lowestPriority=curCheckPcb;
-                            }
-                            else{
-                                _ProcessManager.readyQueue.enqueue(curCheckPcb);
-                                
-                            }
-                        }
-                        _ProcessManager.runningQueue.enqueue(lowestPriority);
-
+                    }
+                    else if(lowestPriority.priority=curCheckPcb.priority&& lowestPriority.waitTime<curCheckPcb.waitTime){
+                        _ProcessManager.readyQueue.enqueue(lowestPriority);
+                        lowestPriority=curCheckPcb;
                     }
                     else{
-                        _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
+                        _ProcessManager.readyQueue.enqueue(curCheckPcb);
+                                
                     }
-                // alert(this.runningQueue[0]);
+                }
+                _ProcessManager.runningQueue.enqueue(lowestPriority);
+
+            }
+            else{
+                _ProcessManager.runningQueue.enqueue(_ProcessManager.readyQueue.dequeue());
+            }
                     _CPU.loadFromPcb(_ProcessManager.runningQueue.q[0]);
 
                 //if
 
                  
 
-             }
-             else{
-                 _StdOut.putText("No programs are loaded to run.",true);
-             }
+        }
+        else{
+            _StdOut.putText("No programs are loaded to run.",true);
+        }
 
          }
         public shellQuantum(args) {
@@ -756,7 +754,7 @@ module TSOS {
                     
                     result += (hex)
                  }
-                 _krnHardDriveDriver.createFile(result);
+                 _krnHardDriveDriver.createFile(result,false);
                 
                  //return result
                 

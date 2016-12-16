@@ -16,7 +16,6 @@ var TSOS;
                     var pcb = _ProcessManager.residentList[i];
                     break;
                 }
-                alert("inFor");
             }
             // console.log(this.findFreeMem())
             var freeMem = this.findFreeMem();
@@ -36,7 +35,6 @@ var TSOS;
                     }
                 }
                 this.allocated.push(pcb);
-                alert("alocated");
             }
             //      console.log("resident list After allocate mem everything" +this.residentList.length)
         };
